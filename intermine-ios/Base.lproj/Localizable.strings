@@ -1,0 +1,37 @@
+/* 
+  Localizable.strings
+  intermine-ios
+
+  Created by Nadia on 5/9/17.
+  Copyright © 2017 Nadia. All rights reserved.
+*/
+
+"Tabs.Search" = "Search";
+"Tabs.Templates" = "Templates";
+"Tabs.Lists" = "Lists";
+"Tabs.Favorites" = "Favorites";
+"Tabs.Login" = "Login";
+
+"Results.NotFound" = "Nothing found";
+
+"Templates.CTA.Search" = "Show Results";
+"Templates.CTA.SelectOperation" = "Select Operation";
+
+"General.NothingFound" = "No results found";
+
+"Search.AppDescription" = "Use InterMine App to quickly find fundamental information about genes and chromosomal features. Search gene names, gene descriptions, or browse the databases to find information about your favorite gene, as well as more detailed information.";
+"Search.Placeholder" = "Enter search term";
+"Search.Search" = "Search";
+"Search.Refine" = "Refine Search";
+"Search.Refine.SelectMine" = "Select mine";
+"Search.Refine.SelectCategory" = "Select category";
+"Search.Refine.NoSelection" = "None selected";
+"Search.SelectMine" = "Select mine";
+"Search.All" = "Search all mines";
+"Search.Header" = "Search term: %@";
+
+"Login.LoginButton" = "Login";
+
+"Webview.Loading.Error" = "Error loading. Please, try again later";
+
+"Favorites.Title" = "Favorites";

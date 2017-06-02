@@ -21,18 +21,20 @@ class MainTabController: UITabBarController {
     // MARK: Private methods
     
     private func setupTabBar() {
+        
         guard let items = bar?.items else {
             return
         }
-        let images = [UIImage.init(icon: .FASearch, size: CGSize(width: 35, height: 35)),
-                      UIImage.init(icon: .FATasks, size: CGSize(width: 35, height: 35)),
-                      UIImage.init(icon: .FAList, size: CGSize(width: 35, height: 35)),
-                      UIImage.init(icon: .FABookmark, size: CGSize(width: 35, height: 35)),
-                      UIImage.init(icon: .FASignIn, size: CGSize(width: 35, height: 35))]
-        let titles = ["Search", "Templates", "Lists", "Favorites", "Login"]
+        let icons = [Icons.search, Icons.templates, Icons.lists, Icons.bookmark, Icons.login]
+        
+        let titles = [String.localize("Tabs.Search"),
+                      String.localize("Tabs.Templates"),
+                      String.localize("Tabs.Lists"),
+                      String.localize("Tabs.Favorites"),
+                      String.localize("Tabs.Login")]
         
         for i in 0..<items.count {
-            items[i].image = images[i]
+            items[i].image = icons[i]
             items[i].title = titles[i]
         }
     }

@@ -8,28 +8,57 @@
 
 import UIKit
 
-class FavoritesViewController: BaseViewController {
+class FavoritesViewController: BaseViewController, UITableViewDataSource {
+    
+    
+    @IBOutlet weak var tableView: UITableView?
+    
+    private var savedSearches: [FavoriteSearchResult]? {
+        didSet {
+            self.tableView?.reloadData()
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        super.setNavBarTitle(title: String.localize("Favorites.Title"))
+        super.showMenuButton()
+        tableView?.dataSource = self
+        tableView?.rowHeight = UITableViewAutomaticDimension
+        tableView?.estimatedRowHeight = 140
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.updateSavedSearches()
     }
-    */
-
+    
+    // MARK: Private methods
+    
+    private func updateSavedSearches() {
+        self.savedSearches = CacheDataStore.sharedCacheDataStore.getSavedSearchResults()
+    }
+    
+    // MARK: Table view data source
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if let searches = self.savedSearches {
+            return searches.count
+        }
+        return 0
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: FetchedCell.identifier, for: indexPath) as! FetchedCell
+        if let searches = self.savedSearches {
+            let search = searches[indexPath.row]
+            cell.representedData = search.viewableRepresentation()
+        }
+        return cell
+    }
+    
 }

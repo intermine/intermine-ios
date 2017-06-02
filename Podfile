@@ -5,4 +5,6 @@ use_frameworks!
 target 'intermine-ios' do
     pod 'Alamofire', '~> 4.4'
     pod 'Font-Awesome-Swift', '~> 1.6.2'
+    pod 'NVActivityIndicatorView'
+    pod 'SWXMLHash', '~> 3.0.0'
 end

@@ -12,14 +12,21 @@ import CoreData
 @objc(Mine)
 public class Mine: NSManagedObject {
     
-    class func createMineFromJson(json: Dictionary<String, String>, context: NSManagedObjectContext) {
+    class func createMineFromJson(json: Dictionary<String, String>, context: NSManagedObjectContext) -> Mine? {
         guard let mineEntiry = NSEntityDescription.entity(forEntityName: "Mine", in: context) else {
-            return
+            return nil
         }
-        let mine = Mine(entity: mineEntiry, insertInto: context)
-        mine.name = json["name"]
-        mine.url = json["url"]
-        mine.lastUpdated = NSDate()
+        var mine: Mine?
+        if let name = json["name"], let existingMine = Mine.getMineByName(name: name, context: context) {
+            mine = existingMine
+        } else {
+            mine = Mine(entity: mineEntiry, insertInto: context)
+        }
+        mine?.name = json["name"]
+        mine?.url = json["url"]
+        mine?.theme = json["theme"]
+        mine?.lastUpdated = NSDate()
+        return mine
     }
     
     class func getMineByName(name: String, context: NSManagedObjectContext) -> Mine? {
@@ -28,6 +35,27 @@ public class Mine: NSManagedObject {
         if let mines = try? context.fetch(request) {
             if mines.count > 0 {
                 return mines.first
+            }
+        }
+        return nil
+    }
+    
+    class func getMineByUrl(url: String, context: NSManagedObjectContext) -> Mine? {
+        let request = NSFetchRequest<Mine>(entityName: "Mine")
+        request.predicate =  NSPredicate(format: "url == %@", url)
+        if let mines = try? context.fetch(request) {
+            if mines.count > 0 {
+                return mines.first
+            }
+        }
+        return nil
+    }
+    
+    class func getAllMines(context: NSManagedObjectContext) -> [Mine]? {
+        let request = NSFetchRequest<Mine>(entityName: "Mine")
+        if let mines = try? context.fetch(request) {
+            if mines.count > 0 {
+                return mines
             }
         }
         return nil

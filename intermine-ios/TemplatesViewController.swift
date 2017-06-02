@@ -1,35 +1,72 @@
 //
-//  TemplatesViewController.swift
+//  ResultsTableViewController.swift
 //  intermine-ios
 //
-//  Created by Nadia on 5/8/17.
+//  Created by Nadia on 5/11/17.
 //  Copyright © 2017 Nadia. All rights reserved.
 //
 
 import UIKit
 
-class TemplatesViewController: BaseViewController {
+
+class TemplatesViewController: LoadingTableViewController {
+
+    private var templatesList: TemplatesList? {
+        didSet {
+            if let templatesList = self.templatesList {
+                if templatesList.size() > 0 {
+                    self.tableView.reloadData()
+                    self.hideNothingFoundView()
+                } else {
+                    self.showNothingFoundView()
+                }
+            }
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        if  let mine = CacheDataStore.sharedCacheDataStore.findMineByName(name: AppManager.sharedManager.selectedMine), let mineUrl = mine.url {
+            self.mineUrl = mineUrl
+            IntermineAPIClient.fetchTemplates(mineUrl: mineUrl) { (templatesList) in
+                guard let list = templatesList else {
+                    self.stopSpinner()
+                    self.showNothingFoundView()
+                    return
+                }
+                self.templatesList = list
+                self.stopSpinner()
+            }
+        }
     }
     
+    // MARK: Table view data source
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
     }
-    */
 
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if let list = self.templatesList {
+            return list.size()
+        }
+        return 0
+    }
+
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: TemplateTableViewCell.identifier, for: indexPath) as! TemplateTableViewCell
+        if let template = templatesList?.templateAtIndex(index: indexPath.row) {
+            cell.template = template
+        }
+        return cell
+    }
+    
+    // MARK: Table view delegate
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if let template = templatesList?.templateAtIndex(index: indexPath.row),
+            let templateDetail = TemplateDetailTableViewController.templateDetailTableViewController(withTemplate: template) {
+            self.navigationController?.pushViewController(templateDetail, animated: true)
+        }
+    }
 }
