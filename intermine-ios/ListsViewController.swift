@@ -38,6 +38,14 @@ class ListsViewController: LoadingTableViewController {
             })
         }
     }
+    
+    override func mineSelected(_ notification: NSNotification) {
+        if let mineName = notification.userInfo?["mineName"] as? String {
+            if let mine = CacheDataStore.sharedCacheDataStore.findMineByName(name: mineName) {
+                self.configureNavBar(mine: mine)
+            }
+        }
+    }
 
     // MARK: - Table view data source
 

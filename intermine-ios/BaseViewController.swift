@@ -11,9 +11,9 @@ import UIKit
 class BaseViewController: UIViewController {
     
     let interactor = Interactor()
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         self.configureNavBar()
     }
     

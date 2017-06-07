@@ -17,4 +17,8 @@ class DefaultsManager {
     class func fetchFromDefaults(key: String) -> String? {
         return UserDefaults.standard.string(forKey: key)
     }
+    
+    class func keyExists(key: String) -> Bool {
+        return DefaultsManager.fetchFromDefaults(key: key) != nil
+    }
 }

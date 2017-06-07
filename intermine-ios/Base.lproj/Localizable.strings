@@ -31,6 +31,9 @@
 "Search.Header" = "Search term: %@";
 
 "Login.LoginButton" = "Login";
+"Login.CredsPrompt" = "Use the same credentials as for web";
+"Login.Loggedin" = "You are logged in to %@";
+"Login.AuthError" = "Something went wrong";
 
 "Webview.Loading.Error" = "Error loading. Please, try again later";
 

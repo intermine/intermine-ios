@@ -14,10 +14,15 @@ class AppManager {
     var selectedMine: String = General.defaultMine {
         didSet {
             //
+            var info: [String: Any] = [:]
+            info = ["mineName": self.selectedMine]
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: Notifications.mineSelected), object: self, userInfo: info)
         }
     }
     
     var shouldBreakLoading = false
+    
+    var token: String? = DefaultsManager.fetchFromDefaults(key: DefaultsKeys.token)
     
     // MARK: Shared Instance
     
@@ -38,6 +43,10 @@ class AppManager {
         } else {
             self.selectMine(mineName: General.defaultMine)
         }
+    }
+    
+    func updateToken() {
+        self.token = DefaultsManager.fetchFromDefaults(key: DefaultsKeys.token)
     }
 }
 

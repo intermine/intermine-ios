@@ -18,7 +18,8 @@ class IntermineAPIClient: NSObject {
     
     private class func sendJSONRequest(url: String, method: HTTPMethod, params: [String: String]?, completion: @escaping (_ result: [String: AnyObject]?) -> ()) {
         manager.session.configuration.timeoutIntervalForRequest = 120
-        manager.request(url, method: method, parameters: params)
+        let updatedParams = IntermineAPIClient.updateParamsWithAuth(params: params)
+        manager.request(url, method: method, parameters: updatedParams)
             .responseJSON {
                 response in
                 switch (response.result) {
@@ -43,7 +44,8 @@ class IntermineAPIClient: NSObject {
     
     private class func sendStringRequest(url: String, method: HTTPMethod, params: [String: String]?, completion: @escaping (_ result: String?) -> ()) {
         manager.session.configuration.timeoutIntervalForRequest = 120
-        manager.request(url, method: method, parameters: params)
+        let updatedParams = IntermineAPIClient.updateParamsWithAuth(params: params)
+        manager.request(url, method: method, parameters: updatedParams)
             .responseString {
                 response in
                 switch (response.result) {
@@ -60,6 +62,24 @@ class IntermineAPIClient: NSObject {
                     break
                 }
         }
+    }
+    
+    private class func updateParamsWithAuth(params: [String: String]?) -> [String: String]? {
+        var mineName = ""
+        if let selectedMine = DefaultsManager.fetchFromDefaults(key: DefaultsKeys.selectedMine) {
+            mineName = selectedMine
+        } else {
+            mineName = General.defaultMine
+        }
+        
+        if let mine = CacheDataStore.sharedCacheDataStore.findMineByName(name: mineName), let mineUrl = mine.url {
+            if let token = DefaultsManager.fetchFromDefaults(key: mineUrl) {
+                var updatedParams = params
+                updatedParams?["token"] = token
+                return updatedParams
+            }
+        }
+        return params
     }
     
     // MARK: Public methods
@@ -117,7 +137,6 @@ class IntermineAPIClient: NSObject {
         var currentMineCount = 0
         for mine in registry {
             currentMineCount += 1
-            // TODO: stop loop method after refine search is called
             if let mineUrl = mine.url {
                 if AppManager.sharedManager.shouldBreakLoading {
                     break
@@ -284,7 +303,7 @@ class IntermineAPIClient: NSObject {
                         if successful {
                             // store token in nsuserdefaults
                             if let token = JSON["token"] as? String {
-                                DefaultsManager.storeInDefaults(key: DefaultsKeys.token, value: token)
+                                DefaultsManager.storeInDefaults(key: mineUrl, value: token)
                                 completion(true)
                             }
                         } else {
@@ -320,7 +339,7 @@ class IntermineAPIClient: NSObject {
                         if successful {
                             // store token in nsuserdefaults
                             if let token = JSON["token"] as? String {
-                                DefaultsManager.storeInDefaults(key: DefaultsKeys.token, value: token)
+                                DefaultsManager.storeInDefaults(key: mineUrl, value: token)
                                 completion(true)
                             }
                         } else {
