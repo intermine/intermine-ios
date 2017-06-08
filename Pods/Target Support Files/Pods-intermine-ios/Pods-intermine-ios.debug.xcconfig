@@ -1,9 +1,10 @@
 ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES
-FRAMEWORK_SEARCH_PATHS = $(inherited) "$PODS_CONFIGURATION_BUILD_DIR/Alamofire" "$PODS_CONFIGURATION_BUILD_DIR/Font-Awesome-Swift" "$PODS_CONFIGURATION_BUILD_DIR/NVActivityIndicatorView" "$PODS_CONFIGURATION_BUILD_DIR/SWXMLHash"
+FRAMEWORK_SEARCH_PATHS = $(inherited) "$PODS_CONFIGURATION_BUILD_DIR/Alamofire" "$PODS_CONFIGURATION_BUILD_DIR/Font-Awesome-Swift" "$PODS_CONFIGURATION_BUILD_DIR/NVActivityIndicatorView" "$PODS_CONFIGURATION_BUILD_DIR/SWXMLHash" "${PODS_ROOT}/HockeySDK/HockeySDK-iOS/HockeySDK.embeddedframework"
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
+HEADER_SEARCH_PATHS = $(inherited) "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/HockeySDK"
 LD_RUNPATH_SEARCH_PATHS = $(inherited) '@executable_path/Frameworks' '@loader_path/Frameworks'
-OTHER_CFLAGS = $(inherited) -iquote "$PODS_CONFIGURATION_BUILD_DIR/Alamofire/Alamofire.framework/Headers" -iquote "$PODS_CONFIGURATION_BUILD_DIR/Font-Awesome-Swift/Font_Awesome_Swift.framework/Headers" -iquote "$PODS_CONFIGURATION_BUILD_DIR/NVActivityIndicatorView/NVActivityIndicatorView.framework/Headers" -iquote "$PODS_CONFIGURATION_BUILD_DIR/SWXMLHash/SWXMLHash.framework/Headers"
-OTHER_LDFLAGS = $(inherited) -framework "Alamofire" -framework "Font_Awesome_Swift" -framework "NVActivityIndicatorView" -framework "SWXMLHash"
+OTHER_CFLAGS = $(inherited) -iquote "$PODS_CONFIGURATION_BUILD_DIR/Alamofire/Alamofire.framework/Headers" -iquote "$PODS_CONFIGURATION_BUILD_DIR/Font-Awesome-Swift/Font_Awesome_Swift.framework/Headers" -iquote "$PODS_CONFIGURATION_BUILD_DIR/NVActivityIndicatorView/NVActivityIndicatorView.framework/Headers" -iquote "$PODS_CONFIGURATION_BUILD_DIR/SWXMLHash/SWXMLHash.framework/Headers" -isystem "${PODS_ROOT}/Headers/Public" -isystem "${PODS_ROOT}/Headers/Public/HockeySDK"
+OTHER_LDFLAGS = $(inherited) -ObjC -l"c++" -l"z" -framework "Alamofire" -framework "CoreGraphics" -framework "CoreTelephony" -framework "CoreText" -framework "Font_Awesome_Swift" -framework "Foundation" -framework "HockeySDK" -framework "MobileCoreServices" -framework "NVActivityIndicatorView" -framework "QuartzCore" -framework "QuickLook" -framework "SWXMLHash" -framework "Security" -framework "SystemConfiguration" -framework "UIKit"
 OTHER_SWIFT_FLAGS = $(inherited) "-D" "COCOAPODS"
 PODS_BUILD_DIR = $BUILD_DIR
 PODS_CONFIGURATION_BUILD_DIR = $PODS_BUILD_DIR/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)

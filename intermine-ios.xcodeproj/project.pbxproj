@@ -512,6 +512,7 @@
 				05DF53061E90286D00113171 /* Resources */,
 				FE8531314A8AF5AB709DF4B3 /* [CP] Embed Pods Frameworks */,
 				13DA4E4B32221F00D7C8E9B2 /* [CP] Copy Pods Resources */,
+				05033F691EE962270081F522 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -552,6 +553,7 @@
 				TargetAttributes = {
 					05DF53071E90286D00113171 = {
 						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = RRT3YS6M8P;
 						ProvisioningStyle = Automatic;
 					};
 					05DF531B1E90286E00113171 = {
@@ -604,6 +606,19 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		05033F691EE962270081F522 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "FILE=\"${SRCROOT}/HockeySDK-iOS/BuildAgent\"\nif [ -f \"$FILE\" ]; then\n\"$FILE\"\nfi";
+		};
 		13DA4E4B32221F00D7C8E9B2 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -865,12 +880,14 @@
 			baseConfigurationReference = DA3F464877A1055A9A211969 /* Pods-intermine-ios.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = RRT3YS6M8P;
 				INFOPLIST_FILE = "intermine-ios/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "self.edu.com.intermine-ios";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -879,12 +896,14 @@
 			baseConfigurationReference = 2F5C0CB30F0BCF0BB472F14D /* Pods-intermine-ios.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = RRT3YS6M8P;
 				INFOPLIST_FILE = "intermine-ios/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "self.edu.com.intermine-ios";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import HockeySDK
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -21,6 +22,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
         AppManager.sharedManager.retrieveSelectedMine()
+        
+        BITHockeyManager.shared().configure(withIdentifier: "978f62a7b13a4d5d8d809daeb71e2c12")
+        BITHockeyManager.shared().start()
+        BITHockeyManager.shared().authenticator.authenticateInstallation()
+        
         return true
     }
 

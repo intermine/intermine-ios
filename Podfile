@@ -7,4 +7,5 @@ target 'intermine-ios' do
     pod 'Font-Awesome-Swift', '~> 1.6.2'
     pod 'NVActivityIndicatorView'
     pod 'SWXMLHash', '~> 3.0.0'
+    pod 'HockeySDK', '~> 4.1.5'
 end
