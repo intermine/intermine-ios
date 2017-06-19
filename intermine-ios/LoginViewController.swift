@@ -43,9 +43,7 @@ class LoginViewController: BaseViewController, UITextFieldDelegate {
         passwordTextField?.delegate = self
         initialViewY = self.view.frame.origin.y
         descriptionLabel?.text = String.localize("Login.CredsPrompt")
-        if let mineUrl = self.mineUrl, let mine = CacheDataStore.sharedCacheDataStore.findMineByUrl(url: mineUrl), let mineName = mine.name {
-            loggedInLabel?.text = String.localizeWithArg("Login.Loggedin", arg: mineName)
-        }
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -84,6 +82,10 @@ class LoginViewController: BaseViewController, UITextFieldDelegate {
             barButton.customView = button
             
             self.navigationItem.leftBarButtonItem = barButton
+            
+            if let mineUrl = self.mineUrl, let mine = CacheDataStore.sharedCacheDataStore.findMineByUrl(url: mineUrl), let mineName = mine.name {
+                loggedInLabel?.text = String.localizeWithArg("Login.Loggedin", arg: mineName)
+            }
         }
     }
    

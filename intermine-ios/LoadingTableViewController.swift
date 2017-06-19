@@ -12,13 +12,23 @@ import NVActivityIndicatorView
 class LoadingTableViewController: UITableViewController {
     
     private var spinner: NVActivityIndicatorView?
-    private var nothingFoundView: BaseView? = nil
+    private var nothingFoundView: TableCoverView? = nil
     let interactor = Interactor()
+    
+    var hideMenuButton = false {
+        didSet {
+            if hideMenuButton {
+                if let url = self.mineUrl, let mine = CacheDataStore.sharedCacheDataStore.findMineByUrl(url: url) {
+                    self.configureNavBar(mine: mine, shouldShowMenuButton: false)
+                }
+            }
+        }
+    }
     
     var mineUrl: String? {
         didSet {
             if let url = self.mineUrl, let mine = CacheDataStore.sharedCacheDataStore.findMineByUrl(url: url) {
-                self.configureNavBar(mine: mine)
+                self.configureNavBar(mine: mine, shouldShowMenuButton: !self.hideMenuButton)
             }
         }
     }
@@ -70,10 +80,19 @@ class LoadingTableViewController: UITableViewController {
     
     func showNothingFoundView() {
         self.nothingFoundView?.isHidden = false
+        self.showNothingFoundLabel()
     }
     
     func hideNothingFoundView() {
         self.nothingFoundView?.isHidden = true
+    }
+    
+    func hideNothingFoundLabel() {
+        self.nothingFoundView?.messageLabel?.isHidden = true
+    }
+    
+    func showNothingFoundLabel() {
+        self.nothingFoundView?.messageLabel?.isHidden = false
     }
     
     private func indicatorFrame() -> CGRect {
@@ -87,22 +106,30 @@ class LoadingTableViewController: UITableViewController {
         }
     }
     
-    func configureNavBar(mine: Mine) {
+    func configureNavBar(mine: Mine, shouldShowMenuButton: Bool) {
         self.navigationController?.navigationBar.barTintColor = UIColor.hexStringToUIColor(hex: mine.theme)
         self.navigationController?.navigationBar.isTranslucent = false
         self.navigationController?.navigationBar.tintColor = Colors.white
         self.navigationController?.navigationBar.topItem?.title = mine.name
         self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: Colors.white]
         
-        let button = UIButton()
-        button.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
-        button.setImage(Icons.menu, for: .normal)
-        button.addTarget(self, action: #selector(LoadingTableViewController.menuButtonPressed), for: .touchUpInside)
-        button.tintColor = Colors.white
-        let barButton = UIBarButtonItem()
-        barButton.customView = button
+        if shouldShowMenuButton {
+            let button = UIButton()
+            button.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
+            button.setImage(Icons.menu, for: .normal)
+            button.addTarget(self, action: #selector(LoadingTableViewController.menuButtonPressed), for: .touchUpInside)
+            button.tintColor = Colors.white
+            let barButton = UIBarButtonItem()
+            barButton.customView = button
+            self.navigationItem.leftBarButtonItem = barButton
+        }
         
-        self.navigationItem.leftBarButtonItem = barButton
+        if shouldShowMenuButton != true {
+            if self.navigationItem.leftBarButtonItem != nil {
+                self.navigationItem.leftBarButtonItem = nil
+            }
+        }
+
     }
     
     func menuButtonPressed() {

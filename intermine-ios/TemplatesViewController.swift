@@ -28,23 +28,34 @@ class TemplatesViewController: LoadingTableViewController {
         super.viewDidLoad()
         if  let mine = CacheDataStore.sharedCacheDataStore.findMineByName(name: AppManager.sharedManager.selectedMine), let mineUrl = mine.url {
             self.mineUrl = mineUrl
-            IntermineAPIClient.fetchTemplates(mineUrl: mineUrl) { (templatesList) in
-                guard let list = templatesList else {
-                    self.stopSpinner()
-                    self.showNothingFoundView()
-                    return
-                }
-                self.templatesList = list
-                self.stopSpinner()
-            }
+            self.fetchTemplates(mineUrl: mineUrl)
         }
     }
 
     override func mineSelected(_ notification: NSNotification) {
+        self.startSpinner()
+        self.templatesList = TemplatesList(withTemplates: [], mine: mineUrl)
+        self.hideNothingFoundLabel()
         if let mineName = notification.userInfo?["mineName"] as? String {
             if let mine = CacheDataStore.sharedCacheDataStore.findMineByName(name: mineName) {
-                self.configureNavBar(mine: mine)
+                self.configureNavBar(mine: mine, shouldShowMenuButton: true)
+                if let mineUrl = mine.url {
+                    self.mineUrl = mineUrl
+                    self.fetchTemplates(mineUrl: mineUrl)
+                }
             }
+        }
+    }
+    
+    private func fetchTemplates(mineUrl: String) {
+        IntermineAPIClient.fetchTemplates(mineUrl: mineUrl) { (templatesList) in
+            guard let list = templatesList else {
+                self.stopSpinner()
+                self.showNothingFoundView()
+                return
+            }
+            self.templatesList = list
+            self.stopSpinner()
         }
     }
     

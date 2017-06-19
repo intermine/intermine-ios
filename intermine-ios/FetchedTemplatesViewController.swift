@@ -36,7 +36,7 @@ class FetchedTemplatesViewController: LoadingTableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        self.hideMenuButton = true
         self.loadTemplateResultsWithOffset(offset: self.currentOffset)
         
         if let mineUrl = self.mineUrl, let params = self.params {

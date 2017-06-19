@@ -52,6 +52,7 @@ class RefineSearchViewController: BaseViewController, UIPickerViewDelegate, UIPi
     
     
     @IBOutlet weak var placeholderImageView: UIImageView?
+    @IBOutlet weak var refineSearchButton: BaseButton?
     
     private var mines: [String] = [String.localize("Search.Refine.NoSelection")]
     var allCells = Set<CategoryCell>()
@@ -75,6 +76,7 @@ class RefineSearchViewController: BaseViewController, UIPickerViewDelegate, UIPi
                 if let catsTable = self.categoriesTable {
                     if selectedMine == String.localize("Search.Refine.NoSelection") {
                         BaseView.animateView(view: catsTable, animateIn: false)
+                        refineSearchButton?.isEnabled = false
                     } else {
                         BaseView.animateView(view: catsTable, animateIn: true)
                     }
@@ -99,6 +101,11 @@ class RefineSearchViewController: BaseViewController, UIPickerViewDelegate, UIPi
         super.viewDidLoad()
         minesLabel?.text = String.localize("Search.Refine.SelectMine")
         categoriesLabel?.text = String.localize("Search.Refine.SelectCategory")
+        
+        //TODO: - refine search button should be grayed out until some selection is performed
+        refineSearchButton?.setTitle(String.localize("Search.Refine.CTA"), for: .normal)
+        refineSearchButton?.isEnabled = false
+        
         minesPicker?.delegate = self
         minesPicker?.dataSource = self
         categoriesTable?.delegate = self
@@ -107,6 +114,14 @@ class RefineSearchViewController: BaseViewController, UIPickerViewDelegate, UIPi
         self.selectedMine = self.getInitialSelectedMine()
         self.placeholderImageView?.image = Icons.placeholder
     }
+    
+    // MARK: Actions
+    
+    @IBAction func refineSearchButtonTapped(_ sender: Any) {
+        // Go to prev vc with reload
+        self.navigationController?.popViewController(animated: true)
+    }
+    
     
     // MARK: Private methods
     
@@ -124,6 +139,10 @@ class RefineSearchViewController: BaseViewController, UIPickerViewDelegate, UIPi
             }
         }
         return mineNames
+    }
+    
+    private func changeStateRefineSearchButton(enabled: Bool) {
+        refineSearchButton?.isEnabled = enabled
     }
     
     private func getMinesCount() -> Int {
@@ -199,12 +218,6 @@ class RefineSearchViewController: BaseViewController, UIPickerViewDelegate, UIPi
     
     // MARK: - Table view data source
     
-    // TODO: this needs to be in sync w/mine selection from picker
-    // when certain mine is selected in picker -->
-    // table view shows categories for this mine
-    // when different mine is selected -->
-    // table view reloads
-    
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -231,6 +244,7 @@ class RefineSearchViewController: BaseViewController, UIPickerViewDelegate, UIPi
             let category = categories[indexPath.row]
             if let facetName = category.getTitle(), let facetCount = category.getCount() {
                 let selectedFacet = SelectedFacet(withMineName: selectedMine, facetName: facetName, count: facetCount)
+                refineSearchButton?.isEnabled = true
                 self.delegate?.refineSearchViewController(controller: self, didSelectFacet: selectedFacet)
             }
         }

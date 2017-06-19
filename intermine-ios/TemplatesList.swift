@@ -12,7 +12,7 @@ class TemplatesList {
     
     // TODO: Should it be cached in CD?
     
-    private let templates: [Template]?
+    private var templates: [Template]?
     private let mine: String?
     
     init(withTemplates: [Template]?, mine: String?) {
@@ -26,6 +26,10 @@ class TemplatesList {
         } else {
             return 0
         }
+    }
+    
+    func removeAllItems() {
+        self.templates = []
     }
     
     func templateAtIndex(index: Int) -> Template? {

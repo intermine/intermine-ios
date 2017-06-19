@@ -38,6 +38,7 @@ struct Icons {
     static let templates = UIImage.init(icon: .FATasks, size: CGSize(width: 35, height: 35))
     static let lists = UIImage.init(icon: .FAList, size: CGSize(width: 35, height: 35))
     static let bookmark = UIImage.init(icon: .FABookmark, size: CGSize(width: 35, height: 35))
+    static let bookmarkEmpty = UIImage.init(icon: .FABookmarkO, size: CGSize(width: 35, height: 35))
     static let login = UIImage.init(icon: .FASignIn, size: CGSize(width: 35, height: 35))
     static let close = UIImage.init(icon: .FATimes, size: CGSize(width: 40, height: 40))
     static let menu = UIImage.init(icon: .FABars, size: CGSize(width: 40, height: 40), orientation: UIImageOrientation.up, textColor: Colors.white, backgroundColor: UIColor.clear)

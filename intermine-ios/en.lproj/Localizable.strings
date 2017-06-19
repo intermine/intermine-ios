@@ -26,6 +26,10 @@
 "Search.Refine.SelectMine" = "Select mine";
 "Search.Refine.SelectCategory" = "Select category";
 "Search.Refine.NoSelection" = "None selected";
+"Search.Refine.AllMines" = "All mines";
+"Search.Refine.AllCategories" = "All facets";
+"Search.Refine.CTA" = "Refine search";
+
 "Search.SelectMine" = "Select mine";
 "Search.All" = "Search all mines";
 "Search.Header" = "Search term: %@";

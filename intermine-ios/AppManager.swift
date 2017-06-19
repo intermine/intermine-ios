@@ -20,7 +20,13 @@ class AppManager {
         }
     }
     
-    var shouldBreakLoading = false
+    var shouldBreakLoading = false {
+        didSet {
+            if self.shouldBreakLoading {
+                IntermineAPIClient.cancelAllRequests()
+            }
+        }
+    }
     
     var token: String? = DefaultsManager.fetchFromDefaults(key: DefaultsKeys.token)
     
