@@ -26,6 +26,7 @@ class FavoritesViewController: BaseViewController, UITableViewDataSource {
         tableView?.dataSource = self
         tableView?.rowHeight = UITableViewAutomaticDimension
         tableView?.estimatedRowHeight = 140
+        tableView?.allowsMultipleSelectionDuringEditing = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -59,6 +60,25 @@ class FavoritesViewController: BaseViewController, UITableViewDataSource {
             cell.representedData = search.viewableRepresentation()
         }
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if (editingStyle == .delete) {
+            guard let savedSearches = self.savedSearches else {
+                return
+            }
+
+            let removingSearch = savedSearches[indexPath.row]
+            if let id = removingSearch.id {
+                CacheDataStore.sharedCacheDataStore.unsaveSearchResult(withId: id)
+            }
+            
+            self.savedSearches?.remove(at: indexPath.row)
+        }
     }
     
 }

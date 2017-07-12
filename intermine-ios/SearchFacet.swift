@@ -54,6 +54,13 @@ class FormattedFacet {
         return self.count
     }
     
+    func getNumericCount() -> Int? {
+        if let count = self.count {
+            return Int(count)
+        }
+        return 0
+    }
+    
 }
 
 

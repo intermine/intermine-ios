@@ -16,6 +16,8 @@
 
 "Templates.CTA.Search" = "Show Results";
 "Templates.CTA.SelectOperation" = "Select Operation";
+"Templates.CountLabel" = "Template count: %@";
+"Templates.Params" = "Parameters: %@";
 
 "General.NothingFound" = "No results found";
 
@@ -42,3 +44,8 @@
 "Webview.Loading.Error" = "Error loading. Please, try again later";
 
 "Favorites.Title" = "Favorites";
+
+"Network.Error.ConnectionLost" = "Please, check your Internet connection and try again";
+"Network.Error.Server" = "Sorry, we are experiensing some issues. Please, try again later";
+"Network.Error.Auth" = "This action is only available for authenticated users";
+"Network.Error.Unknown" = "Something went wrong. Please, try again later";

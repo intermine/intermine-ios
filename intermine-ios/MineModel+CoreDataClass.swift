@@ -12,7 +12,7 @@ import CoreData
 @objc(MineModel)
 public class MineModel: NSManagedObject {
     
-    class func createMineModel(url: String, date: String, xmlFile: String, versioned: Bool, context: NSManagedObjectContext) {
+    class func createMineModel(url: String, releaseId: String?, xmlFile: String, versionId: String?, context: NSManagedObjectContext) {
         guard let intermineModelEntity = NSEntityDescription.entity(forEntityName: "MineModel", in: context) else {
             return
         }
@@ -23,8 +23,8 @@ public class MineModel: NSManagedObject {
             model = MineModel(entity: intermineModelEntity, insertInto: context)
         }
         model?.url = url
-        model?.versioned = versioned // if Intermine backend is > 1.6.6
-        model?.releaseDate = date // should come from separate call
+        model?.versionId = versionId
+        model?.releaseId = releaseId
         model?.xmlFile = xmlFile
     }
     

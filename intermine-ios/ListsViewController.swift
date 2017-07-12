@@ -47,10 +47,13 @@ class ListsViewController: LoadingTableViewController {
     }
     
     private func fetchLists(mineUrl: String) {
-        IntermineAPIClient.fetchLists(mineUrl: mineUrl, completion: { (lists) in
+        IntermineAPIClient.fetchLists(mineUrl: mineUrl, completion: { (lists, error) in
             guard let lists = lists else {
                 self.stopSpinner()
                 self.showNothingFoundView()
+                if let error = error {
+                    self.alert(message: NetworkErrorHandler.getErrorMessage(errorType: error))
+                }
                 return
             }
             self.lists = lists

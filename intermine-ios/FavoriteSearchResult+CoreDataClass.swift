@@ -33,6 +33,17 @@ public class FavoriteSearchResult: NSManagedObject {
         return nil
     }
     
+    class func getFavoriteSearchById(id: String, context: NSManagedObjectContext) -> FavoriteSearchResult? {
+        let request = NSFetchRequest<FavoriteSearchResult>(entityName: "FavoriteSearchResult")
+        request.predicate =  NSPredicate(format: "id == %@", id)
+        if let res = try? context.fetch(request) {
+            if res.count > 0 {
+                return res.first
+            }
+        }
+        return nil
+    }
+    
     class func createFavoriteSearchResult(type: String, fields: NSDictionary, mineName: String, id: String, context: NSManagedObjectContext) {
         guard let favSearchResult = NSEntityDescription.entity(forEntityName: "FavoriteSearchResult", in: context) else {
             return

@@ -48,10 +48,13 @@ class TemplatesViewController: LoadingTableViewController {
     }
     
     private func fetchTemplates(mineUrl: String) {
-        IntermineAPIClient.fetchTemplates(mineUrl: mineUrl) { (templatesList) in
+        IntermineAPIClient.fetchTemplates(mineUrl: mineUrl) { (templatesList, error) in
             guard let list = templatesList else {
                 self.stopSpinner()
                 self.showNothingFoundView()
+                if let error = error {
+                    self.alert(message: NetworkErrorHandler.getErrorMessage(errorType: error))
+                }
                 return
             }
             self.templatesList = list

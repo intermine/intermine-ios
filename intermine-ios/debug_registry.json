@@ -1,0 +1,11 @@
+{
+    "mines":
+    [
+         {
+         "name": "MouseMine",
+         "url": "http://127.0.0.1:5000",
+         "theme": "#5EB0D3"
+         }
+    ]
+}
+

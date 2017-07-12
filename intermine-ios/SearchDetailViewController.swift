@@ -29,7 +29,7 @@ class SearchCell: UITableViewCell {
     
 }
 
-class SearchDetailViewController: BaseViewController, UITableViewDataSource {
+class SearchDetailViewController: BaseViewController, UITableViewDataSource, FavoriteButtonDelegate {
     
     @IBOutlet weak var tableView: UITableView?
     
@@ -49,15 +49,12 @@ class SearchDetailViewController: BaseViewController, UITableViewDataSource {
     private func addNavbarButtons() {
         let infoButton = UIBarButtonItem(image: Icons.info,  style: .plain, target: self, action: #selector(SearchDetailViewController.didTapInfoButton))
         
-        // TODO: fav button should be empty button if search is not favorited, should be full if search
-        // is favorited
-        
-        
-        let favButtonEmpty = UIBarButtonItem(image: Icons.bookmarkEmpty,  style: .plain, target: self, action: #selector(SearchDetailViewController.didTapFavEmptyButton))
-        
-        let favButton = UIBarButtonItem(image: Icons.bookmark,  style: .plain, target: self, action: #selector(SearchDetailViewController.didTapFavButton))
-        
-        navigationItem.rightBarButtonItems = [infoButton, favButton]
+        if let data = self.data {
+            let favButton = FavoriteButton(isFavorite: data.isFavorited())
+            favButton.delegate = self
+            let favBarButton = UIBarButtonItem(customView: favButton)
+            navigationItem.rightBarButtonItems = [infoButton, favBarButton]
+        }
     }
     
     func didTapInfoButton() {
@@ -66,19 +63,6 @@ class SearchDetailViewController: BaseViewController, UITableViewDataSource {
             self.navigationController?.pushViewController(webVC, animated: true)
         }
     }
-    
-    func didTapFavButton() {
-        if let data = self.data {
-            CacheDataStore.sharedCacheDataStore.saveSearchResult(searchResult: data)
-        }
-    }
-    
-    func didTapFavEmptyButton() {
-        if let data = self.data {
-            CacheDataStore.sharedCacheDataStore.saveSearchResult(searchResult: data)
-        }
-    }
-
     
     // MARK: Load from storyboard
     
@@ -111,6 +95,20 @@ class SearchDetailViewController: BaseViewController, UITableViewDataSource {
         cell.key = key
         cell.value = self.data?.viewableRepresentation()[key]
         return cell
+    }
+    
+    // MARK: - FavoriteButtonDelegate
+    
+    func didTapFavoriteButton(favoriteButton: FavoriteButton) {
+        guard let searchResult = self.data, let searchId = searchResult.getId() else {
+            return
+        }
+        
+        if searchResult.isFavorited() {
+            CacheDataStore.sharedCacheDataStore.unsaveSearchResult(withId: searchId)
+        } else {
+            CacheDataStore.sharedCacheDataStore.saveSearchResult(searchResult: searchResult)
+        }
     }
 
 }

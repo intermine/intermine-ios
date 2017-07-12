@@ -146,8 +146,12 @@ class LoadingTableViewController: UITableViewController {
             if let elem = elem as? String {
                 let comps = elem.components(separatedBy: " > ")
                 if comps.count > 1 {
-                    let title = comps[1]
-                    processedArray.append(title)
+                    let currentIndex = comps.count - 1
+                    if processedArray.contains(comps[currentIndex]) {
+                        processedArray.append(comps[currentIndex-1] + comps[currentIndex])
+                    } else {
+                        processedArray.append(comps[currentIndex])
+                    }
                 }
             }
         }

@@ -9,14 +9,13 @@
 import UIKit
 
 struct Endpoints {
-    static let serviceListing = "/service"
     static let modelDescription = "/service/model"
     static let lists = "/service/lists"
     static let templates = "/service/templates"
     static let tokens = "/service/user/token"
     static let templateResults = "/service/template/results"
-    static let intermineVersion = "/service/version/intermine"
-    static let modelReleased = "/service/version/release"
+    static let intermineVersion = "/service/version/intermine" // version of the intermine software
+    static let modelReleased = "/service/version/release" // version of the data *inside* the intermine
     static let singleList = "/service/query/results"
     static let search = "/service/search"
     static let report = "/report.do"
@@ -29,16 +28,17 @@ struct General {
     static let searchSize = 5
     static let baseVersion = "1.6.5"
     static let descriptionCharactersLimit = 120
-    static let defaultMine = "YeastMine"
+    static let defaultMine = "MouseMine"
     static let viewAnimationSpeed = 0.2
+    static let nullValues = ["<null>", "NULL", "-"]
 }
 
 struct Icons {
     static let search = UIImage.init(icon: .FASearch, size: CGSize(width: 35, height: 35))
     static let templates = UIImage.init(icon: .FATasks, size: CGSize(width: 35, height: 35))
     static let lists = UIImage.init(icon: .FAList, size: CGSize(width: 35, height: 35))
-    static let bookmark = UIImage.init(icon: .FABookmark, size: CGSize(width: 35, height: 35))
-    static let bookmarkEmpty = UIImage.init(icon: .FABookmarkO, size: CGSize(width: 35, height: 35))
+    static let bookmark = UIImage.init(icon: .FABookmark, size: CGSize(width: 35, height: 35), orientation: UIImageOrientation.up, textColor: Colors.white, backgroundColor: UIColor.clear)
+    static let bookmarkEmpty = UIImage.init(icon: .FABookmarkO, size: CGSize(width: 35, height: 35), orientation: UIImageOrientation.up, textColor: Colors.white, backgroundColor: UIColor.clear)
     static let login = UIImage.init(icon: .FASignIn, size: CGSize(width: 35, height: 35))
     static let close = UIImage.init(icon: .FATimes, size: CGSize(width: 40, height: 40))
     static let menu = UIImage.init(icon: .FABars, size: CGSize(width: 40, height: 40), orientation: UIImageOrientation.up, textColor: Colors.white, backgroundColor: UIColor.clear)

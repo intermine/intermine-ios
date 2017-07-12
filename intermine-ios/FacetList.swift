@@ -31,4 +31,16 @@ class FacetList {
         return self.categoryFacet?.getFormattedContents()
     }
     
+    func getTotalFacetCount() -> Int {
+        var count = 0
+        if let formattedFacets = self.getFormattedFacetsList() {
+            for facet in formattedFacets {
+                if let num = facet.getNumericCount() {
+                    count += num
+                }
+            }
+        }
+        return count
+    }
+    
 }

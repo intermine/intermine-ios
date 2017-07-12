@@ -13,7 +13,7 @@ class SearchResult: NSObject {
     
     private var type: String?
     private var fields: [String: AnyObject]?
-    private var mineName: String?
+    var mineName: String?
     private var id: String?
     
     init(withType: String?, fields: [String: AnyObject]?, mineName: String?, id: Int?) {
@@ -53,5 +53,13 @@ class SearchResult: NSObject {
         return representation
     }
     
+    func isFavorited() -> Bool {
+        if let id = self.id {
+            if CacheDataStore.sharedCacheDataStore.getSavedSearchById(id: id) != nil {
+                return true
+            }
+        }
+        return false
+    }
     
 }

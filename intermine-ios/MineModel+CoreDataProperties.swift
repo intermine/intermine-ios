@@ -2,7 +2,7 @@
 //  MineModel+CoreDataProperties.swift
 //  intermine-ios
 //
-//  Created by Nadia on 5/16/17.
+//  Created by Nadia on 6/23/17.
 //  Copyright © 2017 Nadia. All rights reserved.
 //
 
@@ -16,9 +16,9 @@ extension MineModel {
         return NSFetchRequest<MineModel>(entityName: "MineModel")
     }
 
-    @NSManaged public var releaseDate: String?
+    @NSManaged public var releaseId: String?
     @NSManaged public var url: String?
-    @NSManaged public var versioned: Bool
     @NSManaged public var xmlFile: String?
+    @NSManaged public var versionId: String?
 
 }
