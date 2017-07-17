@@ -76,7 +76,7 @@ class ListsViewController: LoadingTableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ListTableViewCell.identifier, for: indexPath) as! ListTableViewCell
-        if let lists = self.lists {
+        if let lists = self.lists, lists.count > 0 {
             cell.list = lists[indexPath.row]
         }
         return cell

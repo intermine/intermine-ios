@@ -1143,14 +1143,21 @@
                                                     <rect key="frame" x="0.0" y="0.0" width="310" height="43.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
+                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FCx-ys-UV9">
+                                                            <rect key="frame" x="8" y="4" width="2" height="36"/>
+                                                            <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" constant="2" id="FE2-NO-veV"/>
+                                                            </constraints>
+                                                        </view>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Aez-0n-5R9">
-                                                            <rect key="frame" x="16" y="13" width="156" height="18"/>
+                                                            <rect key="frame" x="15" y="13" width="156" height="18"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                             <color key="textColor" red="0.56078431370000004" green="0.56078431370000004" blue="0.56078431370000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="J7i-WK-sio">
-                                                            <rect key="frame" x="177" y="9" width="25" height="25"/>
+                                                            <rect key="frame" x="176" y="9" width="25" height="25"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="25" id="6dH-ql-hec"/>
                                                                 <constraint firstAttribute="height" constant="25" id="Dec-5H-cSX"/>
@@ -1166,15 +1173,19 @@
                                                     <constraints>
                                                         <constraint firstItem="Aez-0n-5R9" firstAttribute="width" secondItem="roJ-QW-Sbg" secondAttribute="width" multiplier="0.5" constant="1" id="4PB-eU-Rog"/>
                                                         <constraint firstItem="Aez-0n-5R9" firstAttribute="centerY" secondItem="roJ-QW-Sbg" secondAttribute="centerY" id="5q5-Sb-U62"/>
+                                                        <constraint firstItem="FCx-ys-UV9" firstAttribute="leading" secondItem="roJ-QW-Sbg" secondAttribute="leadingMargin" id="Bzh-uh-Hft"/>
+                                                        <constraint firstItem="FCx-ys-UV9" firstAttribute="trailing" secondItem="Aez-0n-5R9" secondAttribute="leading" constant="-5" id="P6g-r4-qGn"/>
                                                         <constraint firstItem="I3B-aA-uHk" firstAttribute="centerY" secondItem="roJ-QW-Sbg" secondAttribute="centerY" id="PQQ-d8-W0f"/>
                                                         <constraint firstItem="J7i-WK-sio" firstAttribute="centerY" secondItem="Aez-0n-5R9" secondAttribute="centerY" id="QUE-RC-ex5"/>
-                                                        <constraint firstItem="Aez-0n-5R9" firstAttribute="leading" secondItem="roJ-QW-Sbg" secondAttribute="leadingMargin" constant="8" id="SP6-wO-Rgm"/>
+                                                        <constraint firstItem="FCx-ys-UV9" firstAttribute="height" secondItem="roJ-QW-Sbg" secondAttribute="height" multiplier="0.8" constant="1" id="Wov-Yh-XlS"/>
+                                                        <constraint firstItem="FCx-ys-UV9" firstAttribute="centerY" secondItem="roJ-QW-Sbg" secondAttribute="centerY" id="aT0-fV-yLm"/>
                                                         <constraint firstItem="J7i-WK-sio" firstAttribute="leading" secondItem="Aez-0n-5R9" secondAttribute="trailing" constant="5" id="bck-9j-FpF"/>
                                                         <constraint firstAttribute="trailingMargin" secondItem="I3B-aA-uHk" secondAttribute="trailing" constant="8" id="j9O-hb-Y46"/>
                                                     </constraints>
                                                 </tableViewCellContentView>
                                                 <connections>
                                                     <outlet property="checkImageView" destination="J7i-WK-sio" id="qlu-m2-JMo"/>
+                                                    <outlet property="colorView" destination="FCx-ys-UV9" id="COo-LR-4ik"/>
                                                     <outlet property="countLabel" destination="I3B-aA-uHk" id="lHM-8a-GfI"/>
                                                     <outlet property="titleLabel" destination="Aez-0n-5R9" id="bi6-GK-B8P"/>
                                                 </connections>
@@ -1229,6 +1240,7 @@
                         <outlet property="categoriesTable" destination="Vze-8B-4NV" id="5Zg-fj-nyR"/>
                         <outlet property="minesLabel" destination="TlS-Kn-u6z" id="kbu-dc-pKo"/>
                         <outlet property="minesPicker" destination="2aQ-T8-Tb7" id="Jlr-f6-a4C"/>
+                        <outlet property="nothingFoundView" destination="d2Q-wf-ErA" id="S6k-cH-cjl"/>
                         <outlet property="placeholderImageView" destination="khk-e1-6uq" id="r9t-CC-f0F"/>
                         <outlet property="refineSearchButton" destination="jPD-WO-1A6" id="x7b-qi-9Ib"/>
                     </connections>
@@ -1243,7 +1255,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="mcr-ju-Ezg" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Item" id="ar8-9P-eZg"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="BaB-xS-8FQ">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="BaB-xS-8FQ">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>

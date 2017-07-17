@@ -15,6 +15,7 @@
 		0535181C1ECF8260006F87EA /* FacetList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0535181B1ECF8260006F87EA /* FacetList.swift */; };
 		053A57CC1F13858F00445F6E /* debug_registry.json in Resources */ = {isa = PBXBuildFile; fileRef = 053A57CB1F13858F00445F6E /* debug_registry.json */; };
 		05420A921F128C4C00BC1CC7 /* NetworkErrorHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05420A911F128C4C00BC1CC7 /* NetworkErrorHandler.swift */; };
+		054FD7591F1AD93F0017171A /* FacetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 054FD7581F1AD93F0017171A /* FacetManager.swift */; };
 		055556661ECCA344009DCA24 /* FetchedSearchesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 055556651ECCA344009DCA24 /* FetchedSearchesViewController.swift */; };
 		055556691ECCA91D009DCA24 /* SearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 055556681ECCA91D009DCA24 /* SearchResult.swift */; };
 		05715E541EBF055800C4C3C7 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05715E531EBF055800C4C3C7 /* Constants.swift */; };
@@ -102,6 +103,7 @@
 		053A57CB1F13858F00445F6E /* debug_registry.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = debug_registry.json; sourceTree = "<group>"; };
 		05420A911F128C4C00BC1CC7 /* NetworkErrorHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkErrorHandler.swift; sourceTree = "<group>"; };
 		054745731EC2426900BC35F8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
+		054FD7581F1AD93F0017171A /* FacetManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FacetManager.swift; sourceTree = "<group>"; };
 		055556651ECCA344009DCA24 /* FetchedSearchesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchedSearchesViewController.swift; sourceTree = "<group>"; };
 		055556681ECCA91D009DCA24 /* SearchResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResult.swift; sourceTree = "<group>"; };
 		05715E531EBF055800C4C3C7 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -279,6 +281,7 @@
 				05DA3DF61EC9E95200AB4B79 /* MineModelParser.swift */,
 				05DA3DF81ECAF75D00AB4B79 /* QueryBuilder.swift */,
 				05269F601ED4D4E50002ECB2 /* DefaultsManager.swift */,
+				054FD7581F1AD93F0017171A /* FacetManager.swift */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -707,6 +710,7 @@
 				05EA6CC01EC82CB2002CC884 /* ListsViewController.swift in Sources */,
 				0595D51F1EC0A60600686065 /* SearchViewController.swift in Sources */,
 				05F407A51EC6100C00707B86 /* ActionCell.swift in Sources */,
+				054FD7591F1AD93F0017171A /* FacetManager.swift in Sources */,
 				05AC8A751ED772D6000F37CE /* WebViewController.swift in Sources */,
 				05F4079F1EC60F9D00707B86 /* LookupCell.swift in Sources */,
 				055556691ECCA91D009DCA24 /* SearchResult.swift in Sources */,

@@ -31,6 +31,7 @@ struct General {
     static let defaultMine = "MouseMine"
     static let viewAnimationSpeed = 0.2
     static let nullValues = ["<null>", "NULL", "-"]
+    static let timeoutIntervalForRequest: Double = 1800
 }
 
 struct Icons {
@@ -45,22 +46,25 @@ struct Icons {
     static let check = UIImage.init(icon: .FACheck, size: CGSize(width: 35, height: 35), orientation: UIImageOrientation.up, textColor: Colors.tamarillo, backgroundColor: UIColor.clear)
     static let info = UIImage.init(icon: .FAInfo, size: CGSize(width: 35, height: 35), orientation: UIImageOrientation.up, textColor: Colors.white, backgroundColor: UIColor.clear)
     static let star = UIImage.init(icon: .FAStar, size: CGSize(width: 35, height: 35), orientation: UIImageOrientation.up, textColor: Colors.white, backgroundColor: UIColor.clear)
-    static let placeholder = UIImage.init(icon: .FAFile, size: CGSize(width: 500, height: 500), orientation: UIImageOrientation.up, textColor: Colors.gray, backgroundColor: UIColor.clear)
+    static let placeholder = UIImage.init(icon: .FAFile, size: CGSize(width: 500, height: 500), orientation: UIImageOrientation.up, textColor: Colors.gray56, backgroundColor: UIColor.clear)
     
 }
 
 struct Colors {
-    static let chelseaCucumber = UIColor.hexStringToUIColor(hex: "#8CA855")
-    static let conifer = UIColor.hexStringToUIColor(hex: "#BED549")
-    static let pistachio = UIColor.hexStringToUIColor(hex: "#8CA50B")
-    static let eggplant = UIColor.hexStringToUIColor(hex: "#a50b8b") // complementary to pistachio
     static let white = UIColor.white
-    static let gray = UIColor.hexStringToUIColor(hex: "#8F8F8F")
-    static let greenMeadow = UIColor.hexStringToUIColor(hex: "#1cb25d")
-    static let terracota = UIColor.hexStringToUIColor(hex: "#b22d1c")
+    static let gray56 = UIColor.hexStringToUIColor(hex: "#8F8F8F")
     static let palma = UIColor.hexStringToUIColor(hex: "#1E9618")
     static let tamarillo = UIColor.hexStringToUIColor(hex: "#96181e")
     static let apple = UIColor.hexStringToUIColor(hex: "#43A047")
+    
+    // Search facet colors
+    static let sushi = UIColor.hexStringToUIColor(hex: "#8BC34A")
+    static let amber = UIColor.hexStringToUIColor(hex: "#FFC107")
+    static let dodgerBlue = UIColor.hexStringToUIColor(hex: "#2196F3")
+    static let amaranth = UIColor.hexStringToUIColor(hex: "#E91E63")
+    static let orange = UIColor.hexStringToUIColor(hex: "#FF5722")
+    static let seance = UIColor.hexStringToUIColor(hex: "#9C27B0")
+    static let silver = UIColor.hexStringToUIColor(hex: "#CCCCCC")
 }
 
 struct DefaultsKeys {
@@ -87,4 +91,6 @@ struct Notifications {
     static let operationChanged = "notification.operation.changed"
     static let valueChanged = "notification.value.changed"
     static let mineSelected = "notification.mine.selected"
+    static let facetsUpdated = "notification.facets.updated"
+    static let searchFailed = "notification.search.failed"
 }

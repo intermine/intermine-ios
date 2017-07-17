@@ -28,7 +28,12 @@ class FacetList {
     }
     
     func getFormattedFacetsList() -> [FormattedFacet]? {
-        return self.categoryFacet?.getFormattedContents()
+        return self.categoryFacet?.getFormattedContents()?.sorted(by: { (facet0, facet1) -> Bool in
+            guard let title0 = facet0.getTitle(), let title1 = facet1.getTitle() else {
+                return false
+            }
+            return title0 < title1
+        })
     }
     
     func getTotalFacetCount() -> Int {

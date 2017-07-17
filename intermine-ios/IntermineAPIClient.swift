@@ -44,7 +44,7 @@ class IntermineAPIClient: NSObject {
     // MARK: Private methods
 
     private class func sendJSONRequest(url: String, method: HTTPMethod, params: [String: String]?, shouldUseAuth: Bool, completion: @escaping (_ result: [String: AnyObject]?, _ error: NetworkErrorType?) -> ()) {
-        manager.session.configuration.timeoutIntervalForRequest = 30
+        manager.session.configuration.timeoutIntervalForRequest = General.timeoutIntervalForRequest
         var paramsToUse = params
         if shouldUseAuth {
             paramsToUse = IntermineAPIClient.updateParamsWithAuth(params: params)
@@ -70,7 +70,7 @@ class IntermineAPIClient: NSObject {
     }
     
     private class func sendStringRequest(url: String, method: HTTPMethod, params: [String: String]?, shouldUseAuth: Bool, completion: @escaping (_ result: String?, _ error: NetworkErrorType?) -> ()) {
-        manager.session.configuration.timeoutIntervalForRequest = 120
+        manager.session.configuration.timeoutIntervalForRequest = General.timeoutIntervalForRequest
         var paramsToUse = params
         if shouldUseAuth {
             paramsToUse = IntermineAPIClient.updateParamsWithAuth(params: params)

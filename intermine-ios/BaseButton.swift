@@ -19,7 +19,7 @@ class BaseButton: UIButton {
                 })
             } else {
                 UIView.animate(withDuration: 0.2, animations: { 
-                    self.backgroundColor = Colors.gray
+                    self.backgroundColor = Colors.gray56
                     self.alpha = 0.5
                 })
             }

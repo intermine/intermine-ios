@@ -17,10 +17,13 @@ class FetchedSearchesViewController: LoadingTableViewController, UIGestureRecogn
     
     private var currentOffset: Int = 0
     private var params: [String: String]?
+    private let facetManager = FacetManager.shared
     
     private var facets: [FacetList]? {
         didSet {
             if let facets = self.facets {
+                facetManager.updateFacets(facets: facets)
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: Notifications.facetsUpdated), object: self, userInfo: nil)
                 var mineNames: [String] = []
                 for facet in facets {
                     if let name = facet.getMine() {
@@ -88,7 +91,7 @@ class FetchedSearchesViewController: LoadingTableViewController, UIGestureRecogn
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        self.lockData = true
+        //self.lockData = true
         
         if (self.isMovingFromParentViewController || self.isBeingDismissed) {
             self.data = []
@@ -144,6 +147,9 @@ class FetchedSearchesViewController: LoadingTableViewController, UIGestureRecogn
                 }
                 
                 if let error = error {
+                    var info: [String: Any] = [:]
+                    info["errorType"] = error
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: Notifications.searchFailed), object: self, userInfo: info)
                     self.alert(message: NetworkErrorHandler.getErrorMessage(errorType: error))
                 }
 

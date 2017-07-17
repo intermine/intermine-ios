@@ -27,6 +27,7 @@
 "Search.Refine" = "Refine Search";
 "Search.Refine.SelectMine" = "Select mine";
 "Search.Refine.SelectCategory" = "Select category";
+"Search.Refine.LoadingCategories" = "Loading categories";
 "Search.Refine.NoSelection" = "None selected";
 "Search.Refine.AllMines" = "All mines";
 "Search.Refine.AllCategories" = "All facets";
