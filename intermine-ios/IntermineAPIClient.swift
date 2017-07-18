@@ -226,7 +226,7 @@ class IntermineAPIClient: NSObject {
     
     class func fetchSingleList(mineUrl: String, queryString: String, completion: @escaping (_ result: [String: AnyObject]?, _ params: [String: String], _ error: NetworkErrorType?) -> ()) {
         let url = mineUrl + Endpoints.singleList
-        let params: [String: String] = ["format": "json", "query": queryString, "start": "0", "size": "15"]
+        let params: [String: String] = ["format": "json", "q": queryString, "start": "0", "size": "15"]
         IntermineAPIClient.sendJSONRequest(url: url, method: .post, params: params, shouldUseAuth: true) { (res, error) in
             completion(res, params, error)
         }
