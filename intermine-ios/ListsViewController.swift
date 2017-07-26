@@ -14,27 +14,38 @@ class ListsViewController: LoadingTableViewController {
         didSet {
             if let lists = self.lists {
                 if lists.count > 0 {
-                    self.tableView.reloadData()
-                    self.hideNothingFoundView()
+                    UIView.transition(with: self.tableView, duration: 0.5, options: .transitionCrossDissolve, animations: {
+                        self.tableView.reloadData()
+                    }, completion: nil)
+                    self.showingResult = true
                 } else {
-                    self.showNothingFoundView()
+                    self.nothingFound = true
                 }
             }
         }
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         if  let mine = CacheDataStore.sharedCacheDataStore.findMineByName(name: AppManager.sharedManager.selectedMine), let mineUrl = mine.url  {
             self.mineUrl = mineUrl
             self.fetchLists(mineUrl: mineUrl)
+        } else {
+            self.defaultNavbarConfiguration(withTitle: "Lists")
+            let failedView = FailedRegistryView.instantiateFromNib()
+            self.tableView.addSubview(failedView)
         }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+    }
+    
     override func mineSelected(_ notification: NSNotification) {
-        self.startSpinner()
         self.lists = []
-        self.hideNothingFoundLabel()
+        self.isLoading = true
+        IntermineAPIClient.cancelListsRequest()
         if let mineName = notification.userInfo?["mineName"] as? String {
             if let mine = CacheDataStore.sharedCacheDataStore.findMineByName(name: mineName) {
                 self.configureNavBar(mine: mine, shouldShowMenuButton: true)
@@ -47,17 +58,16 @@ class ListsViewController: LoadingTableViewController {
     }
     
     private func fetchLists(mineUrl: String) {
+        self.isLoading = true
         IntermineAPIClient.fetchLists(mineUrl: mineUrl, completion: { (lists, error) in
             guard let lists = lists else {
-                self.stopSpinner()
-                self.showNothingFoundView()
                 if let error = error {
                     self.alert(message: NetworkErrorHandler.getErrorMessage(errorType: error))
                 }
                 return
             }
-            self.lists = lists
-            self.stopSpinner()
+            // Sort list objects by "authorized"
+            self.lists = lists.sorted { $0.getAuthd() && !$1.getAuthd() }
         })
     }
 
@@ -98,7 +108,7 @@ class ListsViewController: LoadingTableViewController {
                     if let views = CacheDataStore.sharedCacheDataStore.getParamsForListCall(mineUrl: mineUrl, type: selectedType) {
                         if let viewsQuery = QueryBuilder.buildQuery(views: views, type: selectedType, value: selectedValue) {
                             
-                            if let fetchedListsCV = FetchedListsViewController.fetchedListsViewController(withMineUrl: mineUrl, viewsQuery: viewsQuery) {
+                            if let fetchedListsCV = FetchedListsViewController.fetchedListsViewController(withMineUrl: mineUrl, viewsQuery: viewsQuery, type: selectedType, listTitle: selectedList.getName()) {
                                 self.navigationController?.pushViewController(fetchedListsCV, animated: true)
                             }
                         }

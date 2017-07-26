@@ -10,46 +10,65 @@ import UIKit
 
 class FetchedListsViewController: LoadingTableViewController {
     
-    
     private var viewsQuery: String?
     private var currentOffset: Int = 0
     private var params: [String: String]?
+    private var type: String?
+    private var listTitle: String?
     
     private var lists: [[String: String]] = [] {
         didSet {
             if self.lists.count > 0 {
                 self.tableView.reloadData()
-                self.hideNothingFoundView()
+                self.showingResult = true
             } else {
-                self.showNothingFoundView()
+                self.nothingFound = true
             }
         }
     }
     
+    override func didTapInfoButton() {
+        if let listTitle = self.listTitle, let mineUrl = self.mineUrl {
+            let urlTitle = createUrlValueFromTitle(title: listTitle)
+            let url = mineUrl + Endpoints.listReport + "?bagName=\(urlTitle)"
+            if let webVC = WebViewController.webViewController(withUrl: url) {
+                self.navigationController?.pushViewController(webVC, animated: true)
+            }
+        }
+    }
+    
+    private func createUrlValueFromTitle(title: String) -> String {
+        return title.replacingOccurrences(of: " ", with: "+")
+    }
+    
     // MARK: Load from storyboard
     
-    class func fetchedListsViewController(withMineUrl: String, viewsQuery: String) -> FetchedListsViewController? {
+    class func fetchedListsViewController(withMineUrl: String, viewsQuery: String, type: String, listTitle: String?) -> FetchedListsViewController? {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "FetchedListsVC") as? FetchedListsViewController
         vc?.mineUrl = withMineUrl
         vc?.viewsQuery = viewsQuery
+        vc?.type = type
+        vc?.listTitle = listTitle
         return vc
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.hideMenuButton = true
+        self.showInfoButton = true
         self.loadTemplateResultsWithOffset(offset: self.currentOffset)
     }
     
     private func loadTemplateResultsWithOffset(offset: Int) {
         self.params?["start"] = "\(offset)"
+        self.isLoading = true
         if let mineUrl = self.mineUrl, let queryString = self.viewsQuery {
             IntermineAPIClient.fetchSingleList(mineUrl: mineUrl, queryString: queryString, completion: { (res, params, error) in
                 self.params = params
                 self.processDataResult(res: res, data: &self.lists)
                 if self.currentOffset == 0 {
-                    self.stopSpinner()
+                    // FIXME: - when is this true?
                 }
                 if let error = error {
                     self.alert(message: NetworkErrorHandler.getErrorMessage(errorType: error))
@@ -71,6 +90,9 @@ class FetchedListsViewController: LoadingTableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: FetchedCell.identifier, for: indexPath) as! FetchedCell
         cell.representedData = lists[indexPath.row]
+        if let type = self.type {
+            cell.typeColor = TypeColorDefine.getBackgroundColor(categoryType: type)
+        }
         return cell
     }
     

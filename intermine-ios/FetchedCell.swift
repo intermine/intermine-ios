@@ -8,14 +8,26 @@
 
 import UIKit
 
-class FetchedCell: UITableViewCell {
+class FetchedCell: TypeColorCell {
     
     static let identifier = "FetchedCell"
     @IBOutlet weak var descriptionLabel: UILabel?
+    @IBOutlet weak var typeView: UIView?
+    private var typeViewBackgroundColor: UIColor?
+    
+    var typeColor: UIColor? {
+        didSet {
+            if let typeColor = self.typeColor {
+                contentView.backgroundColor = typeColor
+            }
+        }
+    }
     
     var representedData: [String:String] = [:] {
         didSet {
             descriptionLabel?.attributedText = self.labelContents(representedData: representedData)
+            typeView?.layer.borderWidth = 1
+            typeView?.layer.borderColor = Colors.gray56.withAlphaComponent(0.3).cgColor
         }
     }
     
@@ -24,12 +36,17 @@ class FetchedCell: UITableViewCell {
             if let data = self.data {
                 let viewableRepresentation: [String:String] = data.viewableRepresentation()
                 descriptionLabel?.attributedText = self.labelContents(representedData: viewableRepresentation)
+                if let type = data.getType() {
+                    let typeViewBackgroundColor = getBackgroundColor(categoryType: type)
+                    typeView?.backgroundColor = typeViewBackgroundColor
+                    self.typeViewBackgroundColor = typeViewBackgroundColor
+                }
             }
         }
     }
     
     private func labelContents(representedData: [String: String]) -> NSMutableAttributedString {
-        let infoString = NSMutableAttributedString(string: "")
+        var infoString = NSMutableAttributedString(string: "")
         let mineString = NSMutableAttributedString(string: "")
         let typeString = NSMutableAttributedString(string: "")
         let resultingString = NSMutableAttributedString(string: "")
@@ -42,15 +59,12 @@ class FetchedCell: UITableViewCell {
                     let currentString = String.makeBold(text: value)
                     currentString.append(newline)
                     mineString.append(currentString)
-                }
-                
-                else if (key == "type") {
+                } else if (key == "type") {
                     let currentSting = NSMutableAttributedString(string: value)
                     currentSting.append(newline)
                     typeString.append(currentSting)
-                    
                 } else {
-                    let currentString = String.formStringWithBoldText(boldText: key.replacingOccurrences(of: ".", with: " ").camelCaseToWords().replacingOccurrences(of: "  ", with: " "), separatorText: ": ", normalText: value)
+                    let currentString = String.formStringWithBoldText(boldText: key.replacingOccurrences(of: ".", with: " ").replacingOccurrences(of: "  ", with: " "), separatorText: ": ", normalText: value)
                     if gen != representedData.count {
                         currentString.append(newline)
                     }
@@ -58,7 +72,9 @@ class FetchedCell: UITableViewCell {
                 }
             } else {
                 if gen == representedData.count {
-                    // TODO: -if infoString ends with newline -> remove last newline
+                    if infoString.string.hasSuffix("\n") {
+                        infoString = infoString.attributedSubstring(from: NSMakeRange(0, infoString.length - 1)) as! NSMutableAttributedString
+                    }
                 }
             }
         }

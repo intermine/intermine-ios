@@ -9,6 +9,19 @@
 import Foundation
 import Alamofire
 
+import Foundation
+import Alamofire
+
+class Connectivity {
+    class func isConnectedToInternet() -> Bool {
+        if let reachable = NetworkReachabilityManager()?.isReachable {
+            return reachable
+        } else {
+            return false
+        }
+    }
+}
+
 class Counter: NSObject {
     
     private var currentMineCount = 0
@@ -38,18 +51,24 @@ class IntermineAPIClient: NSObject {
     static let jsonParams = ["format": "json"]
     static let manager = Alamofire.SessionManager.default
     static let counter = Counter()
-    
     static let useDebugServer = false
+    
+    static var listsRequest: Request?
+    static var templatesRequest: Request?
     
     // MARK: Private methods
 
-    private class func sendJSONRequest(url: String, method: HTTPMethod, params: [String: String]?, shouldUseAuth: Bool, completion: @escaping (_ result: [String: AnyObject]?, _ error: NetworkErrorType?) -> ()) {
-        manager.session.configuration.timeoutIntervalForRequest = General.timeoutIntervalForRequest
+    private class func sendJSONRequest(url: String, method: HTTPMethod, params: [String: String]?, timeOutInterval: Double?, shouldUseAuth: Bool, completion: @escaping (_ result: [String: AnyObject]?, _ error: NetworkErrorType?) -> ()) -> Request {
+        var interval = General.timeoutIntervalForRequest
+        if !(timeOutInterval == nil) {
+            interval = timeOutInterval!
+        }
+        manager.session.configuration.timeoutIntervalForRequest = interval
         var paramsToUse = params
         if shouldUseAuth {
             paramsToUse = IntermineAPIClient.updateParamsWithAuth(params: params)
         }
-        manager.request(url, method: method, parameters: paramsToUse)
+        return manager.request(url, method: method, parameters: paramsToUse)
             .responseJSON {
                 response in
                 switch (response.result) {
@@ -112,7 +131,7 @@ class IntermineAPIClient: NSObject {
     private class func fetchIntermineVersion(mineUrl: String, completion: @escaping (_ result: String?, _ error: NetworkErrorType?) -> ()) {
         // TODO: - remove method if not needed
         let url = mineUrl + Endpoints.intermineVersion
-        IntermineAPIClient.sendJSONRequest(url: url, method: .get, params: jsonParams, shouldUseAuth: false) { (result, error) in
+        var _ = IntermineAPIClient.sendJSONRequest(url: url, method: .get, params: jsonParams, timeOutInterval: nil, shouldUseAuth: false) { (result, error) in
             if let result = result {
                 if let versionString = result["version"] {
                     completion("\(versionString)", nil)
@@ -125,7 +144,7 @@ class IntermineAPIClient: NSObject {
     
     private class func fetchReleaseId(mineUrl: String, completion: @escaping (_ result: String?, _ error: NetworkErrorType?) -> ()) {
         let url = mineUrl + Endpoints.modelReleased
-        IntermineAPIClient.sendJSONRequest(url: url, method: .get, params: jsonParams, shouldUseAuth: false) { (result, error) in
+        var _ = IntermineAPIClient.sendJSONRequest(url: url, method: .get, params: jsonParams, timeOutInterval: nil, shouldUseAuth: false) { (result, error) in
             if let result = result {
                 if let releaseString = result["version"] {
                     completion("\(releaseString)", nil)
@@ -146,10 +165,18 @@ class IntermineAPIClient: NSObject {
         }
     }
     
+    class func cancelListsRequest() {
+        IntermineAPIClient.listsRequest?.cancel()
+    }
+    
+    class func cancelTemplatesRequest() {
+        IntermineAPIClient.templatesRequest?.cancel()
+    }
+    
     class func makeSearchInMine(mineUrl: String, params: [String: String], completion: @escaping (_ result: SearchResult?, _ facets: FacetList?, _ error: NetworkErrorType?) -> ()) {
         
         let url = mineUrl + Endpoints.search
-        IntermineAPIClient.sendJSONRequest(url: url, method: .get, params: params, shouldUseAuth: false) { (res, error) in
+        var _ = IntermineAPIClient.sendJSONRequest(url: url, method: .get, params: params, timeOutInterval: nil, shouldUseAuth: false) { (res, error) in
             if let res = res {
                 var facetList: FacetList?
                 if let facets = res["facets"] as? [String: AnyObject] {
@@ -226,30 +253,16 @@ class IntermineAPIClient: NSObject {
     
     class func fetchSingleList(mineUrl: String, queryString: String, completion: @escaping (_ result: [String: AnyObject]?, _ params: [String: String], _ error: NetworkErrorType?) -> ()) {
         let url = mineUrl + Endpoints.singleList
-        let params: [String: String] = ["format": "json", "q": queryString, "start": "0", "size": "15"]
-        IntermineAPIClient.sendJSONRequest(url: url, method: .post, params: params, shouldUseAuth: true) { (res, error) in
+        let params: [String: String] = ["format": "json", "query": queryString, "start": "0", "size": "15"]
+        var _ = IntermineAPIClient.sendJSONRequest(url: url, method: .post, params: params, timeOutInterval: nil, shouldUseAuth: true) { (res, error) in
             completion(res, params, error)
         }
     }
     
-    class func fetchRegistry(completion: (_ result: NSDictionary?) -> ()) {
-        // TODO: Use registry endpoint
-        // for now: read registry from .json file
-        var registryPath = Bundle.main.path(forResource: "registry", ofType: ".json")
-        
-        if useDebugServer {
-            registryPath = Bundle.main.path(forResource: "debug_registry", ofType: ".json")
-        }
-        
-        guard let jsonData = try? NSData(contentsOfFile: registryPath!, options: NSData.ReadingOptions.mappedIfSafe) else {
-            completion(nil)
-            return
-        }
-        
-        if let jsonResult = try? JSONSerialization.jsonObject(with: jsonData as Data, options: JSONSerialization.ReadingOptions.mutableContainers) as? NSDictionary {
-            completion(jsonResult)
-        } else {
-            completion(nil)
+    class func fetchRegistry(completion: @escaping (_ result: [String: AnyObject]?, _ error: NetworkErrorType?) -> ()) {
+        let url = Endpoints.registryDomain + Endpoints.registryInstances
+        var _ = IntermineAPIClient.sendJSONRequest(url: url, method: .get, params: nil, timeOutInterval: General.timeoutForRegistryUpdate, shouldUseAuth: false) { (res, error) in
+            completion(res, error)
         }
     }
     
@@ -269,7 +282,7 @@ class IntermineAPIClient: NSObject {
     
     class func fetchLists(mineUrl: String, completion: @escaping (_ result: [List]?, _ error: NetworkErrorType?) -> ()) {
         let url = mineUrl + Endpoints.lists
-        IntermineAPIClient.sendJSONRequest(url: url, method: .get, params: jsonParams, shouldUseAuth: true) { (result, error) in
+        IntermineAPIClient.listsRequest = IntermineAPIClient.sendJSONRequest(url: url, method: .get, params: jsonParams, timeOutInterval: nil, shouldUseAuth: true) { (result, error) in
             var listObjects: [List] = []
             if let result = result {
                 if let lists = result["lists"] as? [[String: AnyObject]] {
@@ -279,7 +292,8 @@ class IntermineAPIClient: NSObject {
                                            size: list["size"] as? Int,
                                            type: list["type"] as? String,
                                            name: list["name"] as? String,
-                                           status: list["status"] as? String)
+                                           status: list["status"] as? String,
+                                           authorized: list["authorized"] as? Bool)
                         listObjects.append(listObj)
                     }
                     completion(listObjects, nil)
@@ -292,7 +306,7 @@ class IntermineAPIClient: NSObject {
     
     class func fetchTemplates(mineUrl: String, completion: @escaping (_ result: TemplatesList?, _ error: NetworkErrorType?) -> ()) {
         let url = mineUrl + Endpoints.templates
-        IntermineAPIClient.sendJSONRequest(url: url, method: .get, params: jsonParams, shouldUseAuth: true) { (result, error) in
+        IntermineAPIClient.templatesRequest = IntermineAPIClient.sendJSONRequest(url: url, method: .get, params: jsonParams, timeOutInterval: nil, shouldUseAuth: true) { (result, error) in
             if let result = result {
                 if let templates = result["templates"] as? [String: AnyObject] {
                     var templateList: [Template] = []
@@ -320,7 +334,7 @@ class IntermineAPIClient: NSObject {
     
     class func fetchTemplateResults(mineUrl: String, queryParams: [String: String], completion: @escaping (_ res: [String: AnyObject]?, _ error: NetworkErrorType?) -> ()) {
         let url = mineUrl + Endpoints.templateResults
-        IntermineAPIClient.sendJSONRequest(url: url, method: .get, params: queryParams, shouldUseAuth: true) { (res, error) in
+        var _ = IntermineAPIClient.sendJSONRequest(url: url, method: .get, params: queryParams, timeOutInterval: nil, shouldUseAuth: true) { (res, error) in
             completion(res, error)
         }
     }

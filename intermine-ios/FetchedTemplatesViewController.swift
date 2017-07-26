@@ -55,10 +55,12 @@ class FetchedTemplatesViewController: LoadingTableViewController, UISearchResult
     private var templatesCount: Int? {
         didSet {
             if self.templatesCount == 0 {
-                self.showNothingFoundView()
+                self.nothingFound = true
             } else {
                 self.summaryCell?.templatesCount = self.templatesCount
-                self.tableView.reloadData()
+                UIView.transition(with: self.tableView, duration: 0.5, options: .transitionCrossDissolve, animations: {
+                    self.tableView.reloadData()
+                }, completion: nil)
             }
         }
     }
@@ -71,9 +73,9 @@ class FetchedTemplatesViewController: LoadingTableViewController, UISearchResult
         didSet {
             if self.templates.count > 0 {
                 self.tableView.reloadData()
-                self.hideNothingFoundView()
+                self.showingResult = true
             } else {
-                self.showNothingFoundView()
+                self.nothingFound = true
             }
         }
     }
@@ -134,10 +136,11 @@ class FetchedTemplatesViewController: LoadingTableViewController, UISearchResult
         if let mineUrl = self.mineUrl, let params = self.params {
             var correctedParams = params
             correctedParams["start"] = "\(offset)"
+            self.isLoading = true
             IntermineAPIClient.fetchTemplateResults(mineUrl: mineUrl, queryParams: correctedParams, completion: { (res, error) in
                 self.processDataResult(res: res, data: &self.templates)
                 if self.currentOffset == 0 {
-                    self.stopSpinner()
+                    // FIXME: 
                 }
                 if let error = error {
                     self.alert(message: NetworkErrorHandler.getErrorMessage(errorType: error))
@@ -159,7 +162,9 @@ class FetchedTemplatesViewController: LoadingTableViewController, UISearchResult
                 self.filteredTemplates.append(template)
             }
         }
-        self.tableView.reloadData()
+        UIView.transition(with: self.tableView, duration: 0.5, options: .transitionCrossDissolve, animations: {
+            self.tableView.reloadData()
+        }, completion: nil)
     }
     
     // MARK: - Table view data source

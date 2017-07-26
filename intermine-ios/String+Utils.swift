@@ -48,10 +48,7 @@ extension String {
     }
     
     static func formStringWithBoldText(boldText: String, separatorText: String, normalText: String) -> NSMutableAttributedString {
-        
-        // TODO - remove spaces between single letters
-        
-        let attributedString = String.makeBold(text: boldText.capitalized)
+        let attributedString = String.makeBold(text: boldText)
         let separator = NSMutableAttributedString(string: separatorText)
         let normal = NSMutableAttributedString(string: normalText)
         attributedString.append(separator)

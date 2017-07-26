@@ -18,7 +18,10 @@ struct Endpoints {
     static let modelReleased = "/service/version/release" // version of the data *inside* the intermine
     static let singleList = "/service/query/results"
     static let search = "/service/search"
-    static let report = "/report.do"
+    static let searchResultReport = "/report.do"
+    static let registryDomain = "http://registry.intermine.org"
+    static let registryInstances = "/service/instances"
+    static let listReport = "/bagDetails.do"
 }
 
 struct General {
@@ -32,6 +35,8 @@ struct General {
     static let viewAnimationSpeed = 0.2
     static let nullValues = ["<null>", "NULL", "-"]
     static let timeoutIntervalForRequest: Double = 1800
+    static let timeoutForRegistryUpdate: Double = 30
+    static let needUppercase = ["dbid", "id", "ebi"]
 }
 
 struct Icons {
@@ -47,7 +52,8 @@ struct Icons {
     static let info = UIImage.init(icon: .FAInfo, size: CGSize(width: 35, height: 35), orientation: UIImageOrientation.up, textColor: Colors.white, backgroundColor: UIColor.clear)
     static let star = UIImage.init(icon: .FAStar, size: CGSize(width: 35, height: 35), orientation: UIImageOrientation.up, textColor: Colors.white, backgroundColor: UIColor.clear)
     static let placeholder = UIImage.init(icon: .FAFile, size: CGSize(width: 500, height: 500), orientation: UIImageOrientation.up, textColor: Colors.gray56, backgroundColor: UIColor.clear)
-    
+    static let titleBarPlaceholder = UIImage.init(icon: .FAChainBroken, size: CGSize(width: 35, height: 35), orientation: UIImageOrientation.up, textColor: Colors.white, backgroundColor: UIColor.clear)
+    static let user = UIImage.init(icon: .FAUserO, size: CGSize(width: 35, height: 35), orientation: UIImageOrientation.up, textColor: Colors.palma, backgroundColor: UIColor.clear)
 }
 
 struct Colors {
@@ -93,4 +99,5 @@ struct Notifications {
     static let mineSelected = "notification.mine.selected"
     static let facetsUpdated = "notification.facets.updated"
     static let searchFailed = "notification.search.failed"
+    static let registryLoaded = "notification.registry.loaded"
 }

@@ -17,6 +17,7 @@ class LoginViewController: BaseViewController, UITextFieldDelegate {
     @IBOutlet weak var descriptionLabel: UILabel?
     @IBOutlet weak var coverView: UIView?
     @IBOutlet weak var loggedInLabel: UILabel?
+    @IBOutlet weak var logoutButton: UIButton!
     
     private let itemsCount = CacheDataStore.sharedCacheDataStore.registrySize()
     private let registry = CacheDataStore.sharedCacheDataStore.getMineNames()
@@ -39,6 +40,7 @@ class LoginViewController: BaseViewController, UITextFieldDelegate {
         usernameTextField?.returnKeyType = .go
         passwordTextField?.returnKeyType = .go
         loginButton?.setTitle(String.localize("Login.LoginButton"), for: .normal)
+        logoutButton?.setTitle(String.localize("Login.LogoutButton"), for: .normal)
         usernameTextField?.delegate = self
         passwordTextField?.delegate = self
         initialViewY = self.view.frame.origin.y
@@ -61,7 +63,6 @@ class LoginViewController: BaseViewController, UITextFieldDelegate {
     }
     
     override func configureNavBar() {
-        print("conf")
         let selectedMine = AppManager.sharedManager.selectedMine
         if let mine = CacheDataStore.sharedCacheDataStore.findMineByName(name: selectedMine) {
             
@@ -86,6 +87,10 @@ class LoginViewController: BaseViewController, UITextFieldDelegate {
             if let mineUrl = self.mineUrl, let mine = CacheDataStore.sharedCacheDataStore.findMineByUrl(url: mineUrl), let mineName = mine.name {
                 loggedInLabel?.text = String.localizeWithArg("Login.Loggedin", arg: mineName)
             }
+        } else {
+            self.defaultNavbarConfiguration(withTitle: "Login")
+            let failedView = FailedRegistryView.instantiateFromNib()
+            self.view.addSubview(failedView)
         }
     }
    
@@ -110,10 +115,27 @@ class LoginViewController: BaseViewController, UITextFieldDelegate {
             IntermineAPIClient.getToken(mineUrl: mineUrl, username: userName, password: pwd, completion: { (success) in
                 if success {
                     self.showLoggedinState(isLogged: true)
+                    self.sendUpdatedMineNotification(mineUrl: mineUrl)
                 } else {
                     self.alert(message: String.localize("Login.AuthError"))
                 }
             })
+        }
+    }
+    
+    private func logout() {
+        if let mineUrl = self.mineUrl {
+            DefaultsManager.removeFromDefaults(key: mineUrl)
+            self.showLoggedinState(isLogged: false)
+            self.sendUpdatedMineNotification(mineUrl: mineUrl)
+        }
+    }
+    
+    private func sendUpdatedMineNotification(mineUrl: String) {
+        if let mine = CacheDataStore.sharedCacheDataStore.findMineByUrl(url: mineUrl), let mineName = mine.name {
+            var info: [String: Any] = [:]
+            info = ["mineName": mineName]
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: Notifications.mineSelected), object: self, userInfo: info)
         }
     }
     
@@ -125,6 +147,10 @@ class LoginViewController: BaseViewController, UITextFieldDelegate {
     
     @IBAction func loginButtonTapped(_ sender: Any) {
         self.login()
+    }
+    
+    @IBAction func logoutButtonTapped(_ sender: Any) {
+        self.logout()
     }
     
     // MARK: Text field delegate

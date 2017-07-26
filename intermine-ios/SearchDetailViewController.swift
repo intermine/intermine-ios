@@ -58,9 +58,18 @@ class SearchDetailViewController: BaseViewController, UITableViewDataSource, Fav
     }
     
     func didTapInfoButton() {
-        if let data = self.data, let webVC = WebViewController.webViewController(withSearchResult: data) {
-            AppManager.sharedManager.shouldBreakLoading = true
-            self.navigationController?.pushViewController(webVC, animated: true)
+        if let searchResult = self.data,
+            let mineName = searchResult.getMineName(),
+            let id = searchResult.getId() {
+            if let mine = CacheDataStore.sharedCacheDataStore.findMineByName(name: mineName) {
+                if let mineUrl = mine.url {
+                    let url = mineUrl + Endpoints.searchResultReport + "?id=\(id)"
+                    if let webVC = WebViewController.webViewController(withUrl: url) {
+                        AppManager.sharedManager.shouldBreakLoading = true
+                        self.navigationController?.pushViewController(webVC, animated: true)
+                    }
+                }
+            }
         }
     }
     

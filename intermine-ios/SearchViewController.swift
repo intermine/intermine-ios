@@ -17,7 +17,6 @@ class SearchViewController: BaseViewController, UISearchBarDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         super.setNavBarTitle(title: String.localize("Search.All"))
-        super.showMenuButton()
         self.descriptionLabel?.text = String.localize("Search.AppDescription")
         self.searchBar?.placeholder = String.localize("Search.Placeholder")
         self.searchBar?.delegate = self

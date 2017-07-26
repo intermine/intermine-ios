@@ -40,17 +40,13 @@ extension NSDate {
         }
     }
     
-    class func stringToDate(dateString: String) -> NSDate? {
-        // should process both Feb-6-2017 and Feb-16-2017
-        var stringToProcess = dateString
-        if dateString.characters.count == 10 {
-            // Feb-6-2017 case, add leading 0 to day
-            let mutableString = NSMutableString(string: dateString)
-            mutableString.insert("0", at: 4)
-            stringToProcess = mutableString as String
+    class func stringToDate(dateString: String?) -> NSDate? {
+        if let dateString = dateString {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZZ"
+            return dateFormatter.date(from: dateString) as NSDate?
+        } else {
+            return nil
         }
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MMM-dd-yyyy"
-        return dateFormatter.date(from: stringToProcess) as NSDate?
     }
  }

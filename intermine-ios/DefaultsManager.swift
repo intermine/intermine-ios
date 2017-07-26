@@ -21,4 +21,8 @@ class DefaultsManager {
     class func keyExists(key: String) -> Bool {
         return DefaultsManager.fetchFromDefaults(key: key) != nil
     }
+    
+    class func removeFromDefaults(key: String) {
+        UserDefaults.standard.removeObject(forKey: key)
+    }
 }

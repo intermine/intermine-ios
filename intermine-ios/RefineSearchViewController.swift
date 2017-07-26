@@ -9,84 +9,6 @@
 import UIKit
 import NVActivityIndicatorView
 
-class CategoryCell: UITableViewCell {
-    
-    private enum CategoryType: String {
-        case Gene = "Gene"
-        case Protein = "Protein"
-        case Publication = "Publication"
-        case Organism = "Organism"
-        case Interaction = "Interaction"
-        case GO = "GO"
-        case Nuffink = "Nuffink"
-    }
-    
-    @IBOutlet weak var checkImageView: UIImageView?
-    static let identifier = "CategoryCell"
-    
-    @IBOutlet weak var titleLabel: UILabel?
-    @IBOutlet weak var countLabel: UILabel?
-    @IBOutlet weak var colorView: UIView?
-    
-    var index: Int = 0
-    
-    var formattedFacet: FormattedFacet? {
-        didSet {
-            let title = formattedFacet?.getTitle()
-            titleLabel?.text = title
-            countLabel?.text = formattedFacet?.getCount()
-            colorView?.backgroundColor = getSideColor(categoryTitle: title)
-        }
-    }
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        checkImageView?.image = Icons.check
-    }
-    
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        self.hideCheck()
-    }
-    
-    func hideCheck() {
-        checkImageView?.isHidden = true
-    }
-    
-    func showCheck() {
-        checkImageView?.isHidden = false
-    }
-    
-    private func getSideColor(categoryTitle: String?) -> UIColor {
-        var color = Colors.silver
-        if let title = categoryTitle {
-            switch title {
-            case CategoryType.Gene.rawValue:
-                color = Colors.sushi
-                break
-            case CategoryType.Protein.rawValue:
-                color = Colors.amber
-                break
-            case CategoryType.Publication.rawValue:
-                color = Colors.dodgerBlue
-                break
-            case CategoryType.Organism.rawValue:
-                color = Colors.amaranth
-                break
-            case CategoryType.Interaction.rawValue:
-                color = Colors.orange
-                break
-            case CategoryType.GO.rawValue:
-                color = Colors.seance
-                break
-            default:
-                break
-            }
-        }
-        return color
-    }
-
-}
 
 protocol RefineSearchViewControllerDelegate: class {
     func refineSearchViewController(controller: RefineSearchViewController, didSelectFacet: SelectedFacet)
@@ -167,7 +89,7 @@ class RefineSearchViewController: BaseViewController, UIPickerViewDelegate, UIPi
         }
     }
     
-    private func indicatorPadding() -> CGFloat {
+    override func indicatorPadding() -> CGFloat {
         if let nothingFoundView = self.nothingFoundView {
             return BaseView.viewWidth(view: nothingFoundView) / 3
         }

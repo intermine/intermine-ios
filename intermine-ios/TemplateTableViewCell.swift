@@ -14,6 +14,7 @@ class TemplateTableViewCell: UITableViewCell {
     
     @IBOutlet weak var descriptionLabel: UILabel?
     @IBOutlet weak var titleLabel: UILabel?
+    @IBOutlet weak var containerView: UIView?
     
     var template: Template? {
         didSet {
@@ -30,6 +31,8 @@ class TemplateTableViewCell: UITableViewCell {
                 }
             }
             titleLabel?.text = template?.getTitle()
+            containerView?.layer.borderWidth = 1
+            containerView?.layer.borderColor = Colors.gray56.withAlphaComponent(0.3).cgColor
         }
     }
 }

@@ -14,14 +14,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
-        CacheDataStore.sharedCacheDataStore.updateRegistryIfNeeded { (mines) in
+        ControllersManager().subscribe()
+        
+        CacheDataStore.sharedCacheDataStore.updateRegistryIfNeeded { (mines, error) in
+            AppManager.sharedManager.hideLaunchScreen()
             if let mines = mines {
                 CacheDataStore.sharedCacheDataStore.updateRegistryModelsIfNeeded(mines: mines)
             }
         }
+        
         AppManager.sharedManager.retrieveSelectedMine()
         
         BITHockeyManager.shared().configure(withIdentifier: "978f62a7b13a4d5d8d809daeb71e2c12")
@@ -48,6 +51,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+        AppManager.sharedManager.presentLaunchScreen(rootViewController: self.window?.rootViewController)
     }
 
     func applicationWillTerminate(_ application: UIApplication) {

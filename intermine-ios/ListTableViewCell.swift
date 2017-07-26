@@ -8,9 +8,11 @@
 
 import UIKit
 
-class ListTableViewCell: UITableViewCell {
+class ListTableViewCell: TypeColorCell {
     
     static let identifier = "ListCell"
+    @IBOutlet weak var colorTypeView: UIView?
+    @IBOutlet weak var userImageView: UIImageView?
     
     var list: List? {
         didSet {
@@ -22,6 +24,11 @@ class ListTableViewCell: UITableViewCell {
                     let sizeString = "\(size)"
                     countLabel?.text = sizeString
                 }
+                if let type = list.getType() {
+                    let color = getBackgroundColor(categoryType: type)
+                    colorTypeView?.backgroundColor = color
+                }
+                userImageView?.isHidden = !list.getAuthd()
             }
         }
     }
@@ -33,6 +40,7 @@ class ListTableViewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        userImageView?.image = Icons.user
     }
 
 }

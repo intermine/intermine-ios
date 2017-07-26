@@ -7,9 +7,21 @@
 //
 
 import Foundation
+import UIKit
 
 
 class AppManager {
+    
+    private var launchVC: UIViewController?
+    private var launchVCShouldHide = false
+    
+    var canHideVC = false {
+        didSet {
+            if launchVCShouldHide {
+                launchVC?.dismiss(animated: false, completion: nil)
+            }
+        }
+    }
     
     var selectedMine: String = General.defaultMine {
         didSet {
@@ -37,8 +49,8 @@ class AppManager {
         return instance
     }()
     
-    // MARK: Public method
-    
+    // MARK: Public methods
+
     func selectMine(mineName: String) {
         self.selectedMine = mineName
     }
@@ -53,6 +65,21 @@ class AppManager {
     
     func updateToken() {
         self.token = DefaultsManager.fetchFromDefaults(key: DefaultsKeys.token)
+    }
+    
+    func presentLaunchScreen(rootViewController: UIViewController?) {
+        if let vc = LaunchViewController.launchViewController() {
+            self.launchVC = vc
+            vc.modalTransitionStyle = .crossDissolve
+            rootViewController?.present(vc, animated: false, completion: nil)
+        }
+    }
+    
+    func hideLaunchScreen() {
+        // show when notification is received
+        if let launchVC = self.launchVC {
+            launchVC.dismiss(animated: true, completion: nil)
+        }
     }
 }
 

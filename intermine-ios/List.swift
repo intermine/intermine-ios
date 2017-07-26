@@ -17,14 +17,20 @@ class List {
     private var type: String? // to be later used as "path"
     private var name: String?
     private var status: String?
+    private var authorized: Bool?
     
-    init(withTitle: String?, info: String?, size: Int?, type: String?, name: String?, status: String?) {
+    init(withTitle: String?, info: String?, size: Int?, type: String?, name: String?, status: String?, authorized: Bool?) {
         self.title = withTitle
         self.info = info
         self.size = size
         self.type = type
         self.name = name
         self.status = status
+        self.authorized = authorized
+    }
+    
+    func getName() -> String? {
+        return self.name
     }
     
     func getTitle() -> String? {
@@ -65,5 +71,13 @@ class List {
     
     func getValue() -> String? {
         return self.name
+    }
+    
+    func getAuthd() -> Bool {
+        if let authd = self.authorized {
+            return authd
+        } else {
+            return false
+        }
     }
 }

@@ -20,6 +20,11 @@ class MenuCell: UITableViewCell {
     
     var index: Int = 0
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        hideCheck()
+    }
+    
     var mineName: String? {
         didSet {
             mineButton?.setTitle(mineName, for: .normal)

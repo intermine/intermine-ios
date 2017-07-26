@@ -7,13 +7,32 @@
 //
 
 import UIKit
-import NVActivityIndicatorView
+
 
 class LoadingTableViewController: UITableViewController {
     
-    private var spinner: NVActivityIndicatorView?
-    private var nothingFoundView: TableCoverView? = nil
+    private var tableOverlay: TableCoverView? = nil
     let interactor = Interactor()
+    
+    var isLoading: Bool = false {
+        didSet {
+            showTableOverlay(isLoading: isLoading)
+        }
+    }
+    
+    var nothingFound: Bool = false {
+        didSet {
+            self.showTableOverlay(isLoading: !nothingFound)
+        }
+    }
+    
+    var showingResult: Bool = false {
+        didSet {
+            if showingResult == true {
+                self.removeTableOverlay()
+            }
+        }
+    }
     
     var hideMenuButton = false {
         didSet {
@@ -21,6 +40,15 @@ class LoadingTableViewController: UITableViewController {
                 if let url = self.mineUrl, let mine = CacheDataStore.sharedCacheDataStore.findMineByUrl(url: url) {
                     self.configureNavBar(mine: mine, shouldShowMenuButton: false)
                 }
+            }
+        }
+    }
+    
+    var showInfoButton = false {
+        didSet {
+            if showInfoButton {
+                let infoButton = UIBarButtonItem(image: Icons.info,  style: .plain, target: self, action: #selector(LoadingTableViewController.didTapInfoButton))
+                navigationItem.rightBarButtonItems = [infoButton]
             }
         }
     }
@@ -35,33 +63,21 @@ class LoadingTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        self.nothingFoundView = TableCoverView.instantiateFromNib()
-        if let nothingFoundView = self.nothingFoundView {
-            nothingFoundView.frame = self.tableView.frame
-            self.tableView.addSubview(nothingFoundView)
-            nothingFoundView.isHidden = true
-        }
-        
         self.tableView.rowHeight = UITableViewAutomaticDimension
         self.tableView.estimatedRowHeight = 200
-        
-        self.spinner = NVActivityIndicatorView(frame: self.indicatorFrame(), type: .ballSpinFadeLoader, color: Colors.apple, padding: self.indicatorPadding())
-        if let spinner = self.spinner {
-            self.view.addSubview(spinner)
-            self.view.bringSubview(toFront: spinner)
-        }
-        self.startSpinner()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         NotificationCenter.default.addObserver(self, selector: #selector(self.mineSelected(_:)), name: NSNotification.Name(rawValue: Notifications.mineSelected), object: nil)
     }
-
     
     deinit {
         NotificationCenter.default.removeObserver(self)
+    }
+    
+    func didTapInfoButton() {
+        print("tapped")
     }
     
     func mineSelected(_ notification: NSNotification) {
@@ -69,40 +85,52 @@ class LoadingTableViewController: UITableViewController {
         print("super")
     }
     
-
-    func stopSpinner() {
-        self.spinner?.stopAnimating()
-    }
-    
-    func startSpinner() {
-        self.spinner?.startAnimating()
-    }
-    
-    func showNothingFoundView() {
-        self.nothingFoundView?.isHidden = false
-        self.showNothingFoundLabel()
-    }
-    
-    func hideNothingFoundView() {
-        self.nothingFoundView?.isHidden = true
-    }
-    
-    func hideNothingFoundLabel() {
-        self.nothingFoundView?.messageLabel?.isHidden = true
-    }
-    
-    func showNothingFoundLabel() {
-        self.nothingFoundView?.messageLabel?.isHidden = false
-    }
-    
-    private func indicatorFrame() -> CGRect {
-        if let navbarHeight = self.navigationController?.navigationBar.frame.size.height, let tabbarHeight = self.tabBarController?.tabBar.frame.size.height {
-            let viewHeight = BaseView.viewHeight(view: self.view)
-            let indicatorHeight = viewHeight - (tabbarHeight + navbarHeight)
-            let indicatorWidth = BaseView.viewWidth(view: self.view)
-            return CGRect(x: 0, y: 0, width: indicatorWidth, height: indicatorHeight)
+    func showTableOverlay(isLoading: Bool) {
+        if self.tableOverlay == nil {
+            self.tableOverlay = TableCoverView.instantiateFromNib()
+            if let tableOverlay = self.tableOverlay {
+                tableOverlay.frame = self.tableView.frame
+                self.tableView.addSubview(tableOverlay)
+                tableOverlay.alpha = 0
+                tableOverlay.isHidden = false
+                if let navbarHeight = self.navigationController?.navigationBar.frame.size.height, let tabbarHeight = self.tabBarController?.tabBar.frame.size.height {
+                    tableOverlay.upperOffset = navbarHeight + tabbarHeight
+                }
+            }
+            
+            self.tableOverlay?.alpha = 1
+            if isLoading {
+                self.tableOverlay?.showSpinner()
+            } else {
+                self.tableOverlay?.showLabel()
+            }
+            
         } else {
-            return self.view.frame
+            if self.tableOverlay?.isDescendant(of: self.tableView) == true {
+                // the view already in the stack, 
+                // swap spinner to label or wise versa
+                if !isLoading {
+                    self.tableOverlay?.hideSpinner()
+                    self.tableOverlay?.showLabel()
+                } else {
+                    self.tableOverlay?.hideLabel()
+                    self.tableOverlay?.showSpinner()
+                }
+                self.tableOverlay?.frame = self.tableView.bounds
+                self.tableOverlay?.alpha = 1
+                self.tableOverlay?.isHidden = false
+            } else {
+                print("table overlay is not descendant")
+            }
+        }
+    }
+    
+    func removeTableOverlay() {
+        UIView.animate(withDuration: 0.2, animations: {
+            self.tableOverlay?.alpha = 0
+        }) { (done) in
+            self.tableOverlay?.removeFromSuperview()
+            self.tableOverlay = nil
         }
     }
     
@@ -130,6 +158,23 @@ class LoadingTableViewController: UITableViewController {
             }
         }
 
+    }
+    
+    func defaultNavbarConfiguration(withTitle: String) {
+        self.navigationController?.navigationBar.barTintColor = Colors.palma
+        self.navigationController?.navigationBar.isTranslucent = false
+        self.navigationController?.navigationBar.tintColor = Colors.white
+        self.navigationController?.navigationBar.topItem?.title = withTitle//UIImageView(image: Icons.titleBarPlaceholder)
+        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: Colors.white]
+        
+        let button = UIButton()
+        button.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
+        button.setImage(Icons.titleBarPlaceholder, for: .normal)
+        button.addTarget(self, action: #selector(LoadingTableViewController.menuButtonPressed), for: .touchUpInside)
+        button.tintColor = Colors.white
+        let barButton = UIBarButtonItem()
+        barButton.customView = button
+        self.navigationItem.leftBarButtonItem = barButton
     }
     
     func menuButtonPressed() {

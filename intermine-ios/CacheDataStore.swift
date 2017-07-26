@@ -12,11 +12,7 @@ import CoreData
 class CacheDataStore {
     
     private let modelName = General.modelName
-    private let debug = true
-    
-    // TODO: compare versions instead using:
-//    GET /version/release which tells you the version of the data *inside* the intermine
-//    GET /version/intermine, which gives you the version of the intermine software that you're communicating with.
+    private let debug = false
     private let minesUpdateInterval: Double = 432000 //5 days, TODO: -change this value to less often
     
     // MARK: Shared Instance
@@ -38,37 +34,44 @@ class CacheDataStore {
         return nil
     }
 
-    func updateRegistryIfNeeded(completion: @escaping (_ mines: [Mine]?) -> ()) {
-        if registryNeedsUpdate() {
-            IntermineAPIClient.fetchRegistry { (jsonRes) in
-                guard let jsonRes = jsonRes else {
-                    completion(nil)
-                    return
-                }
-                // update registry in Core Data
-                eraseRegistry()
-                if let registryDict = jsonRes as? [String: AnyObject] {
-                    if let mines = registryDict["mines"] as? Array<[String: String]> {
-                        var mineObjects: [Mine] = []
-                        for mine in mines {
-                            if let mineObj = Mine.createMineFromJson(json: mine, context: self.managedContext) {
+    func updateRegistryIfNeeded(completion: @escaping (_ mines: [Mine]?, _ error: NetworkErrorType?) -> ()) {
+        
+        if Connectivity.isConnectedToInternet() {
+            if registryNeedsUpdate() {
+                IntermineAPIClient.fetchRegistry { (jsonRes, error) in
+                    guard let jsonRes = jsonRes else {
+                        completion(nil, error)
+                        return
+                    }
+                    // update registry in Core Data
+                    self.eraseRegistry()
+                    var mineObjects: [Mine] = []
+                    if let instances = jsonRes["instances"] as? [[String: AnyObject]] {
+                        for instance in instances {
+                            if let mineObj = Mine.createMineFromJson(json: instance, context: self.managedContext) {
                                 mineObjects.append(mineObj)
                             }
                         }
-                        save()
-                        completion(mineObjects)
+                        self.save()
+                        completion(mineObjects, error)
                     } else {
-                        completion(nil)
+                        completion(nil, error)
                     }
-                } else {
-                    completion(nil)
                 }
+            } else {
+                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
+                    let mines = Mine.getAllMines(context: self.managedContext)
+                    completion(mines, nil)
+                })
             }
         } else {
-            let mines = Mine.getAllMines(context: self.managedContext)
-            completion(mines)
+            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
+                let mines = Mine.getAllMines(context: self.managedContext)
+                completion(mines, nil)
+            })
         }
     }
+
     
     func save() {
         saveContext()
@@ -164,30 +167,30 @@ class CacheDataStore {
             if let fileName = model.xmlFile {
                 if FileHandler.doesFileExist(fileName: fileName) {
                     
-                    // file exists, check the release version
-                    IntermineAPIClient.fetchVersioning(mineUrl: mineUrl, completion: { (releaseId, error) in
-                        
-                        // compare releaseId and model releaseId
-                        if let releaseId = releaseId {
-                            
+                    // since it is called after mines version is uptated
+                    // we can use mines version
+                    if let mine = Mine.getMineByUrl(url: mineUrl, context: self.managedContext) {
+                        if let releaseId = mine.releaseVersion {
                             if !(releaseId.isEqualTo(comparedTo: model.releaseId)) {
                                 // release ids differ, needs an update
                                 self.updateMineModel(model: model, releaseId: releaseId, xmlFile: nil)
+                                return
                             }
                         }
-                        
-                    })
-
+                    }
                 } else {
                     // xml does not exist in documents directory, model needs an udpate with new xml
                     self.delete(obj: model)
                     self.createMineModel(mineUrl: mineUrl)
+                    return
                 }
             }
         } else {
             // no model found, create mine model
             self.createMineModel(mineUrl: mineUrl)
+            return
         }
+        return
     }
 
     
@@ -197,10 +200,10 @@ class CacheDataStore {
             IntermineAPIClient.fetchModel(mineUrl: mineUrl, completion: { (xmlString, error) in
                 if let xmlString = xmlString as String? {
                     FileHandler.writeToFile(fileName: fileName, contents: xmlString)
-                    IntermineAPIClient.fetchVersioning(mineUrl: mineUrl, completion: { (releaseId, error) in
+                    if let releaseId = mine.releaseVersion {
                         MineModel.createMineModel(url: mineUrl, releaseId: releaseId, xmlFile: fileName, versionId: nil, context: self.managedContext)
                         self.save()
-                    })
+                    }
                 }
             })
         }
@@ -240,16 +243,14 @@ class CacheDataStore {
         if debug == true {
             return true
         }
-        
-        if let registry = fetchCachedRegistry() {
-            if let mine: Mine = registry.first, let lastUpdated = mine.lastUpdated {
+        if let registry = fetchCachedRegistry(), registry.count > 0 {
+            if let mine: Mine = registry.first, let lastUpdated = mine.lastTimeUpdated {
                 return NSDate.hasIntervalPassed(lastUpdated: lastUpdated, timeInterval: minesUpdateInterval)
             }
             return true
+        } else {
+            return true
         }
-        // TODO: handle this better!
-        // if there was an error fetching
-        return false
     }
     
     private func eraseRegistry() {

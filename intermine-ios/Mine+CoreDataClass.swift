@@ -12,20 +12,30 @@ import CoreData
 @objc(Mine)
 public class Mine: NSManagedObject {
     
-    class func createMineFromJson(json: Dictionary<String, String>, context: NSManagedObjectContext) -> Mine? {
+    class func createMineFromJson(json: Dictionary<String, AnyObject>, context: NSManagedObjectContext) -> Mine? {
         guard let mineEntiry = NSEntityDescription.entity(forEntityName: "Mine", in: context) else {
             return nil
         }
         var mine: Mine?
-        if let name = json["name"], let existingMine = Mine.getMineByName(name: name, context: context) {
+        if let name = json["name"] as? String, let existingMine = Mine.getMineByName(name: name, context: context) {
             mine = existingMine
         } else {
             mine = Mine(entity: mineEntiry, insertInto: context)
         }
-        mine?.name = json["name"]
-        mine?.url = json["url"]
-        mine?.theme = json["theme"]
-        mine?.lastUpdated = NSDate()
+        
+        if let releaseVersion = json["release_version"] as? String {
+            if mine?.releaseVersion?.isEqualTo(comparedTo: releaseVersion) == true {
+                return mine
+            } else {
+                mine?.name = json["name"] as? String
+                mine?.url = json["url"] as? String
+                if let colors = json["colors"] as? [String: AnyObject], let main = colors["main"] as? [String: AnyObject], let theme = main["fg"] as? String {
+                    mine?.theme = theme
+                }
+                mine?.lastTimeUpdated = NSDate()
+                mine?.releaseVersion = json["release_version"] as? String
+            }
+        }
         return mine
     }
     

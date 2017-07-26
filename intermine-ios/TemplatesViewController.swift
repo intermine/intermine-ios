@@ -15,27 +15,37 @@ class TemplatesViewController: LoadingTableViewController {
         didSet {
             if let templatesList = self.templatesList {
                 if templatesList.size() > 0 {
-                    self.tableView.reloadData()
-                    self.hideNothingFoundView()
+                    UIView.transition(with: self.tableView, duration: 0.5, options: .transitionCrossDissolve, animations: {
+                        self.tableView.reloadData()
+                    }, completion: nil)
+                    self.showingResult = true
                 } else {
-                    self.showNothingFoundView()
+                    self.nothingFound = true
                 }
             }
         }
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         if  let mine = CacheDataStore.sharedCacheDataStore.findMineByName(name: AppManager.sharedManager.selectedMine), let mineUrl = mine.url {
             self.mineUrl = mineUrl
             self.fetchTemplates(mineUrl: mineUrl)
+        } else {
+            self.defaultNavbarConfiguration(withTitle: "Templates")
+            let failedView = FailedRegistryView.instantiateFromNib()
+            self.tableView.addSubview(failedView)
         }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
     }
 
     override func mineSelected(_ notification: NSNotification) {
-        self.startSpinner()
         self.templatesList = TemplatesList(withTemplates: [], mine: mineUrl)
-        self.hideNothingFoundLabel()
+        self.isLoading = true
+        IntermineAPIClient.cancelTemplatesRequest()
         if let mineName = notification.userInfo?["mineName"] as? String {
             if let mine = CacheDataStore.sharedCacheDataStore.findMineByName(name: mineName) {
                 self.configureNavBar(mine: mine, shouldShowMenuButton: true)
@@ -48,17 +58,15 @@ class TemplatesViewController: LoadingTableViewController {
     }
     
     private func fetchTemplates(mineUrl: String) {
+        self.isLoading = true
         IntermineAPIClient.fetchTemplates(mineUrl: mineUrl) { (templatesList, error) in
             guard let list = templatesList else {
-                self.stopSpinner()
-                self.showNothingFoundView()
                 if let error = error {
                     self.alert(message: NetworkErrorHandler.getErrorMessage(errorType: error))
                 }
                 return
             }
             self.templatesList = list
-            self.stopSpinner()
         }
     }
     

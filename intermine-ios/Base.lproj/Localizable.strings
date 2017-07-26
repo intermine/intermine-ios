@@ -38,6 +38,7 @@
 "Search.Header" = "Search term: %@";
 
 "Login.LoginButton" = "Login";
+"Login.LogoutButton" = "Logout";
 "Login.CredsPrompt" = "Use the same credentials as for web";
 "Login.Loggedin" = "You are logged in to %@";
 "Login.AuthError" = "Something went wrong";
@@ -50,3 +51,5 @@
 "Network.Error.Server" = "Sorry, we are experiensing some issues. Please, try again later";
 "Network.Error.Auth" = "This action is only available for authenticated users";
 "Network.Error.Unknown" = "Something went wrong. Please, try again later";
+
+"Registry.Error.FailedToLoad" = "We were unable to retrive the registry at this time. Please, try to run the app later";

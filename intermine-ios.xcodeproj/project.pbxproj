@@ -16,6 +16,8 @@
 		053A57CC1F13858F00445F6E /* debug_registry.json in Resources */ = {isa = PBXBuildFile; fileRef = 053A57CB1F13858F00445F6E /* debug_registry.json */; };
 		05420A921F128C4C00BC1CC7 /* NetworkErrorHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05420A911F128C4C00BC1CC7 /* NetworkErrorHandler.swift */; };
 		054FD7591F1AD93F0017171A /* FacetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 054FD7581F1AD93F0017171A /* FacetManager.swift */; };
+		05533C251F2392B2000CDB9F /* FailedRegistryView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 05533C241F2392B2000CDB9F /* FailedRegistryView.xib */; };
+		05533C271F2392CA000CDB9F /* FailedRegistryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05533C261F2392CA000CDB9F /* FailedRegistryView.swift */; };
 		055556661ECCA344009DCA24 /* FetchedSearchesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 055556651ECCA344009DCA24 /* FetchedSearchesViewController.swift */; };
 		055556691ECCA91D009DCA24 /* SearchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 055556681ECCA91D009DCA24 /* SearchResult.swift */; };
 		05715E541EBF055800C4C3C7 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05715E531EBF055800C4C3C7 /* Constants.swift */; };
@@ -41,7 +43,11 @@
 		05AA421F1EF5715200992DF3 /* BaseButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05AA421E1EF5715200992DF3 /* BaseButton.swift */; };
 		05AC8A731ED75DB2000F37CE /* SearchDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05AC8A721ED75DB2000F37CE /* SearchDetailViewController.swift */; };
 		05AC8A751ED772D6000F37CE /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05AC8A741ED772D6000F37CE /* WebViewController.swift */; };
+		05BF4A7F1F21AB12007EE471 /* TypeColorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05BF4A7E1F21AB12007EE471 /* TypeColorCell.swift */; };
+		05BF4A811F21AB92007EE471 /* CategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05BF4A801F21AB92007EE471 /* CategoryCell.swift */; };
+		05BF4A881F22267F007EE471 /* ControllersManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05BF4A871F22267F007EE471 /* ControllersManager.swift */; };
 		05CFF8511ED06839005DD0FE /* RefineSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05CFF8501ED06839005DD0FE /* RefineSearchViewController.swift */; };
+		05D531571F1E3674006A4EDC /* LaunchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05D531561F1E3674006A4EDC /* LaunchViewController.swift */; };
 		05DA3DF71EC9E95200AB4B79 /* MineModelParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05DA3DF61EC9E95200AB4B79 /* MineModelParser.swift */; };
 		05DA3DF91ECAF75D00AB4B79 /* QueryBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05DA3DF81ECAF75D00AB4B79 /* QueryBuilder.swift */; };
 		05DA3DFB1ECB03F300AB4B79 /* FetchedListsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05DA3DFA1ECB03F300AB4B79 /* FetchedListsViewController.swift */; };
@@ -104,6 +110,8 @@
 		05420A911F128C4C00BC1CC7 /* NetworkErrorHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkErrorHandler.swift; sourceTree = "<group>"; };
 		054745731EC2426900BC35F8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
 		054FD7581F1AD93F0017171A /* FacetManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FacetManager.swift; sourceTree = "<group>"; };
+		05533C241F2392B2000CDB9F /* FailedRegistryView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FailedRegistryView.xib; sourceTree = "<group>"; };
+		05533C261F2392CA000CDB9F /* FailedRegistryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FailedRegistryView.swift; sourceTree = "<group>"; };
 		055556651ECCA344009DCA24 /* FetchedSearchesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchedSearchesViewController.swift; sourceTree = "<group>"; };
 		055556681ECCA91D009DCA24 /* SearchResult.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchResult.swift; sourceTree = "<group>"; };
 		05715E531EBF055800C4C3C7 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -129,7 +137,11 @@
 		05AA421E1EF5715200992DF3 /* BaseButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseButton.swift; sourceTree = "<group>"; };
 		05AC8A721ED75DB2000F37CE /* SearchDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchDetailViewController.swift; sourceTree = "<group>"; };
 		05AC8A741ED772D6000F37CE /* WebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
+		05BF4A7E1F21AB12007EE471 /* TypeColorCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TypeColorCell.swift; sourceTree = "<group>"; };
+		05BF4A801F21AB92007EE471 /* CategoryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryCell.swift; sourceTree = "<group>"; };
+		05BF4A871F22267F007EE471 /* ControllersManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ControllersManager.swift; sourceTree = "<group>"; };
 		05CFF8501ED06839005DD0FE /* RefineSearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RefineSearchViewController.swift; sourceTree = "<group>"; };
+		05D531561F1E3674006A4EDC /* LaunchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchViewController.swift; sourceTree = "<group>"; };
 		05DA3DF61EC9E95200AB4B79 /* MineModelParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MineModelParser.swift; sourceTree = "<group>"; };
 		05DA3DF81ECAF75D00AB4B79 /* QueryBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QueryBuilder.swift; sourceTree = "<group>"; };
 		05DA3DFA1ECB03F300AB4B79 /* FetchedListsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchedListsViewController.swift; sourceTree = "<group>"; };
@@ -238,7 +250,6 @@
 				055556651ECCA344009DCA24 /* FetchedSearchesViewController.swift */,
 				05CFF8501ED06839005DD0FE /* RefineSearchViewController.swift */,
 				05AC8A721ED75DB2000F37CE /* SearchDetailViewController.swift */,
-				05AC8A741ED772D6000F37CE /* WebViewController.swift */,
 			);
 			name = SearchTabVCs;
 			sourceTree = "<group>";
@@ -289,6 +300,8 @@
 		05715E6C1EBFBC1100C4C3C7 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				05AC8A741ED772D6000F37CE /* WebViewController.swift */,
+				05D531561F1E3674006A4EDC /* LaunchViewController.swift */,
 				057E5F741ED6EBC6004278C5 /* MainViewController.swift */,
 				057E5F701ED6EB01004278C5 /* MenuViewController.swift */,
 				055556641ECCA31F009DCA24 /* SearchTabVCs */,
@@ -305,12 +318,9 @@
 		05715E6D1EBFBC3200C4C3C7 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				05BF4A7D1F21AADF007EE471 /* Cells */,
 				05908AFA1F076209007BDF50 /* Buttons */,
-				057E5F761ED6F032004278C5 /* MenuCell.swift */,
-				05F407B11EC61F1400707B86 /* FetchedCell.swift */,
-				05EA6CC11EC83758002CC884 /* ListCells */,
 				05EA6CBB1EC79BF8002CC884 /* TableCoverView */,
-				05F4079D1EC60F7E00707B86 /* TemplateCells */,
 				05F407781EC34CFE00707B86 /* BaseView.swift */,
 				054745791EC247EA00BC35F8 /* Storyboards */,
 				0547457A1EC247F500BC35F8 /* LaunchScreen */,
@@ -323,6 +333,7 @@
 			children = (
 				05DF530B1E90286E00113171 /* AppDelegate.swift */,
 				052458591ED6115200C8A340 /* AppManager.swift */,
+				05BF4A871F22267F007EE471 /* ControllersManager.swift */,
 			);
 			name = App;
 			sourceTree = "<group>";
@@ -345,6 +356,43 @@
 				05908AFB1F0765CD007BDF50 /* FavoriteButton.swift */,
 			);
 			name = Buttons;
+			sourceTree = "<group>";
+		};
+		05BF4A7D1F21AADF007EE471 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				05F4079D1EC60F7E00707B86 /* TemplateCells */,
+				05F407B11EC61F1400707B86 /* FetchedCell.swift */,
+				05BF4A7E1F21AB12007EE471 /* TypeColorCell.swift */,
+				05BF4A841F21ABEA007EE471 /* Menu */,
+				05BF4A831F21ABDF007EE471 /* Search */,
+				05BF4A821F21ABC6007EE471 /* Lists */,
+			);
+			name = Cells;
+			sourceTree = "<group>";
+		};
+		05BF4A821F21ABC6007EE471 /* Lists */ = {
+			isa = PBXGroup;
+			children = (
+				05EA6CC21EC8377A002CC884 /* ListTableViewCell.swift */,
+			);
+			name = Lists;
+			sourceTree = "<group>";
+		};
+		05BF4A831F21ABDF007EE471 /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				05BF4A801F21AB92007EE471 /* CategoryCell.swift */,
+			);
+			name = Search;
+			sourceTree = "<group>";
+		};
+		05BF4A841F21ABEA007EE471 /* Menu */ = {
+			isa = PBXGroup;
+			children = (
+				057E5F761ED6F032004278C5 /* MenuCell.swift */,
+			);
+			name = Menu;
 			sourceTree = "<group>";
 		};
 		05DE68A21E91BA220009838E /* Networking */ = {
@@ -409,6 +457,8 @@
 			children = (
 				05EA6CBC1EC79C10002CC884 /* TableCoverView.swift */,
 				05EA6CB91EC79BEB002CC884 /* TableCoverView.xib */,
+				05533C261F2392CA000CDB9F /* FailedRegistryView.swift */,
+				05533C241F2392B2000CDB9F /* FailedRegistryView.xib */,
 			);
 			name = TableCoverView;
 			sourceTree = "<group>";
@@ -419,14 +469,6 @@
 				05DA3DFA1ECB03F300AB4B79 /* FetchedListsViewController.swift */,
 			);
 			name = ListTabVCs;
-			sourceTree = "<group>";
-		};
-		05EA6CC11EC83758002CC884 /* ListCells */ = {
-			isa = PBXGroup;
-			children = (
-				05EA6CC21EC8377A002CC884 /* ListTableViewCell.swift */,
-			);
-			name = ListCells;
 			sourceTree = "<group>";
 		};
 		05EA6CC41EC83D48002CC884 /* Lists */ = {
@@ -610,6 +652,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				05533C251F2392B2000CDB9F /* FailedRegistryView.xib in Resources */,
 				05E952E91EC197400057F753 /* Localizable.strings in Resources */,
 				05DF53161E90286E00113171 /* LaunchScreen.storyboard in Resources */,
 				05DF53131E90286E00113171 /* Assets.xcassets in Resources */,
@@ -702,6 +745,7 @@
 				05AA421F1EF5715200992DF3 /* BaseButton.swift in Sources */,
 				0524F3B51EDC36AE004779F6 /* FavoriteSearchResult+CoreDataClass.swift in Sources */,
 				05EA6CD71EC8B243002CC884 /* MineModel+CoreDataClass.swift in Sources */,
+				05BF4A881F22267F007EE471 /* ControllersManager.swift in Sources */,
 				05F4078F1EC4F48400707B86 /* TemplateTableViewCell.swift in Sources */,
 				05908AFC1F0765CD007BDF50 /* FavoriteButton.swift in Sources */,
 				05F407A71EC6105A00707B86 /* TemplateDetailBaseCell.swift in Sources */,
@@ -714,6 +758,7 @@
 				05AC8A751ED772D6000F37CE /* WebViewController.swift in Sources */,
 				05F4079F1EC60F9D00707B86 /* LookupCell.swift in Sources */,
 				055556691ECCA91D009DCA24 /* SearchResult.swift in Sources */,
+				05D531571F1E3674006A4EDC /* LaunchViewController.swift in Sources */,
 				0535181A1ECF824E006F87EA /* SearchFacet.swift in Sources */,
 				05F407871EC4998A00707B86 /* TemplateQuery.swift in Sources */,
 				0595D5251EC0A69C00686065 /* FavoritesViewController.swift in Sources */,
@@ -745,11 +790,14 @@
 				05F4078D1EC4AD3100707B86 /* UIViewController+Utils.swift in Sources */,
 				05F407B01EC6159000707B86 /* FetchedTemplatesViewController.swift in Sources */,
 				05F407831EC4980C00707B86 /* TemplatesList.swift in Sources */,
+				05533C271F2392CA000CDB9F /* FailedRegistryView.swift in Sources */,
+				05BF4A811F21AB92007EE471 /* CategoryCell.swift in Sources */,
 				0595D5291EC0A7C800686065 /* BaseViewController.swift in Sources */,
 				057E5F771ED6F032004278C5 /* MenuCell.swift in Sources */,
 				05DA3DFB1ECB03F300AB4B79 /* FetchedListsViewController.swift in Sources */,
 				05EA6CC31EC8377A002CC884 /* ListTableViewCell.swift in Sources */,
 				05F4078A1EC4A9AA00707B86 /* TemplatesViewController.swift in Sources */,
+				05BF4A7F1F21AB12007EE471 /* TypeColorCell.swift in Sources */,
 				05F407801EC36E4800707B86 /* UIColor+Utils.swift in Sources */,
 				05F4079A1EC5DFF900707B86 /* OperationSelectViewController.swift in Sources */,
 				05DA3DF91ECAF75D00AB4B79 /* QueryBuilder.swift in Sources */,

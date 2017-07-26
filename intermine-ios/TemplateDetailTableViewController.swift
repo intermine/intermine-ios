@@ -17,7 +17,9 @@ class TemplateDetailTableViewController: UITableViewController, OperationSelecti
     
     var template: Template? {
         didSet {
-            self.tableView.reloadData()
+            UIView.transition(with: self.tableView, duration: 0.5, options: .transitionCrossDissolve, animations: {
+                self.tableView.reloadData()
+            }, completion: nil)
             if let template = self.template {
                 self.sortedQueries = template.getQueriesSortedByType()
                 self.switchIndex = template.totalQueryCount() - template.opQueryCount() - 1
@@ -44,6 +46,8 @@ class TemplateDetailTableViewController: UITableViewController, OperationSelecti
         
         self.tableView.sectionHeaderHeight = UITableViewAutomaticDimension
         self.tableView.estimatedSectionHeaderHeight = 60
+        
+        self.navigationItem.titleView = UIView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -140,7 +144,6 @@ class TemplateDetailTableViewController: UITableViewController, OperationSelecti
                 self.navigationController?.pushViewController(fetchedVC, animated: true)
             }
         }
-        
     }
     
     // MARK: Notification when operation is changed

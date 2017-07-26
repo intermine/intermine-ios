@@ -63,14 +63,16 @@ class FetchedSearchesViewController: LoadingTableViewController, UIGestureRecogn
                 return name0 < name1
             })
             
-            self.tableView.reloadData()
+            UIView.transition(with: self.tableView, duration: 0.5, options: .transitionCrossDissolve, animations: { 
+                self.tableView.reloadData()
+            }, completion: nil)
+            
             if data.count > 0 {
-                self.hideNothingFoundView()
+                self.showingResult = true
                 self.buttonView?.isHidden = false
-                self.stopSpinner()
             } else {
                 if self.selectedFacet == nil {
-                    self.showNothingFoundView()
+                    self.nothingFound = true
                     self.buttonView?.isHidden = true
                 }
             }
@@ -82,6 +84,7 @@ class FetchedSearchesViewController: LoadingTableViewController, UIGestureRecogn
     override func viewDidLoad() {
         super.viewDidLoad()
         self.configureNavbar()
+        self.isLoading = true
         self.loadSearchResultsWithOffset(offset: self.currentOffset)
         refineButton?.setTitle(String.localize("Search.Refine"), for: .normal)
         buttonView?.isHidden = true
@@ -127,8 +130,6 @@ class FetchedSearchesViewController: LoadingTableViewController, UIGestureRecogn
     
     private func loadSearchResultsWithOffset(offset: Int) {
         self.params?["start"] = "\(offset)"
-        // TODO: - debug line, to remove
-        //self.params?["facet_Category"] = "Gene"
         if let params = self.params {
             IntermineAPIClient.makeSearchOverAllMines(params: params) { (searchResults, facetLists, error) in
                 // Transform into [String: String] dict
@@ -136,7 +137,7 @@ class FetchedSearchesViewController: LoadingTableViewController, UIGestureRecogn
                     for res in searchResults {
                         if !self.lockData {
                             self.data.append(res)
-                            self.stopSpinner()
+                            // FIXME: ?
                         }
                     }
                 }
@@ -186,9 +187,8 @@ class FetchedSearchesViewController: LoadingTableViewController, UIGestureRecogn
     func refineSearchViewController(controller: RefineSearchViewController, didSelectFacet: SelectedFacet) {
         // reload table view with new data
         self.selectedFacet = didSelectFacet
-        self.hideNothingFoundView()
+        self.showingResult = true
         self.lockData = true
-        self.startSpinner()
         self.data = []
         self.loadRefinedSearchWithOffset(offset: self.currentOffset, selectedFacet: didSelectFacet)
     }
