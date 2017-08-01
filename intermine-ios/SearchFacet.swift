@@ -41,7 +41,7 @@ class FormattedFacet {
     private var title: String?
     private var count: String?
     
-    init(withTitle: String?, count: String) {
+    init(withTitle: String?, count: String?) {
         self.title = withTitle
         self.count = count
     }
@@ -91,6 +91,7 @@ class SearchFacet {
         for (key, value) in contents {
             formattedFacets.append(FormattedFacet(withTitle: key, count: "\(value)"))
         }
+        formattedFacets.insert(FormattedFacet(withTitle: String.localize("Search.Refine.AllCategories"), count: nil), at: 0)
         return formattedFacets
     }
 

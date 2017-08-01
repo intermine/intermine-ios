@@ -9,6 +9,7 @@
     <entity name="Mine" representedClassName="Mine" syncable="YES">
         <attribute name="lastTimeUpdated" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="organisms" optional="YES" attributeType="Transformable" customClassName="NSArray" syncable="YES"/>
         <attribute name="releaseVersion" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="theme" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="url" optional="YES" attributeType="String" syncable="YES"/>
@@ -21,7 +22,7 @@
     </entity>
     <elements>
         <element name="FavoriteSearchResult" positionX="18" positionY="18" width="128" height="105"/>
-        <element name="Mine" positionX="-63" positionY="-18" width="128" height="120"/>
+        <element name="Mine" positionX="-63" positionY="-18" width="128" height="135"/>
         <element name="MineModel" positionX="97" positionY="-9" width="128" height="105"/>
     </elements>
 </model>

@@ -6,6 +6,8 @@
   Copyright © 2017 Nadia. All rights reserved.
 */
 
+"General.Details" = "Details";
+
 "Tabs.Search" = "Search";
 "Tabs.Templates" = "Templates";
 "Tabs.Lists" = "Lists";
@@ -18,6 +20,9 @@
 "Templates.CTA.SelectOperation" = "Select Operation";
 "Templates.CountLabel" = "Template count: %@";
 "Templates.Params" = "Parameters: %@";
+"Templates.Operator" = "Operator";
+"Templates.Value" = "Value";
+"Templates.ExtraValue" = "Organism";
 
 "General.NothingFound" = "No results found";
 
@@ -26,11 +31,12 @@
 "Search.Search" = "Search";
 "Search.Refine" = "Refine Search";
 "Search.Refine.SelectMine" = "Select mine";
+"Search.Refine.SelectedMine" = "Selected mine";
 "Search.Refine.SelectCategory" = "Select category";
 "Search.Refine.LoadingCategories" = "Loading categories";
 "Search.Refine.NoSelection" = "None selected";
 "Search.Refine.AllMines" = "All mines";
-"Search.Refine.AllCategories" = "All facets";
+"Search.Refine.AllCategories" = "All categories";
 "Search.Refine.CTA" = "Refine search";
 
 "Search.SelectMine" = "Select mine";
@@ -46,6 +52,7 @@
 "Webview.Loading.Error" = "Error loading. Please, try again later";
 
 "Favorites.Title" = "Favorites";
+"Favorites.NothingFound" = "Save search results to review them later";
 
 "Network.Error.ConnectionLost" = "Please, check your Internet connection and try again";
 "Network.Error.Server" = "Sorry, we are experiensing some issues. Please, try again later";
@@ -53,3 +60,12 @@
 "Network.Error.Unknown" = "Something went wrong. Please, try again later";
 
 "Registry.Error.FailedToLoad" = "We were unable to retrive the registry at this time. Please, try to run the app later";
+
+"Tutorial.Description.Menu" = "Select mine you would like to work with";
+"Tutorial.Description.SelectedMine" = "Search all mines or specific mine";
+"Tutorial.Description.Templates" = "View templates for selected mine";
+"Tutorial.Description.Lists" = "View lists for selected mine";
+"Tutorial.Description.Favs" = "Store your favorite search results";
+"Tutorial.Description.Login" = "Login to access your templates and lists";
+"Tutorial.Next" = "Next";
+"Tutorial.Done" = "Got it!";

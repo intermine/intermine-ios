@@ -47,8 +47,8 @@ class LoadingTableViewController: UITableViewController {
     var showInfoButton = false {
         didSet {
             if showInfoButton {
-                let infoButton = UIBarButtonItem(image: Icons.info,  style: .plain, target: self, action: #selector(LoadingTableViewController.didTapInfoButton))
-                navigationItem.rightBarButtonItems = [infoButton]
+                let detailsButton = UIBarButtonItem(title: String.localize("General.Details"), style: .plain, target: self, action: #selector(LoadingTableViewController.didTapInfoButton))
+                navigationItem.rightBarButtonItems = [detailsButton]
             }
         }
     }

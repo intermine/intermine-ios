@@ -11,6 +11,11 @@ import UIKit
 class FailedRegistryView: BaseView {
 
     @IBOutlet weak var messageLabel: UILabel?
+    var messageText: String? {
+        didSet {
+            messageLabel?.text = messageText
+        }
+    }
     
     override func awakeFromNib() {
         super.awakeFromNib()

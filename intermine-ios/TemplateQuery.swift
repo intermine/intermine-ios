@@ -14,12 +14,16 @@ class TemplateQuery {
     private let code: String?
     private var op: String?
     private let constraint: String? // "path"
+    private var editable: Bool?
+    private var extraValue: String?
     
-    init(withValue: String?, code: String?, op: String?, constraint: String?) {
+    init(withValue: String?, code: String?, op: String?, constraint: String?, editable: Bool?, extraValue: String?) {
         self.value = withValue
         self.code = code
         self.op = op
         self.constraint = constraint
+        self.editable = editable
+        self.extraValue = extraValue
     }
     
     func constructDictForGen(gen: Int) -> [String: String] {
@@ -36,18 +40,29 @@ class TemplateQuery {
         if let op = self.op {
             params["op\(gen)"] = op
         }
+        if let extra = self.extraValue {
+            params["extra\(gen)"] = extra
+        }
         return params
     }
     
+    func getExtraValue() -> String? {
+        return self.extraValue
+    }
+    
+    func isEditable() -> Bool {
+        if let editable = self.editable {
+            return editable
+        }
+        return false
+    }
+    
     func isLookupQuery() -> Bool {
-        return value?.lowercased() == "lookup"
+        return op?.lowercased() == "lookup"
     }
     
     func isOpQuery() -> Bool {
-        if let value = self.value {
-            return value.lowercased() != "lookup"
-        }
-        return false
+        return op?.lowercased() != "lookup"
     }
     
     func getOperation() -> String? {
@@ -64,6 +79,14 @@ class TemplateQuery {
     
     func changeValue(value: String?) {
         self.value = value
+    }
+    
+    func changeExtra(extra: String?) {
+        self.extraValue = extra
+    }
+    
+    func getPath() -> String? {
+        return self.constraint
     }
     
 }

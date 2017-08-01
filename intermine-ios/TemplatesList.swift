@@ -10,14 +10,16 @@ import Foundation
 
 class TemplatesList {
     
-    // TODO: Should it be cached in CD?
-    
     private var templates: [Template]?
     private let mine: String?
     
     init(withTemplates: [Template]?, mine: String?) {
         self.templates = withTemplates
         self.mine = mine
+    }
+    
+    func getTemplates() -> [Template]? {
+        return self.templates
     }
     
     func size() -> Int {
@@ -39,6 +41,23 @@ class TemplatesList {
             }
         }
         return nil
+    }
+    
+    func filterTemplates(searchText: String?) -> [Template] {
+        guard let searchText = searchText else {
+            return []
+        }
+        var filteredTemplates: [Template] = []
+        if let templates = self.templates {
+            for template in templates {
+                if let title = template.getTitle() {
+                    if title.range(of: searchText) != nil {
+                        filteredTemplates.append(template)
+                    }
+                }
+            }
+        }
+        return filteredTemplates
     }
     
 }

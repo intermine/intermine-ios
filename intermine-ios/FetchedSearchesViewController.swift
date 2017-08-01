@@ -18,6 +18,7 @@ class FetchedSearchesViewController: LoadingTableViewController, UIGestureRecogn
     private var currentOffset: Int = 0
     private var params: [String: String]?
     private let facetManager = FacetManager.shared
+    private var mineToSearch: String?
     
     private var facets: [FacetList]? {
         didSet {
@@ -63,9 +64,14 @@ class FetchedSearchesViewController: LoadingTableViewController, UIGestureRecogn
                 return name0 < name1
             })
             
-            UIView.transition(with: self.tableView, duration: 0.5, options: .transitionCrossDissolve, animations: { 
-                self.tableView.reloadData()
-            }, completion: nil)
+            self.data = self.data.sorted(by: { (searchResult0, searchResult1) -> Bool in
+                guard let name0 = searchResult0.mineName, let name1 = searchResult1.mineName else {
+                    return false
+                }
+                return name0 == AppManager.sharedManager.selectedMine && name1 != AppManager.sharedManager.selectedMine
+            })
+            
+            self.tableView.reloadData()
             
             if data.count > 0 {
                 self.showingResult = true
@@ -110,10 +116,11 @@ class FetchedSearchesViewController: LoadingTableViewController, UIGestureRecogn
     
     // MARK: Load from storyboard
     
-    class func fetchedSearchesViewController(withParams: [String: String]?) -> FetchedSearchesViewController? {
+    class func fetchedSearchesViewController(withParams: [String: String]?, forMine: String?) -> FetchedSearchesViewController? {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "FetchedSearchVC") as? FetchedSearchesViewController
         vc?.params = withParams
+        vc?.mineToSearch = forMine
         return vc
     }
     
@@ -127,41 +134,73 @@ class FetchedSearchesViewController: LoadingTableViewController, UIGestureRecogn
         self.navigationController?.navigationBar.topItem?.title = ""
         self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: Colors.white]
     }
+
     
     private func loadSearchResultsWithOffset(offset: Int) {
         self.params?["start"] = "\(offset)"
         if let params = self.params {
-            IntermineAPIClient.makeSearchOverAllMines(params: params) { (searchResults, facetLists, error) in
-                // Transform into [String: String] dict
-                if let searchResults = searchResults {
-                    for res in searchResults {
-                        if !self.lockData {
-                            self.data.append(res)
-                            // FIXME: ?
+            if let mineToSearch = self.mineToSearch {
+                if let mine = CacheDataStore.sharedCacheDataStore.findMineByName(name: mineToSearch), let url = mine.url {
+                    IntermineAPIClient.makeSearchInMine(mineUrl: url, params: params, completion: { (searchResult, facetList, error) in
+                        if let searchResult = searchResult {
+                            if !self.lockData {
+                                self.data.append(searchResult)
+                            }
+                        }
+                        
+                        if let facets = facetList {
+                            // To later show facets on refine search VC
+                            if !self.lockData {
+                                self.facets = [facets]
+                            }
+                        }
+                        
+                        if let error = error {
+                            var info: [String: Any] = [:]
+                            info["errorType"] = error
+                            NotificationCenter.default.post(name: NSNotification.Name(rawValue: Notifications.searchFailed), object: self, userInfo: info)
+                            self.alert(message: NetworkErrorHandler.getErrorMessage(errorType: error))
+                        }
+
+                        
+                    })
+                }
+            } else {
+                IntermineAPIClient.makeSearchOverAllMines(params: params) { (searchResults, facetLists, error) in
+                    // Transform into [String: String] dict
+                    if let searchResults = searchResults {
+                        for res in searchResults {
+                            if !self.lockData {
+                                self.data.append(res)
+                                
+                            }
                         }
                     }
-                }
-                
-                if let facets = facetLists {
-                    // To later show facets on refine search VC
-                    if !self.lockData {
-                        self.facets = facets
+                    
+                    if let facets = facetLists {
+                        // To later show facets on refine search VC
+                        if !self.lockData {
+                            self.facets = facets
+                        }
+                    }
+                    
+                    if let error = error {
+                        var info: [String: Any] = [:]
+                        info["errorType"] = error
+                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: Notifications.searchFailed), object: self, userInfo: info)
+                        self.alert(message: NetworkErrorHandler.getErrorMessage(errorType: error))
                     }
                 }
-                
-                if let error = error {
-                    var info: [String: Any] = [:]
-                    info["errorType"] = error
-                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: Notifications.searchFailed), object: self, userInfo: info)
-                    self.alert(message: NetworkErrorHandler.getErrorMessage(errorType: error))
-                }
-
             }
         }
     }
     
     private func loadRefinedSearchWithOffset(offset: Int, selectedFacet: SelectedFacet) {
-        self.params?["facet_Category"] = selectedFacet.getFacetName()
+        let facetName = selectedFacet.getFacetName()
+        if facetName != String.localize("Search.Refine.AllCategories") {
+            self.params?["facet_Category"] = selectedFacet.getFacetName()
+        }
+        
         self.params?["size"] = "\(General.pageSize)"
         self.params?["start"] = "\(offset)"
         
@@ -196,7 +235,7 @@ class FetchedSearchesViewController: LoadingTableViewController, UIGestureRecogn
     // MARK: Action
     
     @IBAction func refineSearchTapped(_ sender: Any) {
-        if let refineVC = RefineSearchViewController.refineSearchViewController(withFacets: self.facets) {
+        if let refineVC = RefineSearchViewController.refineSearchViewController(withFacets: self.facets, mineToSearch: self.mineToSearch) {
             refineVC.delegate = self
             self.navigationController?.pushViewController(refineVC, animated: true)
         }

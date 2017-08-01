@@ -13,15 +13,7 @@ import UIKit
 class AppManager {
     
     private var launchVC: UIViewController?
-    private var launchVCShouldHide = false
-    
-    var canHideVC = false {
-        didSet {
-            if launchVCShouldHide {
-                launchVC?.dismiss(animated: false, completion: nil)
-            }
-        }
-    }
+    private var tutorialView: TutorialView?
     
     var selectedMine: String = General.defaultMine {
         didSet {
@@ -31,6 +23,9 @@ class AppManager {
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: Notifications.mineSelected), object: self, userInfo: info)
         }
     }
+    
+    var cachedCategory: String? = nil
+    var cachedMineIndex: Int? = nil
     
     var shouldBreakLoading = false {
         didSet {
@@ -72,6 +67,30 @@ class AppManager {
             self.launchVC = vc
             vc.modalTransitionStyle = .crossDissolve
             rootViewController?.present(vc, animated: false, completion: nil)
+        }
+    }
+    
+    func showTutorialView() {
+        if !DefaultsManager.keyExists(key: DefaultsKeys.tutorialShown) {
+            let tutorialView = TutorialView.instantiateFromNib()
+            if let window = UIApplication.shared.keyWindow {
+                tutorialView.resizeView(toY: 0, toWidth: window.frame.size.width, toHeight: window.frame.size.height)
+                tutorialView.tag = 100
+                window.addSubview(tutorialView)
+            }
+            self.tutorialView = tutorialView
+            DefaultsManager.storeInDefaults(key: DefaultsKeys.tutorialShown, value: "yes")
+        }
+    }
+    
+    func removeTutorialView() {
+        if let window = UIApplication.shared.keyWindow {
+            UIView.animate(withDuration: 0.2, animations: { 
+                self.tutorialView?.alpha = 0
+            }, completion: { (done) in
+                window.viewWithTag(100)?.removeFromSuperview()
+                self.tutorialView = nil
+            })
         }
     }
     

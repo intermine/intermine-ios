@@ -15,6 +15,12 @@ class TemplateTableViewCell: UITableViewCell {
     @IBOutlet weak var descriptionLabel: UILabel?
     @IBOutlet weak var titleLabel: UILabel?
     @IBOutlet weak var containerView: UIView?
+    @IBOutlet weak var userImageView: UIImageView?
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        userImageView?.image = Icons.user
+    }
     
     var template: Template? {
         didSet {
@@ -33,6 +39,9 @@ class TemplateTableViewCell: UITableViewCell {
             titleLabel?.text = template?.getTitle()
             containerView?.layer.borderWidth = 1
             containerView?.layer.borderColor = Colors.gray56.withAlphaComponent(0.3).cgColor
+            if let template = self.template {
+                userImageView?.isHidden = !template.getAuthd()
+            }
         }
     }
 }

@@ -22,7 +22,11 @@ public class MineModel: NSManagedObject {
         } else {
             model = MineModel(entity: intermineModelEntity, insertInto: context)
         }
-        model?.url = url
+        var urlCopy = url
+        if urlCopy.hasSuffix("/") {
+            urlCopy = String(urlCopy.characters.dropLast())
+        }
+        model?.url = urlCopy
         model?.versionId = versionId
         model?.releaseId = releaseId
         model?.xmlFile = xmlFile

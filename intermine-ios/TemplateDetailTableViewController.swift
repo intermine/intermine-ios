@@ -9,11 +9,11 @@
 import UIKit
 
 
-class TemplateDetailTableViewController: UITableViewController, OperationSelectionCellDelegate, OperationSelectViewControllerDelegate, ActionCellDelegate {
+class TemplateDetailTableViewController: UITableViewController, TemplateDetailCellDelegate, OperationSelectViewControllerDelegate, ActionCellDelegate {
     
     private var sortedQueries: [TemplateQuery] = []
-    private var switchIndex: Int = 0
     private var popover: OperationSelectViewController?
+    private var displayedQueries: [TemplateQuery] = [] // we don't want to show non-editable queries, but still need them to make a request
     
     var template: Template? {
         didSet {
@@ -22,7 +22,9 @@ class TemplateDetailTableViewController: UITableViewController, OperationSelecti
             }, completion: nil)
             if let template = self.template {
                 self.sortedQueries = template.getQueriesSortedByType()
-                self.switchIndex = template.totalQueryCount() - template.opQueryCount() - 1
+                self.displayedQueries = self.sortedQueries.filter({ (query: TemplateQuery) -> Bool in
+                    return query.isEditable()
+                })
             }
         }
     }
@@ -68,22 +70,15 @@ class TemplateDetailTableViewController: UITableViewController, OperationSelecti
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return sortedQueries.count
+        return displayedQueries.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if (indexPath.row < switchIndex) || (indexPath.row == 0 && switchIndex == 0) || (switchIndex == -1) {
-            let cell = tableView.dequeueReusableCell(withIdentifier: LookupCell.identifier, for: indexPath) as! LookupCell
-            cell.query = sortedQueries[indexPath.row]
-            cell.index = indexPath.row
-            return cell
-        } else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: OperationSelectionCell.identifier, for: indexPath) as! OperationSelectionCell
-            cell.query = sortedQueries[indexPath.row]
-            cell.index = indexPath.row
-            cell.delegate = self
-            return cell
-        }
+        let cell = tableView.dequeueReusableCell(withIdentifier: TemplateDetailCell.identifier, for: indexPath) as! TemplateDetailCell
+        cell.templateQuery = displayedQueries[indexPath.row]
+        cell.index = indexPath.row
+        cell.delegate = self
+        return cell
     }
     
     // MARK: Header and footer
@@ -105,9 +100,9 @@ class TemplateDetailTableViewController: UITableViewController, OperationSelecti
         return 60
     }
 
-    // MARK: Operation selection cell delegate
+    // MARK: Template detail cell delegate
     
-    func operationSelectionCellDidTapSelectButton(cell: OperationSelectionCell) {
+    func templateDetailCellDidTapSelectButton(cell: TemplateDetailCell) {
         let ip = self.tableView.indexPath(for: cell)
         if let popover = OperationSelectViewController.operationSelectViewController(forCellIndex: ip?.row) {
             popover.modalPresentationStyle = UIModalPresentationStyle.popover

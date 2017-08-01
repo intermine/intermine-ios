@@ -159,6 +159,23 @@ class IntermineAPIClient: NSObject {
     
     // MARK: Public methods
     
+    class func fetchOrganismsForMine(mineUrl: String, completion: @escaping (_ result: [String?], _ error: NetworkErrorType?) -> ()) {
+        let query = "<query model=\"genomic\" view=\"Organism.shortName\" sortOrder=\"Organism.shortName ASC\"></query>"
+        let params = ["query": query, "format": "json"]
+        let urlString = mineUrl + Endpoints.singleList
+        _ = IntermineAPIClient.sendJSONRequest(url: urlString, method: .get, params: params, timeOutInterval: General.timeoutIntervalForRequest, shouldUseAuth: false) { (result, error) in
+            var organisms: [String] = []
+            if let results = result?["results"] as? [[String]] {
+                for organism in results {
+                    if organism.count > 0 {
+                        organisms.append(organism[0])
+                    }
+                }
+            }
+            completion(organisms, error)
+        }
+    }
+    
     class func cancelAllRequests() {
         manager.session.getAllTasks { tasks in
             tasks.forEach { $0.cancel() }
@@ -219,6 +236,8 @@ class IntermineAPIClient: NSObject {
             return
         }
         
+        AppManager.sharedManager.cachedMineIndex = nil
+        
         var results: [SearchResult] = []
         var facetLists: [FacetList] = []
         let totalMineCount = CacheDataStore.sharedCacheDataStore.registrySize()
@@ -260,9 +279,13 @@ class IntermineAPIClient: NSObject {
     }
     
     class func fetchRegistry(completion: @escaping (_ result: [String: AnyObject]?, _ error: NetworkErrorType?) -> ()) {
-        let url = Endpoints.registryDomain + Endpoints.registryInstances
-        var _ = IntermineAPIClient.sendJSONRequest(url: url, method: .get, params: nil, timeOutInterval: General.timeoutForRegistryUpdate, shouldUseAuth: false) { (res, error) in
-            completion(res, error)
+        if useDebugServer {
+            // TODO: make changes in debug server
+        } else {
+            let url = Endpoints.registryDomain + Endpoints.registryInstances
+            var _ = IntermineAPIClient.sendJSONRequest(url: url, method: .get, params: nil, timeOutInterval: General.timeoutForRegistryUpdate, shouldUseAuth: false) { (res, error) in
+                completion(res, error)
+            }
         }
     }
     
@@ -314,11 +337,27 @@ class IntermineAPIClient: NSObject {
                         var queryList: [TemplateQuery] = []
                         if let queries = template["where"] as? [[String: AnyObject]] {
                             for query in queries {
-                                let queryObj = TemplateQuery(withValue: query["value"] as? String, code: query["code"] as? String, op: query["op"] as? String, constraint: query["path"] as? String)
-                                queryList.append(queryObj)
+                                var valueString = ""
+                                if let value = query["value"] as? String {
+                                    valueString = value
+                                }
+                                if let valueArray = query["values"] as? [String] {
+                                    valueString = valueArray.joined(separator: ",")
+                                }
+                                
+                                let queryObj = TemplateQuery(withValue: valueString, code: query["code"] as? String, op: query["op"] as? String, constraint: query["path"] as? String, editable: query["editable"] as? Bool, extraValue: query["extraValue"] as? String)
+                                if queryObj.getOperation() != nil {
+                                    queryList.append(queryObj)
+                                }
                             }
                         }
-                        let templateObj = Template(withTitle: template["title"] as? String, description: template["description"] as? String, queryList: queryList, name: template["name"] as? String, mineUrl: mineUrl)
+                        var authd = false
+                        if let tags = template["tags"] as? [String] {
+                            if !tags.contains("im:public") {
+                                authd = true
+                            }
+                        }
+                        let templateObj = Template(withTitle: template["title"] as? String, description: template["description"] as? String, queryList: queryList, name: template["name"] as? String, mineUrl: mineUrl, authorized: authd)
                         templateList.append(templateObj)
                     }
                     let templatesListObj = TemplatesList(withTemplates: templateList, mine: mineUrl)

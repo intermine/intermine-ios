@@ -22,9 +22,11 @@ class RefineSearchViewController: BaseViewController, UIPickerViewDelegate, UIPi
     
     private let facetManager = FacetManager.shared
     @IBOutlet weak var nothingFoundView: UIView?
-    
+    private var mineToSearch: String?
     
     private var mines: [MineRepresentation] = [MineRepresentation(name: String.localize("Search.Refine.NoSelection"), count: nil)]//[String] = [String.localize("Search.Refine.NoSelection")]
+    
+    private var selectedThemeColor: UIColor?
     
     private struct MineRepresentation {
         let name: String
@@ -56,6 +58,13 @@ class RefineSearchViewController: BaseViewController, UIPickerViewDelegate, UIPi
     private var selectedMine: MineRepresentation? {
         didSet {
             if let selectedMine = self.selectedMine {
+                
+                if let mine = CacheDataStore.sharedCacheDataStore.findMineByName(name: selectedMine.name) {
+                    self.selectedThemeColor = UIColor.hexStringToUIColor(hex: mine.theme).withAlphaComponent(0.5)
+                }
+
+                self.configureUIWithMineRepresentation(mineRepresentation: selectedMine)
+                
                 self.categories = self.getCategoriesForMine(mineName: selectedMine.name)
                 if let catsTable = self.categoriesTable {
                     if selectedMine.name == String.localize("Search.Refine.NoSelection") {
@@ -89,6 +98,12 @@ class RefineSearchViewController: BaseViewController, UIPickerViewDelegate, UIPi
         }
     }
     
+    private func configureUIWithMineRepresentation(mineRepresentation: MineRepresentation) {
+        UIView.animate(withDuration: 0.2, animations: {
+            self.refineSearchButton?.backgroundColor = self.selectedThemeColor
+        })
+    }
+    
     override func indicatorPadding() -> CGFloat {
         if let nothingFoundView = self.nothingFoundView {
             return BaseView.viewWidth(view: nothingFoundView) / 3
@@ -112,6 +127,9 @@ class RefineSearchViewController: BaseViewController, UIPickerViewDelegate, UIPi
     override func viewDidLoad() {
         super.viewDidLoad()
         minesLabel?.text = String.localize("Search.Refine.SelectMine")
+        if self.mineToSearch != nil {
+            minesLabel?.text = String.localize("Search.Refine.SelectedMine")
+        }
 
         refineSearchButton?.setTitle(String.localize("Search.Refine.CTA"), for: .normal)
         refineSearchButton?.isEnabled = false
@@ -133,6 +151,7 @@ class RefineSearchViewController: BaseViewController, UIPickerViewDelegate, UIPi
         super.viewWillAppear(animated)
         NotificationCenter.default.addObserver(self, selector: #selector(self.facetsUpdated(_:)), name: NSNotification.Name(rawValue: Notifications.facetsUpdated), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.searchFailed(_:)), name: NSNotification.Name(rawValue: Notifications.searchFailed), object: nil)
+        self.categoriesTable?.reloadData()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -183,19 +202,27 @@ class RefineSearchViewController: BaseViewController, UIPickerViewDelegate, UIPi
             }
         }
         
-//        // Padding with mines containing 0 search results
-        if let registry = CacheDataStore.sharedCacheDataStore.allRegistry() {
-            for mine in registry {
-                if let name = mine.name {
-                    let count = self.getTotalCountForMine(mineName: name)
-                    let updatedMine = MineRepresentation(name: name, count: count)
-                    // test if mines array already has mine with this name
-                    if !(mines.contains(where: { rep in rep.name == name })) {
-                        mines.append(updatedMine)
+        if self.mineToSearch == nil {
+            // Padding with mines containing 0 search results
+            if let registry = CacheDataStore.sharedCacheDataStore.allRegistry() {
+                for mine in registry {
+                    if let name = mine.name {
+                        let count = self.getTotalCountForMine(mineName: name)
+                        let updatedMine = MineRepresentation(name: name, count: count)
+                        // test if mines array already has mine with this name
+                        if !(mines.contains(where: { rep in rep.name == name })) {
+                            mines.append(updatedMine)
+                        }
                     }
                 }
             }
+        } else {
+            // Remove "None selected" option
+            mines = mines.filter({ (mine) -> Bool in
+                return mine.name != String.localize("Search.Refine.NoSelection")
+            })
         }
+
         
         // TODO: - use if mines need to be sorted
         
@@ -220,12 +247,17 @@ class RefineSearchViewController: BaseViewController, UIPickerViewDelegate, UIPi
     }
     
     private func getInitialSelectedRow() -> Int? {
-        if mines.count > 0 {
-            return 1
+        if AppManager.sharedManager.cachedMineIndex != nil {
+            return AppManager.sharedManager.cachedMineIndex
         } else {
-            return nil
+            if mines.count > 1 {
+                return 1
+            } else if mines.count == 1 {
+                return 0
+            } else {
+                return nil
+            }
         }
-
     }
     
     private func getInitialSelectedMine() -> MineRepresentation? {
@@ -276,9 +308,10 @@ class RefineSearchViewController: BaseViewController, UIPickerViewDelegate, UIPi
     
     // MARK: Load from storyboard
     
-    class func refineSearchViewController(withFacets: [FacetList]?) -> RefineSearchViewController? {
+    class func refineSearchViewController(withFacets: [FacetList]?, mineToSearch: String?) -> RefineSearchViewController? {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "RefineSearchVC") as? RefineSearchViewController
+        vc?.mineToSearch = mineToSearch
         vc?.facets = withFacets
         return vc
     }
@@ -304,7 +337,10 @@ class RefineSearchViewController: BaseViewController, UIPickerViewDelegate, UIPi
     // MARK: Picker view delegate
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        self.selectedMine = self.mines[row]
+        AppManager.sharedManager.cachedCategory = nil
+        let selected = self.mines[row]
+        self.selectedMine = selected
+        AppManager.sharedManager.cachedMineIndex = row
     }
     
     // MARK: - Table view data source
@@ -322,6 +358,9 @@ class RefineSearchViewController: BaseViewController, UIPickerViewDelegate, UIPi
         if let categories = self.categories {
             let category = categories[indexPath.row]
             cell.formattedFacet = category
+            if let cached = AppManager.sharedManager.cachedCategory, category.getTitle() == cached {
+                cell.showCheck()
+            }
         }
         cell.index = indexPath.row
         if !allCells.contains(cell) { allCells.insert(cell) }
@@ -333,8 +372,9 @@ class RefineSearchViewController: BaseViewController, UIPickerViewDelegate, UIPi
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let categories = self.categories, let selectedMine = self.selectedMine {
             let category = categories[indexPath.row]
-            if let facetName = category.getTitle(), let facetCount = category.getCount() {
-                let selectedFacet = SelectedFacet(withMineName: selectedMine.name, facetName: facetName, count: facetCount)
+            if let facetName = category.getTitle() {
+                AppManager.sharedManager.cachedCategory = facetName
+                let selectedFacet = SelectedFacet(withMineName: selectedMine.name, facetName: facetName, count: category.getCount())
                 refineSearchButton?.isEnabled = true
                 self.delegate?.refineSearchViewController(controller: self, didSelectFacet: selectedFacet)
             }
@@ -346,6 +386,13 @@ class RefineSearchViewController: BaseViewController, UIPickerViewDelegate, UIPi
                 cell.showCheck()
             }
         }
+    }
+    
+    // MARK: Scroll view delegate
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let verticalIndicator = scrollView.subviews.last as? UIImageView
+        verticalIndicator?.backgroundColor = self.selectedThemeColor
     }
 
 }

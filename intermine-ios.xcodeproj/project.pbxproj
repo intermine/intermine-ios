@@ -14,7 +14,11 @@
 		0535181A1ECF824E006F87EA /* SearchFacet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053518191ECF824E006F87EA /* SearchFacet.swift */; };
 		0535181C1ECF8260006F87EA /* FacetList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0535181B1ECF8260006F87EA /* FacetList.swift */; };
 		053A57CC1F13858F00445F6E /* debug_registry.json in Resources */ = {isa = PBXBuildFile; fileRef = 053A57CB1F13858F00445F6E /* debug_registry.json */; };
+		053DBEC91F2F1EBC00988200 /* TutorialView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 053DBEC81F2F1EBC00988200 /* TutorialView.xib */; };
+		053DBECB1F2F1ECF00988200 /* TutorialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053DBECA1F2F1ECF00988200 /* TutorialView.swift */; };
 		05420A921F128C4C00BC1CC7 /* NetworkErrorHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05420A911F128C4C00BC1CC7 /* NetworkErrorHandler.swift */; };
+		054A8D5C1F29605A00D56813 /* TemplateDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 054A8D5B1F29605A00D56813 /* TemplateDetailCell.swift */; };
+		054A8D5E1F2A0F7600D56813 /* ResultsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 054A8D5D1F2A0F7600D56813 /* ResultsTableViewController.swift */; };
 		054FD7591F1AD93F0017171A /* FacetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 054FD7581F1AD93F0017171A /* FacetManager.swift */; };
 		05533C251F2392B2000CDB9F /* FailedRegistryView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 05533C241F2392B2000CDB9F /* FailedRegistryView.xib */; };
 		05533C271F2392CA000CDB9F /* FailedRegistryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05533C261F2392CA000CDB9F /* FailedRegistryView.swift */; };
@@ -45,7 +49,6 @@
 		05AC8A751ED772D6000F37CE /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05AC8A741ED772D6000F37CE /* WebViewController.swift */; };
 		05BF4A7F1F21AB12007EE471 /* TypeColorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05BF4A7E1F21AB12007EE471 /* TypeColorCell.swift */; };
 		05BF4A811F21AB92007EE471 /* CategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05BF4A801F21AB92007EE471 /* CategoryCell.swift */; };
-		05BF4A881F22267F007EE471 /* ControllersManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05BF4A871F22267F007EE471 /* ControllersManager.swift */; };
 		05CFF8511ED06839005DD0FE /* RefineSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05CFF8501ED06839005DD0FE /* RefineSearchViewController.swift */; };
 		05D531571F1E3674006A4EDC /* LaunchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05D531561F1E3674006A4EDC /* LaunchViewController.swift */; };
 		05DA3DF71EC9E95200AB4B79 /* MineModelParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05DA3DF61EC9E95200AB4B79 /* MineModelParser.swift */; };
@@ -78,11 +81,8 @@
 		05F407981EC5B45F00707B86 /* TemplateDetailTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F407971EC5B45F00707B86 /* TemplateDetailTableViewController.swift */; };
 		05F4079A1EC5DFF900707B86 /* OperationSelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F407991EC5DFF900707B86 /* OperationSelectViewController.swift */; };
 		05F4079C1EC6068E00707B86 /* Dictionary+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F4079B1EC6068E00707B86 /* Dictionary+Utils.swift */; };
-		05F4079F1EC60F9D00707B86 /* LookupCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F4079E1EC60F9D00707B86 /* LookupCell.swift */; };
-		05F407A11EC60FC800707B86 /* OperationSelectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F407A01EC60FC800707B86 /* OperationSelectionCell.swift */; };
 		05F407A31EC60FEF00707B86 /* DescriptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F407A21EC60FEF00707B86 /* DescriptionCell.swift */; };
 		05F407A51EC6100C00707B86 /* ActionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F407A41EC6100C00707B86 /* ActionCell.swift */; };
-		05F407A71EC6105A00707B86 /* TemplateDetailBaseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F407A61EC6105A00707B86 /* TemplateDetailBaseCell.swift */; };
 		05F407AB1EC6137E00707B86 /* LoadingTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F407AA1EC6137E00707B86 /* LoadingTableViewController.swift */; };
 		05F407B01EC6159000707B86 /* FetchedTemplatesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F407AF1EC6159000707B86 /* FetchedTemplatesViewController.swift */; };
 		05F407B21EC61F1400707B86 /* FetchedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05F407B11EC61F1400707B86 /* FetchedCell.swift */; };
@@ -107,8 +107,12 @@
 		053518191ECF824E006F87EA /* SearchFacet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchFacet.swift; sourceTree = "<group>"; };
 		0535181B1ECF8260006F87EA /* FacetList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FacetList.swift; sourceTree = "<group>"; };
 		053A57CB1F13858F00445F6E /* debug_registry.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = debug_registry.json; sourceTree = "<group>"; };
+		053DBEC81F2F1EBC00988200 /* TutorialView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TutorialView.xib; sourceTree = "<group>"; };
+		053DBECA1F2F1ECF00988200 /* TutorialView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TutorialView.swift; sourceTree = "<group>"; };
 		05420A911F128C4C00BC1CC7 /* NetworkErrorHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkErrorHandler.swift; sourceTree = "<group>"; };
 		054745731EC2426900BC35F8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
+		054A8D5B1F29605A00D56813 /* TemplateDetailCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TemplateDetailCell.swift; sourceTree = "<group>"; };
+		054A8D5D1F2A0F7600D56813 /* ResultsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultsTableViewController.swift; sourceTree = "<group>"; };
 		054FD7581F1AD93F0017171A /* FacetManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FacetManager.swift; sourceTree = "<group>"; };
 		05533C241F2392B2000CDB9F /* FailedRegistryView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FailedRegistryView.xib; sourceTree = "<group>"; };
 		05533C261F2392CA000CDB9F /* FailedRegistryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FailedRegistryView.swift; sourceTree = "<group>"; };
@@ -139,7 +143,6 @@
 		05AC8A741ED772D6000F37CE /* WebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		05BF4A7E1F21AB12007EE471 /* TypeColorCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TypeColorCell.swift; sourceTree = "<group>"; };
 		05BF4A801F21AB92007EE471 /* CategoryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryCell.swift; sourceTree = "<group>"; };
-		05BF4A871F22267F007EE471 /* ControllersManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ControllersManager.swift; sourceTree = "<group>"; };
 		05CFF8501ED06839005DD0FE /* RefineSearchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RefineSearchViewController.swift; sourceTree = "<group>"; };
 		05D531561F1E3674006A4EDC /* LaunchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchViewController.swift; sourceTree = "<group>"; };
 		05DA3DF61EC9E95200AB4B79 /* MineModelParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MineModelParser.swift; sourceTree = "<group>"; };
@@ -176,11 +179,8 @@
 		05F407971EC5B45F00707B86 /* TemplateDetailTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TemplateDetailTableViewController.swift; sourceTree = "<group>"; };
 		05F407991EC5DFF900707B86 /* OperationSelectViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OperationSelectViewController.swift; sourceTree = "<group>"; };
 		05F4079B1EC6068E00707B86 /* Dictionary+Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Dictionary+Utils.swift"; sourceTree = "<group>"; };
-		05F4079E1EC60F9D00707B86 /* LookupCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LookupCell.swift; sourceTree = "<group>"; };
-		05F407A01EC60FC800707B86 /* OperationSelectionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OperationSelectionCell.swift; sourceTree = "<group>"; };
 		05F407A21EC60FEF00707B86 /* DescriptionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DescriptionCell.swift; sourceTree = "<group>"; };
 		05F407A41EC6100C00707B86 /* ActionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionCell.swift; sourceTree = "<group>"; };
-		05F407A61EC6105A00707B86 /* TemplateDetailBaseCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TemplateDetailBaseCell.swift; sourceTree = "<group>"; };
 		05F407AA1EC6137E00707B86 /* LoadingTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingTableViewController.swift; sourceTree = "<group>"; };
 		05F407AF1EC6159000707B86 /* FetchedTemplatesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchedTemplatesViewController.swift; sourceTree = "<group>"; };
 		05F407B11EC61F1400707B86 /* FetchedCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchedCell.swift; sourceTree = "<group>"; };
@@ -208,6 +208,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		053DBEC71F2F1EA700988200 /* Tutorial */ = {
+			isa = PBXGroup;
+			children = (
+				053DBECA1F2F1ECF00988200 /* TutorialView.swift */,
+				053DBEC81F2F1EBC00988200 /* TutorialView.xib */,
+			);
+			name = Tutorial;
+			sourceTree = "<group>";
+		};
 		054745741EC246C700BC35F8 /* BaseVC */ = {
 			isa = PBXGroup;
 			children = (
@@ -307,7 +316,7 @@
 				055556641ECCA31F009DCA24 /* SearchTabVCs */,
 				05EA6CBE1EC82B9A002CC884 /* ListTabVCs */,
 				05F407AE1EC6142000707B86 /* Landing */,
-				05F407AD1EC6141600707B86 /* LoadingVC */,
+				05F407AD1EC6141600707B86 /* LoadingVCs */,
 				05F4078B1EC4A9B300707B86 /* TemplateTabVCs */,
 				054745741EC246C700BC35F8 /* BaseVC */,
 				054745781EC247AA00BC35F8 /* Tabs */,
@@ -318,6 +327,7 @@
 		05715E6D1EBFBC3200C4C3C7 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				053DBEC71F2F1EA700988200 /* Tutorial */,
 				05BF4A7D1F21AADF007EE471 /* Cells */,
 				05908AFA1F076209007BDF50 /* Buttons */,
 				05EA6CBB1EC79BF8002CC884 /* TableCoverView */,
@@ -333,7 +343,6 @@
 			children = (
 				05DF530B1E90286E00113171 /* AppDelegate.swift */,
 				052458591ED6115200C8A340 /* AppManager.swift */,
-				05BF4A871F22267F007EE471 /* ControllersManager.swift */,
 			);
 			name = App;
 			sourceTree = "<group>";
@@ -522,21 +531,20 @@
 			isa = PBXGroup;
 			children = (
 				05F4078E1EC4F48400707B86 /* TemplateTableViewCell.swift */,
-				05F4079E1EC60F9D00707B86 /* LookupCell.swift */,
-				05F407A01EC60FC800707B86 /* OperationSelectionCell.swift */,
 				05F407A21EC60FEF00707B86 /* DescriptionCell.swift */,
 				05F407A41EC6100C00707B86 /* ActionCell.swift */,
-				05F407A61EC6105A00707B86 /* TemplateDetailBaseCell.swift */,
+				054A8D5B1F29605A00D56813 /* TemplateDetailCell.swift */,
 			);
 			name = TemplateCells;
 			sourceTree = "<group>";
 		};
-		05F407AD1EC6141600707B86 /* LoadingVC */ = {
+		05F407AD1EC6141600707B86 /* LoadingVCs */ = {
 			isa = PBXGroup;
 			children = (
+				054A8D5D1F2A0F7600D56813 /* ResultsTableViewController.swift */,
 				05F407AA1EC6137E00707B86 /* LoadingTableViewController.swift */,
 			);
-			name = LoadingVC;
+			name = LoadingVCs;
 			sourceTree = "<group>";
 		};
 		05F407AE1EC6142000707B86 /* Landing */ = {
@@ -656,6 +664,7 @@
 				05E952E91EC197400057F753 /* Localizable.strings in Resources */,
 				05DF53161E90286E00113171 /* LaunchScreen.storyboard in Resources */,
 				05DF53131E90286E00113171 /* Assets.xcassets in Resources */,
+				053DBEC91F2F1EBC00988200 /* TutorialView.xib in Resources */,
 				05715E561EBF0CA800C4C3C7 /* registry.json in Resources */,
 				05EA6CBA1EC79BEB002CC884 /* TableCoverView.xib in Resources */,
 				05DF53111E90286E00113171 /* Main.storyboard in Resources */,
@@ -745,10 +754,9 @@
 				05AA421F1EF5715200992DF3 /* BaseButton.swift in Sources */,
 				0524F3B51EDC36AE004779F6 /* FavoriteSearchResult+CoreDataClass.swift in Sources */,
 				05EA6CD71EC8B243002CC884 /* MineModel+CoreDataClass.swift in Sources */,
-				05BF4A881F22267F007EE471 /* ControllersManager.swift in Sources */,
+				054A8D5C1F29605A00D56813 /* TemplateDetailCell.swift in Sources */,
 				05F4078F1EC4F48400707B86 /* TemplateTableViewCell.swift in Sources */,
 				05908AFC1F0765CD007BDF50 /* FavoriteButton.swift in Sources */,
-				05F407A71EC6105A00707B86 /* TemplateDetailBaseCell.swift in Sources */,
 				057E5F751ED6EBC6004278C5 /* MainViewController.swift in Sources */,
 				0535181C1ECF8260006F87EA /* FacetList.swift in Sources */,
 				05EA6CC01EC82CB2002CC884 /* ListsViewController.swift in Sources */,
@@ -756,7 +764,6 @@
 				05F407A51EC6100C00707B86 /* ActionCell.swift in Sources */,
 				054FD7591F1AD93F0017171A /* FacetManager.swift in Sources */,
 				05AC8A751ED772D6000F37CE /* WebViewController.swift in Sources */,
-				05F4079F1EC60F9D00707B86 /* LookupCell.swift in Sources */,
 				055556691ECCA91D009DCA24 /* SearchResult.swift in Sources */,
 				05D531571F1E3674006A4EDC /* LaunchViewController.swift in Sources */,
 				0535181A1ECF824E006F87EA /* SearchFacet.swift in Sources */,
@@ -772,9 +779,11 @@
 				05F407B21EC61F1400707B86 /* FetchedCell.swift in Sources */,
 				05DA3DF71EC9E95200AB4B79 /* MineModelParser.swift in Sources */,
 				05269F611ED4D4E50002ECB2 /* DefaultsManager.swift in Sources */,
+				053DBECB1F2F1ECF00988200 /* TutorialView.swift in Sources */,
 				057E5F711ED6EB01004278C5 /* MenuViewController.swift in Sources */,
 				05AC8A731ED75DB2000F37CE /* SearchDetailViewController.swift in Sources */,
 				05F407791EC34CFE00707B86 /* BaseView.swift in Sources */,
+				054A8D5E1F2A0F7600D56813 /* ResultsTableViewController.swift in Sources */,
 				05EA6CBD1EC79C10002CC884 /* TableCoverView.swift in Sources */,
 				05715E621EBF10E300C4C3C7 /* Mine+CoreDataProperties.swift in Sources */,
 				05CFF8511ED06839005DD0FE /* RefineSearchViewController.swift in Sources */,
@@ -803,7 +812,6 @@
 				05DA3DF91ECAF75D00AB4B79 /* QueryBuilder.swift in Sources */,
 				057779AA1EAFEFF000B75372 /* IntermineAPIClient.swift in Sources */,
 				05F407851EC4981A00707B86 /* Template.swift in Sources */,
-				05F407A11EC60FC800707B86 /* OperationSelectionCell.swift in Sources */,
 				0524F3B61EDC36AE004779F6 /* FavoriteSearchResult+CoreDataProperties.swift in Sources */,
 				0524585A1ED6115200C8A340 /* AppManager.swift in Sources */,
 				055556661ECCA344009DCA24 /* FetchedSearchesViewController.swift in Sources */,

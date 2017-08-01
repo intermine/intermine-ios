@@ -48,7 +48,10 @@ class CacheDataStore {
                     var mineObjects: [Mine] = []
                     if let instances = jsonRes["instances"] as? [[String: AnyObject]] {
                         for instance in instances {
-                            if let mineObj = Mine.createMineFromJson(json: instance, context: self.managedContext) {
+                            if let mineObj = Mine.createMineFromJson(json: instance, context: self.managedContext), let mineUrl = mineObj.url {
+                                IntermineAPIClient.fetchOrganismsForMine(mineUrl: mineUrl, completion: { (res, error) in
+                                    mineObj.organisms = res as NSArray
+                                })
                                 mineObjects.append(mineObj)
                             }
                         }

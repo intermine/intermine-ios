@@ -14,12 +14,10 @@ class BaseButton: UIButton {
         didSet {
             if isEnabled {
                 UIView.animate(withDuration: 0.2, animations: { 
-                    self.backgroundColor = Colors.palma
-                    self.alpha = 1.0
+                    self.alpha = 1
                 })
             } else {
-                UIView.animate(withDuration: 0.2, animations: { 
-                    self.backgroundColor = Colors.gray56
+                UIView.animate(withDuration: 0.2, animations: {
                     self.alpha = 0.5
                 })
             }
