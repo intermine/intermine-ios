@@ -29,7 +29,7 @@ class OperationSelectViewController: BaseViewController, UIPickerViewDelegate, U
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        closeButton?.setImage(Icons.close, for: .normal)
+        closeButton?.setTitle(String.localize("Templates.OperationSelect.Done"), for: .normal)
         self.picker?.delegate = self
         self.picker?.dataSource = self
     }

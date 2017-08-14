@@ -134,6 +134,8 @@ class TemplateDetailTableViewController: UITableViewController, TemplateDetailCe
             params.update(other: queryParams)
         }
         
+        print(params)
+        
         if let mineUrl = self.template?.getMineUrl() {
             if let fetchedVC = FetchedTemplatesViewController.fetchedTemplatesViewController(withMineUrl: mineUrl, params: params) {
                 self.navigationController?.pushViewController(fetchedVC, animated: true)
@@ -145,7 +147,7 @@ class TemplateDetailTableViewController: UITableViewController, TemplateDetailCe
     
     func operationChanged(_ notification: NSNotification) {
         if let op = notification.userInfo?["op"] as? String, let index = notification.userInfo?["index"] as? Int {
-            let updatedQuery = self.sortedQueries[index]
+            let updatedQuery = self.displayedQueries[index]
             updatedQuery.changeOperation(operation: op)
         }
     }
@@ -154,7 +156,7 @@ class TemplateDetailTableViewController: UITableViewController, TemplateDetailCe
     
     func valueChanged(_ notification: NSNotification) {
         if let value = notification.userInfo?["value"] as? String, let index = notification.userInfo?["index"] as? Int {
-            let updatedQuery = self.sortedQueries[index]
+            let updatedQuery = self.displayedQueries[index]
             updatedQuery.changeValue(value: value)
         }
     }

@@ -22,15 +22,16 @@ public class Mine: NSManagedObject {
         } else {
             mine = Mine(entity: mineEntiry, insertInto: context)
         }
-        
+
         if let releaseVersion = json["release_version"] as? String {
             if mine?.releaseVersion?.isEqualTo(comparedTo: releaseVersion) == true {
                 return mine
             } else {
                 mine?.name = json["name"] as? String
                 mine?.url = json["url"] as? String
-                if let colors = json["colors"] as? [String: AnyObject], let main = colors["main"] as? [String: AnyObject], let theme = main["fg"] as? String {
-                    mine?.theme = theme
+                if let colors = json["colors"] as? [String: AnyObject], let header = colors["header"] as? [String: AnyObject], let main = header["main"] as? String {
+                    print("theme found")
+                    mine?.theme = main
                 }
                 mine?.lastTimeUpdated = NSDate()
                 mine?.releaseVersion = json["release_version"] as? String

@@ -48,7 +48,7 @@ extension String {
     }
     
     static func formStringWithBoldText(boldText: String, separatorText: String, normalText: String) -> NSMutableAttributedString {
-        let attributedString = String.makeBold(text: boldText)
+        let attributedString = String.makeBold(text: boldText.capitalizingFirstLetter())
         let separator = NSMutableAttributedString(string: separatorText)
         let normal = NSMutableAttributedString(string: normalText)
         attributedString.append(separator)
@@ -57,11 +57,10 @@ extension String {
     }
     
     static func makeBold(text: String) -> NSMutableAttributedString {
-        let boldAttrs = [NSFontAttributeName: UIFont.boldSystemFont(ofSize: 17)]
+        let boldAttrs = [NSFontAttributeName: UIFont.boldSystemFont(ofSize: 17), NSForegroundColorAttributeName: Colors.stormDust]
         return NSMutableAttributedString(string: text, attributes: boldAttrs)
     }
 
-    
     func trim() -> String {
         return self.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
     }
@@ -109,5 +108,15 @@ extension String {
             }
         }
         return false
+    }
+    
+    func capitalizingFirstLetter() -> String {
+        let first = String(characters.prefix(1)).capitalized
+        let other = String(characters.dropFirst())
+        return first + other
+    }
+    
+    mutating func capitalizeFirstLetter() {
+        self = self.capitalizingFirstLetter()
     }
 }

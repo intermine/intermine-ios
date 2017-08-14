@@ -22,7 +22,9 @@ struct Endpoints {
     static let registryDomain = "http://registry.intermine.org"
     static let registryInstances = "/service/instances"
     static let listReport = "/bagDetails.do"
+    static let templateReport = "/loadTemplate.do"
     static let pubmed = "https://www.ncbi.nlm.nih.gov/pubmed/?term="
+    static let templateReportPostfix = "&method=results"
 }
 
 struct General {
@@ -48,13 +50,12 @@ struct Icons {
     static let bookmarkEmpty = UIImage.init(icon: .FABookmarkO, size: CGSize(width: 35, height: 35), orientation: UIImageOrientation.up, textColor: Colors.white, backgroundColor: UIColor.clear)
     static let login = UIImage.init(icon: .FASignIn, size: CGSize(width: 35, height: 35))
     static let close = UIImage.init(icon: .FATimes, size: CGSize(width: 40, height: 40))
-    static let menu = UIImage.init(icon: .FABars, size: CGSize(width: 40, height: 40), orientation: UIImageOrientation.up, textColor: Colors.white, backgroundColor: UIColor.clear)
+    static let blackMenu = UIImage.init(icon: .FABars, size: CGSize(width: 40, height: 40), orientation: UIImageOrientation.up, textColor: UIColor.black, backgroundColor: UIColor.clear)
+    static let whiteMenu = UIImage.init(icon: .FABars, size: CGSize(width: 40, height: 40), orientation: UIImageOrientation.up, textColor: Colors.white, backgroundColor: UIColor.clear)
     static let check = UIImage.init(icon: .FACheck, size: CGSize(width: 35, height: 35), orientation: UIImageOrientation.up, textColor: Colors.tamarillo, backgroundColor: UIColor.clear)
-    static let info = UIImage.init(icon: .FAInfo, size: CGSize(width: 35, height: 35), orientation: UIImageOrientation.up, textColor: Colors.white, backgroundColor: UIColor.clear)
-    static let star = UIImage.init(icon: .FAStar, size: CGSize(width: 35, height: 35), orientation: UIImageOrientation.up, textColor: Colors.white, backgroundColor: UIColor.clear)
     static let placeholder = UIImage.init(icon: .FAFile, size: CGSize(width: 500, height: 500), orientation: UIImageOrientation.up, textColor: Colors.gray56, backgroundColor: UIColor.clear)
-    static let titleBarPlaceholder = UIImage.init(icon: .FAChainBroken, size: CGSize(width: 35, height: 35), orientation: UIImageOrientation.up, textColor: Colors.white, backgroundColor: UIColor.clear)
-    static let user = UIImage.init(icon: .FAUserO, size: CGSize(width: 35, height: 35), orientation: UIImageOrientation.up, textColor: Colors.palma, backgroundColor: UIColor.clear)
+    static let titleBarPlaceholder = UIImage.init(icon: .FAChainBroken, size: CGSize(width: 35, height: 35), orientation: UIImageOrientation.up, textColor: UIColor.black, backgroundColor: UIColor.clear)
+    static let user = UIImage.init(icon: .FAUserO, size: CGSize(width: 35, height: 35), orientation: UIImageOrientation.up, textColor: Colors.pistachio, backgroundColor: UIColor.clear)
     static let arrow = UIImage.init(icon: .FALongArrowUp, size: CGSize(width: 50, height: 70), orientation: UIImageOrientation.up, textColor: Colors.white, backgroundColor: UIColor.clear)
     static let refresh = UIImage.init(icon: .FARefresh, size: CGSize(width: 45, height: 45), orientation: UIImageOrientation.up, textColor: Colors.white, backgroundColor: UIColor.clear)
     
@@ -66,6 +67,8 @@ struct Colors {
     static let palma = UIColor.hexStringToUIColor(hex: "#1E9618")
     static let tamarillo = UIColor.hexStringToUIColor(hex: "#96181e")
     static let apple = UIColor.hexStringToUIColor(hex: "#43A047")
+    static let pistachio = UIColor.hexStringToUIColor(hex: "#8CA50B")
+    static let stormDust = UIColor.hexStringToUIColor(hex: "#66675C")
     
     // Search facet colors
     static let sushi = UIColor.hexStringToUIColor(hex: "#8BC34A")
@@ -75,6 +78,8 @@ struct Colors {
     static let orange = UIColor.hexStringToUIColor(hex: "#FF5722")
     static let seance = UIColor.hexStringToUIColor(hex: "#9C27B0")
     static let silver = UIColor.hexStringToUIColor(hex: "#CCCCCC")
+    static let silverChalice = UIColor.hexStringToUIColor(hex: "#A6A6A6")
+    static let scorpion = UIColor.hexStringToUIColor(hex: "#585656")
 }
 
 struct DefaultsKeys {
@@ -106,4 +111,5 @@ struct Notifications {
     static let searchFailed = "notification.search.failed"
     static let registryLoaded = "notification.registry.loaded"
     static let tutorialFinished = "notification.tutorial.finished"
+    static let unfavorited = "notification.favorite.unfavorited"
 }

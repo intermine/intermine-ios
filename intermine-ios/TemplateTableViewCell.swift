@@ -38,7 +38,7 @@ class TemplateTableViewCell: UITableViewCell {
             }
             titleLabel?.text = template?.getTitle()
             containerView?.layer.borderWidth = 1
-            containerView?.layer.borderColor = Colors.gray56.withAlphaComponent(0.3).cgColor
+            containerView?.layer.borderColor = Colors.stormDust.withAlphaComponent(0.3).cgColor
             if let template = self.template {
                 userImageView?.isHidden = !template.getAuthd()
             }

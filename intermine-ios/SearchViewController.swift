@@ -32,6 +32,8 @@ class SearchViewController: BaseViewController, UISearchBarDelegate {
         
         self.searchBar?.showsScopeBar = true
         self.searchBar?.scopeButtonTitles = scopes
+        self.searchBar?.tintColor = Colors.pistachio
+        self.searchBar?.scopeBarBackgroundImage = UIImage.imageWithColor(color: UIColor.white)
         
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(SearchViewController.dismissKeyboard))
         view.addGestureRecognizer(tap)

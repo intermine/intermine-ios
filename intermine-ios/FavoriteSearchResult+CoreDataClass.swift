@@ -60,6 +60,15 @@ public class FavoriteSearchResult: NSManagedObject {
         result?.mineName = mineName
     }
     
+    func getPubmedId() -> String? {
+        if self.type == CategoryType.Publication.rawValue {
+            if let pubmedId = self.fields?["pubMedId"] as? String {
+                return pubmedId
+            }
+        }
+        return nil
+    }
+    
     func viewableRepresentation() -> [String: String] {
         var representation: [String: String] = [:]
         if let type = self.type {

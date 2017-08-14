@@ -77,9 +77,15 @@ class FetchedSearchesViewController: LoadingTableViewController, UIGestureRecogn
                 self.showingResult = true
                 self.buttonView?.isHidden = false
             } else {
+                
                 if self.selectedFacet == nil {
                     self.nothingFound = true
                     self.buttonView?.isHidden = true
+                } else {
+                    self.nothingFound = true
+                    if let buttonView = self.buttonView {
+                        self.view.bringSubview(toFront: buttonView)
+                    }
                 }
             }
         }
@@ -94,7 +100,13 @@ class FetchedSearchesViewController: LoadingTableViewController, UIGestureRecogn
         self.loadSearchResultsWithOffset(offset: self.currentOffset)
         refineButton?.setTitle(String.localize("Search.Refine"), for: .normal)
         buttonView?.isHidden = true
-        mineLabel?.text = String.localize("Search.Refine.AllMines")
+        
+        if let mineToSearch = self.mineToSearch {
+            mineLabel?.text = mineToSearch
+        } else {
+            mineLabel?.text = String.localize("Search.Refine.AllMines")
+        }
+
         categoryLabel?.text = String.localize("Search.Refine.AllCategories")
     }
     
@@ -127,12 +139,12 @@ class FetchedSearchesViewController: LoadingTableViewController, UIGestureRecogn
     // MARK: Private methods
     
     private func configureNavbar() {
-        self.navigationController?.navigationBar.barTintColor = Colors.palma
+        self.navigationController?.navigationBar.barTintColor = UIColor.white//Colors.palma
         self.navigationController?.navigationBar.isTranslucent = false
-        self.navigationController?.navigationBar.tintColor = Colors.white
+        self.navigationController?.navigationBar.tintColor = UIColor.black//Colors.white
         self.navigationController?.navigationBar.backItem?.title = ""
         self.navigationController?.navigationBar.topItem?.title = ""
-        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: Colors.white]
+        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.black]//Colors.white]
     }
 
     
@@ -159,10 +171,10 @@ class FetchedSearchesViewController: LoadingTableViewController, UIGestureRecogn
                             var info: [String: Any] = [:]
                             info["errorType"] = error
                             NotificationCenter.default.post(name: NSNotification.Name(rawValue: Notifications.searchFailed), object: self, userInfo: info)
-                            self.alert(message: NetworkErrorHandler.getErrorMessage(errorType: error))
+                            if let errorMessage = NetworkErrorHandler.getErrorMessage(errorType: error) {
+                                self.alert(message: errorMessage)
+                            }
                         }
-
-                        
                     })
                 }
             } else {
@@ -171,8 +183,9 @@ class FetchedSearchesViewController: LoadingTableViewController, UIGestureRecogn
                     if let searchResults = searchResults {
                         for res in searchResults {
                             if !self.lockData {
-                                self.data.append(res)
-                                
+                                if !self.data.contains(where: { $0.getId() == res.getId() }) {
+                                    self.data.append(res)
+                                }
                             }
                         }
                     }
@@ -188,7 +201,9 @@ class FetchedSearchesViewController: LoadingTableViewController, UIGestureRecogn
                         var info: [String: Any] = [:]
                         info["errorType"] = error
                         NotificationCenter.default.post(name: NSNotification.Name(rawValue: Notifications.searchFailed), object: self, userInfo: info)
-                        self.alert(message: NetworkErrorHandler.getErrorMessage(errorType: error))
+                        if let errorMessage = NetworkErrorHandler.getErrorMessage(errorType: error) {
+                            self.alert(message: errorMessage)
+                        }
                     }
                 }
             }
@@ -204,16 +219,29 @@ class FetchedSearchesViewController: LoadingTableViewController, UIGestureRecogn
         self.params?["size"] = "\(General.pageSize)"
         self.params?["start"] = "\(offset)"
         
+        self.isLoading = true
+        
         if let mineName = selectedFacet.getMineName(), let params = self.params {
             if let mine = CacheDataStore.sharedCacheDataStore.findMineByName(name: mineName), let mineUrl = mine.url {
                 IntermineAPIClient.makeSearchInMine(mineUrl: mineUrl, params: params, completion: { (searchRes, facetList, error) in
                     
                     if let res = searchRes {
                         self.data.append(res)
+                    } else {
+                        self.data = []
+                    }
+                    
+                    if let facets = facetList {
+                        // To later show facets on refine search VC
+                        if let myFacets = self.facets {
+                            self.facets = myFacets + [facets]
+                        }
                     }
                     
                     if let error = error {
-                        self.alert(message: NetworkErrorHandler.getErrorMessage(errorType: error))
+                        if let errorMessage = NetworkErrorHandler.getErrorMessage(errorType: error) {
+                            self.alert(message: errorMessage)
+                        }
                     }
 
                 })
@@ -226,7 +254,7 @@ class FetchedSearchesViewController: LoadingTableViewController, UIGestureRecogn
     func refineSearchViewController(controller: RefineSearchViewController, didSelectFacet: SelectedFacet) {
         // reload table view with new data
         self.selectedFacet = didSelectFacet
-        self.showingResult = true
+        //self.showingResult = true
         self.lockData = true
         self.data = []
         self.loadRefinedSearchWithOffset(offset: self.currentOffset, selectedFacet: didSelectFacet)
@@ -261,8 +289,20 @@ class FetchedSearchesViewController: LoadingTableViewController, UIGestureRecogn
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let data = self.data[indexPath.row]
-        if let searchDetailVC = SearchDetailViewController.searchDetailViewController(withData: data) {
-            self.navigationController?.pushViewController(searchDetailVC, animated: true)
+        if let mineName = data.getMineName(),
+            let id = data.getId() {
+            if let mine = CacheDataStore.sharedCacheDataStore.findMineByName(name: mineName) {
+                if let mineUrl = mine.url {
+                    var url = mineUrl + Endpoints.searchResultReport + "?id=\(id)"
+                    if let pubmedId = data.getPubmedId() {
+                        url = Endpoints.pubmed + pubmedId
+                    }
+                    if let webVC = WebViewController.webViewController(withUrl: url) {
+                        AppManager.sharedManager.shouldBreakLoading = true
+                        self.navigationController?.pushViewController(webVC, animated: true)
+                    }
+                }
+            }
         }
     }
     

@@ -23,6 +23,7 @@
 "Templates.Operator" = "Operator";
 "Templates.Value" = "Value";
 "Templates.ExtraValue" = "Organism";
+"Templates.OperationSelect.Done" = "Done";
 
 "General.NothingFound" = "No results found";
 
@@ -38,6 +39,8 @@
 "Search.Refine.AllMines" = "All mines";
 "Search.Refine.AllCategories" = "All categories";
 "Search.Refine.CTA" = "Refine search";
+"Search.Refine.SelectedMines" = "Selected mines";
+"Search.Refine.NoCategoriesLoaded" = "Run search to view available categories";
 
 "Search.SelectMine" = "Select mine";
 "Search.All" = "Search all mines";
@@ -48,6 +51,7 @@
 "Login.CredsPrompt" = "Use the same credentials as for web";
 "Login.Loggedin" = "You are logged in to %@";
 "Login.AuthError" = "Something went wrong";
+"Login.EmptyCreds" = "Enter valid credetials";
 
 "Webview.Loading.Error" = "Error loading. Please, try again later";
 

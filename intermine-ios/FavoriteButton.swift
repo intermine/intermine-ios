@@ -29,8 +29,14 @@ class FavoriteButton: UIButton {
         }
     }
     
+    override func awakeFromNib() {
+        super.awakeFromNib()
+    }
+    
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        self.isFavorite = false
+        super.init(coder: aDecoder)
+        self.addTarget(self, action: #selector(FavoriteButton.tapped), for: .touchUpInside)
     }
     
     override init(frame: CGRect) {

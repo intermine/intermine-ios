@@ -11,6 +11,8 @@ import UIKit
 
 class TemplatesViewController: ResultsTableViewController {
     
+    var countLoadedIncreased: Bool = false
+    
     private var templates: [Template]? {
         didSet {
             if let templates = self.templates {
@@ -19,11 +21,22 @@ class TemplatesViewController: ResultsTableViewController {
         }
     }
     
+    override var mineUrl: String? {
+        willSet(newValue) {
+            if newValue != self.mineUrl {
+                AppManager.sharedManager.templatesLoadedWithNewMine = true
+            }
+        }
+    }
+
     override func dataLoading(mineUrl: String, completion: @escaping ([Any]?, NetworkErrorType?) -> ()) {
         IntermineAPIClient.fetchTemplates(mineUrl: mineUrl) { (templatesList, error) in
+            super.templatesLoaded = true
             guard let list = templatesList else {
                 if let error = error {
-                    self.alert(message: NetworkErrorHandler.getErrorMessage(errorType: error))
+                    if let errorMessage = NetworkErrorHandler.getErrorMessage(errorType: error) {
+                        self.alert(message: errorMessage)
+                    }
                 }
                 return
             }

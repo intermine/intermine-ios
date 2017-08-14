@@ -9,7 +9,7 @@
 import UIKit
 import StoreKit
 
-class FavoritesViewController: BaseViewController, UITableViewDataSource {
+class FavoritesViewController: BaseViewController, UITableViewDataSource, UITableViewDelegate {
     
     @IBOutlet weak var tableView: UITableView?
     private var failedView: FailedRegistryView?
@@ -36,6 +36,7 @@ class FavoritesViewController: BaseViewController, UITableViewDataSource {
         super.setNavBarTitle(title: String.localize("Favorites.Title"))
         super.showMenuButton()
         tableView?.dataSource = self
+        tableView?.delegate = self
         tableView?.rowHeight = UITableViewAutomaticDimension
         tableView?.estimatedRowHeight = 140
         tableView?.allowsMultipleSelectionDuringEditing = true
@@ -92,10 +93,30 @@ class FavoritesViewController: BaseViewController, UITableViewDataSource {
             let removingSearch = savedSearches[indexPath.row]
             if let id = removingSearch.id {
                 CacheDataStore.sharedCacheDataStore.unsaveSearchResult(withId: id)
+                var info: [String: Any] = [:]
+                info = ["id": id]
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: Notifications.unfavorited), object: self, userInfo: info)
             }
             
             self.savedSearches?.remove(at: indexPath.row)
         }
     }
     
+    // Table view delegate
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if let searches = self.savedSearches {
+            let search = searches[indexPath.row]
+            if let mineName = search.mineName, let mine = CacheDataStore.sharedCacheDataStore.findMineByName(name: mineName), let mineUrl = mine.url, let id = search.id {
+                var url = mineUrl + Endpoints.searchResultReport + "?id=\(id)"
+                if let pubmedId = search.getPubmedId() {
+                    url = Endpoints.pubmed + pubmedId
+                }
+                if let webVC = WebViewController.webViewController(withUrl: url) {
+                    AppManager.sharedManager.shouldBreakLoading = true
+                    self.navigationController?.pushViewController(webVC, animated: true)
+                }
+            }
+        }
+    }
 }

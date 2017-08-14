@@ -58,6 +58,9 @@ class TemplateDetailCell: UITableViewCell, UITextFieldDelegate, UIPickerViewDele
             } else {
                 if let mine = CacheDataStore.sharedCacheDataStore.findMineByName(name: AppManager.sharedManager.selectedMine) {
                     organisms = mine.organisms as? [String]
+                    if organisms?.count == 0 {
+                        //TODO: don't show picker
+                    }
                 }
             }
             operationLabel?.text = templateQuery?.getOperation()
@@ -125,7 +128,9 @@ class TemplateDetailCell: UITableViewCell, UITextFieldDelegate, UIPickerViewDele
         guard let organisms = self.organisms else {
             return
         }
-        templateQuery?.changeExtra(extra: organisms[row])
+        if organisms.count > 0 {
+            templateQuery?.changeExtra(extra: organisms[row])
+        }
     }
     
     // MARK: Notification when operation is changed

@@ -16,7 +16,7 @@ class TableCoverView: BaseView {
     
     var upperOffset: CGFloat = 0 {
         didSet {
-            spinner = NVActivityIndicatorView(frame: self.indicatorFrame(), type: .ballSpinFadeLoader, color: Colors.apple, padding: self.indicatorPadding())
+            spinner = NVActivityIndicatorView(frame: self.indicatorFrame(), type: .ballSpinFadeLoader, color: Colors.pistachio, padding: self.indicatorPadding())
             hideSpinner()
         }
     }

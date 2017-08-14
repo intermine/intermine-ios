@@ -163,12 +163,15 @@ class IntermineAPIClient: NSObject {
         let query = "<query model=\"genomic\" view=\"Organism.shortName\" sortOrder=\"Organism.shortName ASC\"></query>"
         let params = ["query": query, "format": "json"]
         let urlString = mineUrl + Endpoints.singleList
+        
         _ = IntermineAPIClient.sendJSONRequest(url: urlString, method: .get, params: params, timeOutInterval: General.timeoutIntervalForRequest, shouldUseAuth: false) { (result, error) in
             var organisms: [String] = []
-            if let results = result?["results"] as? [[String]] {
+            if let results = result?["results"] as? [[Any]] {
                 for organism in results {
                     if organism.count > 0 {
-                        organisms.append(organism[0])
+                        if let o = organism[0] as? String {
+                            organisms.append(o)
+                        }
                     }
                 }
             }
@@ -208,8 +211,11 @@ class IntermineAPIClient: NSObject {
                         facetList = FacetList(withMineName: mineName, facet: categoryFacet)
                     }
                 }
-                
                 if let result = res["results"] as? [[String: AnyObject]] {
+                    if result.count == 0 {
+                        completion(nil, nil, nil)
+                        return
+                    }
                     
                     for r in result {
                         if let mine = CacheDataStore.sharedCacheDataStore.findMineByUrl(url: mineUrl) {
@@ -221,6 +227,7 @@ class IntermineAPIClient: NSObject {
                             }
                         }
                     }
+                    
                 } else {
                     completion(nil, nil, error)
                 }

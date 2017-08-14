@@ -24,11 +24,19 @@ class WebViewController: BaseViewController, UIWebViewDelegate {
         vc?.urlString = withUrl
         return vc
     }
+    
+    override func configureNavBar() {
+        if let url = self.urlString, let mine = CacheDataStore.sharedCacheDataStore.findMineByUrl(url: url), let theme = mine.theme {
+            self.navigationController?.navigationBar.barTintColor = UIColor.white
+            self.navigationController?.navigationBar.isTranslucent = false
+            self.navigationController?.navigationBar.tintColor = UIColor.hexStringToUIColor(hex: theme)
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.webView?.delegate = self
-        self.spinner = NVActivityIndicatorView(frame: self.indicatorFrame(), type: .ballSpinFadeLoader, color: Colors.apple, padding: self.indicatorPadding())
+        self.spinner = NVActivityIndicatorView(frame: self.indicatorFrame(), type: .ballSpinFadeLoader, color: Colors.pistachio, padding: self.indicatorPadding())
         if let spinner = self.spinner {
             self.view.addSubview(spinner)
             self.view.bringSubview(toFront: spinner)

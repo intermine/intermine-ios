@@ -9,48 +9,36 @@
 import UIKit
 import NVActivityIndicatorView
 
+struct MineRepresentation {
+    let name: String
+    var count: Int?
+    
+    init(name: String, count: Int?) {
+        self.name = name
+        self.count = count
+    }
+}
 
 protocol RefineSearchViewControllerDelegate: class {
     func refineSearchViewController(controller: RefineSearchViewController, didSelectFacet: SelectedFacet)
 }
 
-class RefineSearchViewController: BaseViewController, UIPickerViewDelegate, UIPickerViewDataSource, UITableViewDelegate, UITableViewDataSource {
+class RefineSearchViewController: BaseViewController, UIPickerViewDelegate, UIPickerViewDataSource, HeaderViewDelegate, TableContainerDelegate {
     
-    
-    @IBOutlet weak var placeholderImageView: UIImageView?
-    @IBOutlet weak var refineSearchButton: BaseButton?
+    @IBOutlet weak var headerView: HeaderView?
+    @IBOutlet weak var tableContainer: TableContainer?
     
     private let facetManager = FacetManager.shared
-    @IBOutlet weak var nothingFoundView: UIView?
     private var mineToSearch: String?
     
-    private var mines: [MineRepresentation] = [MineRepresentation(name: String.localize("Search.Refine.NoSelection"), count: nil)]//[String] = [String.localize("Search.Refine.NoSelection")]
+    private var mines: [MineRepresentation] = [] {
+        didSet {
+            minesPicker?.reloadAllComponents()
+        }
+    }
     
     private var selectedThemeColor: UIColor?
-    
-    private struct MineRepresentation {
-        let name: String
-        var count: Int?
-        
-        init(name: String, count: Int?) {
-            self.name = name
-            self.count = count
-        }
-    }
-    
     private var mineCounts: [Int] = []
-    
-    var allCells = Set<CategoryCell>()
-    
-    private var categories: [FormattedFacet]? {
-        didSet {
-            if let catsTable = self.categoriesTable {
-                UIView.transition(with: catsTable, duration: General.viewAnimationSpeed, options: .transitionCrossDissolve, animations: {
-                    self.categoriesTable?.reloadData()
-                })
-            }
-        }
-    }
     
     weak var delegate: RefineSearchViewControllerDelegate?
     private var spinner: NVActivityIndicatorView?
@@ -58,71 +46,23 @@ class RefineSearchViewController: BaseViewController, UIPickerViewDelegate, UIPi
     private var selectedMine: MineRepresentation? {
         didSet {
             if let selectedMine = self.selectedMine {
-                
-                if let mine = CacheDataStore.sharedCacheDataStore.findMineByName(name: selectedMine.name) {
-                    self.selectedThemeColor = UIColor.hexStringToUIColor(hex: mine.theme).withAlphaComponent(0.5)
-                }
-
-                self.configureUIWithMineRepresentation(mineRepresentation: selectedMine)
-                
-                self.categories = self.getCategoriesForMine(mineName: selectedMine.name)
-                if let catsTable = self.categoriesTable {
-                    if selectedMine.name == String.localize("Search.Refine.NoSelection") {
-                        placeholderImageView?.image = Icons.placeholder
-                        categoriesLabel?.text = ""
-                        BaseView.animateView(view: catsTable, animateIn: false)
-                        refineSearchButton?.isEnabled = false
-                    } else {
-                        if let count = selectedMine.count, count > 0 {
-                            categoriesLabel?.text = String.localize("Search.Refine.SelectCategory")
-                            BaseView.animateView(view: catsTable, animateIn: true)
-                        } else {
-                            placeholderImageView?.image = nil
-                            
-                            // add spinner
-                            if let nothingFoundView = self.nothingFoundView {
-                                if self.spinner == nil {
-                                    let spinner = NVActivityIndicatorView(frame: nothingFoundView.bounds, type: .ballSpinFadeLoader, color: Colors.gray56, padding: self.indicatorPadding())
-                                    nothingFoundView.addSubview(spinner)
-                                    spinner.startAnimating()
-                                    self.spinner = spinner
-                                }
-                            }
-                            
-                            categoriesLabel?.text = String.localize("Search.Refine.LoadingCategories")
-                            BaseView.animateView(view: catsTable, animateIn: false)
-                        }
-                    }
+                tableContainer?.updateCategories(categories: getCategoriesForMine(mineName: selectedMine.name))
+                if let mine = CacheDataStore.sharedCacheDataStore.findMineByName(name: selectedMine.name), let theme = mine.theme {
+                    headerView?.configureUI(colorString: theme)
                 }
             }
         }
     }
-    
-    private func configureUIWithMineRepresentation(mineRepresentation: MineRepresentation) {
-        UIView.animate(withDuration: 0.2, animations: {
-            self.refineSearchButton?.backgroundColor = self.selectedThemeColor
-        })
-    }
-    
-    override func indicatorPadding() -> CGFloat {
-        if let nothingFoundView = self.nothingFoundView {
-            return BaseView.viewWidth(view: nothingFoundView) / 3
-        }
-        return 0
-    }
-    
+
     private var facets: [FacetList]? {
         didSet {
-            self.mines = self.createMines()
-            minesPicker?.reloadAllComponents()
+            self.mines = self.createMines(showAllMines: mineToSearch == nil)
         }
     }
     
     @IBOutlet weak var minesLabel: UILabel?
     @IBOutlet weak var categoriesLabel: UILabel?
-    
     @IBOutlet weak var minesPicker: UIPickerView?
-    @IBOutlet weak var categoriesTable: UITableView?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -131,27 +71,40 @@ class RefineSearchViewController: BaseViewController, UIPickerViewDelegate, UIPi
             minesLabel?.text = String.localize("Search.Refine.SelectedMine")
         }
 
-        refineSearchButton?.setTitle(String.localize("Search.Refine.CTA"), for: .normal)
-        refineSearchButton?.isEnabled = false
-        
         minesPicker?.delegate = self
         minesPicker?.dataSource = self
-        categoriesTable?.delegate = self
-        categoriesTable?.dataSource = self
+        headerView?.delegate = self
+        tableContainer?.delegate = self
         
         if let selectedRow = self.getInitialSelectedRow() {
             minesPicker?.selectRow(selectedRow, inComponent: 0, animated: false)
         }
         
+        if let mineToSearch = self.mineToSearch {
+            headerView?.configureModeControl(withMode: RefineMode.One, searchableMine: mineToSearch)
+        } else {
+            headerView?.configureModeControl(withMode: RefineMode.All, searchableMine: nil)
+        }
+
         self.selectedMine = self.getInitialSelectedMine()
-        self.placeholderImageView?.image = Icons.placeholder
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
         NotificationCenter.default.addObserver(self, selector: #selector(self.facetsUpdated(_:)), name: NSNotification.Name(rawValue: Notifications.facetsUpdated), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.searchFailed(_:)), name: NSNotification.Name(rawValue: Notifications.searchFailed), object: nil)
-        self.categoriesTable?.reloadData()
+        
+        if let selectedMine = self.selectedMine {
+            if let mine = CacheDataStore.sharedCacheDataStore.findMineByName(name: selectedMine.name), let theme = mine.theme {
+                headerView?.configureUI(colorString: theme)
+                tableContainer?.configureUI(colorString: theme)
+            }
+        }
+    }
+    
+    func facetsUpdated(_ notification: NSNotification) {
+        self.facets = FacetManager.shared.getFacets()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -159,26 +112,18 @@ class RefineSearchViewController: BaseViewController, UIPickerViewDelegate, UIPi
         NotificationCenter.default.removeObserver(self)
     }
     
-    // MARK: Actions
-    
-    @IBAction func refineSearchButtonTapped(_ sender: Any) {
-        // Go to prev vc with reload
-        self.navigationController?.popViewController(animated: true)
-    }
-    
-    func facetsUpdated(_ notification: NSNotification) {
-        self.facets = facetManager.getFacets()
-    }
     
     func searchFailed(_ notification: NSNotification) {
         if let error = notification.userInfo?["errorType"] as? NetworkErrorType {
-            self.alert(message: NetworkErrorHandler.getErrorMessage(errorType: error))
+            if let errorMessage = NetworkErrorHandler.getErrorMessage(errorType: error) {
+                self.alert(message: errorMessage)
+            }
         }
     }
     
     // MARK: Private methods
     
-    private func createMines() -> [MineRepresentation] {
+    private func createMines(showAllMines: Bool) -> [MineRepresentation] {
         guard let facets = self.facets else {
             return self.mines
         }
@@ -202,7 +147,7 @@ class RefineSearchViewController: BaseViewController, UIPickerViewDelegate, UIPi
             }
         }
         
-        if self.mineToSearch == nil {
+        if showAllMines {
             // Padding with mines containing 0 search results
             if let registry = CacheDataStore.sharedCacheDataStore.allRegistry() {
                 for mine in registry {
@@ -236,10 +181,28 @@ class RefineSearchViewController: BaseViewController, UIPickerViewDelegate, UIPi
         return mines
         
     }
-
     
-    private func changeStateRefineSearchButton(enabled: Bool) {
-        refineSearchButton?.isEnabled = enabled
+    private func getFacetListByName(mineName: String) -> FacetList? {
+        guard let facets = self.facets else {
+            return nil
+        }
+        for facet in facets {
+            if facet.getMine() == mineName {
+                return facet
+            }
+        }
+        return nil
+    }
+    
+    private func getCategoriesForMine(mineName: String) -> [FormattedFacet]? {
+        // FacetList has mineName and categoryFacet as SearchFacet object
+        // SearchFacet object has instance method getFormattedContents() -> [FormattedFacet]
+        
+        if let facetList = self.getFacetListByName(mineName: mineName) {
+            return facetList.getFormattedFacetsList()
+        }
+        
+        return nil
     }
     
     private func getMinesCount() -> Int {
@@ -269,18 +232,6 @@ class RefineSearchViewController: BaseViewController, UIPickerViewDelegate, UIPi
         
     }
     
-    private func getFacetListByName(mineName: String) -> FacetList? {
-        guard let facets = self.facets else {
-            return nil
-        }
-        for facet in facets {
-            if facet.getMine() == mineName {
-                return facet
-            }
-        }
-        return nil
-    }
-    
     private func getTotalCountForMine(mineName: String) -> Int {
         if let facetList = self.getFacetListByName(mineName: mineName) {
             return facetList.getTotalFacetCount()
@@ -288,23 +239,6 @@ class RefineSearchViewController: BaseViewController, UIPickerViewDelegate, UIPi
         return 0
     }
     
-    private func getCategoriesForMine(mineName: String) -> [FormattedFacet]? {
-        // FacetList has mineName and categoryFacet as SearchFacet object
-        // SearchFacet object has instance method getFormattedContents() -> [FormattedFacet]
-        
-        if let facetList = self.getFacetListByName(mineName: mineName) {
-            return facetList.getFormattedFacetsList()
-        }
-       
-        return nil
-    }
-    
-    private func getCategoriesCount() -> Int {
-        if let categories = self.categories {
-            return categories.count
-        }
-        return 0
-    }
     
     // MARK: Load from storyboard
     
@@ -340,59 +274,46 @@ class RefineSearchViewController: BaseViewController, UIPickerViewDelegate, UIPi
         AppManager.sharedManager.cachedCategory = nil
         let selected = self.mines[row]
         self.selectedMine = selected
-        AppManager.sharedManager.cachedMineIndex = row
-    }
-    
-    // MARK: - Table view data source
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.getCategoriesCount()
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: CategoryCell.identifier, for: indexPath) as! CategoryCell
-        if let categories = self.categories {
-            let category = categories[indexPath.row]
-            cell.formattedFacet = category
-            if let cached = AppManager.sharedManager.cachedCategory, category.getTitle() == cached {
-                cell.showCheck()
-            }
-        }
-        cell.index = indexPath.row
-        if !allCells.contains(cell) { allCells.insert(cell) }
-        return cell
-    }
-    
-    // MARK: Table view delegate
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let categories = self.categories, let selectedMine = self.selectedMine {
-            let category = categories[indexPath.row]
-            if let facetName = category.getTitle() {
-                AppManager.sharedManager.cachedCategory = facetName
-                let selectedFacet = SelectedFacet(withMineName: selectedMine.name, facetName: facetName, count: category.getCount())
-                refineSearchButton?.isEnabled = true
-                self.delegate?.refineSearchViewController(controller: self, didSelectFacet: selectedFacet)
-            }
-        }
-        for cell in allCells {
-            if cell.index != indexPath.row {
-                cell.hideCheck()
-            } else {
-                cell.showCheck()
-            }
+        if !(mineToSearch != nil) {
+            AppManager.sharedManager.cachedMineIndex = row
+        } else {
+            AppManager.sharedManager.cachedMineIndex = nil
         }
     }
     
-    // MARK: Scroll view delegate
+        
+    // MARK: Header view delegate
     
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let verticalIndicator = scrollView.subviews.last as? UIImageView
-        verticalIndicator?.backgroundColor = self.selectedThemeColor
+    func headerViewDidTapRefineSearchButton(headerView: HeaderView) {
+        guard let selectedMine = self.selectedMine else {
+            return
+        }
+        let selectedFacet = SelectedFacet(withMineName: selectedMine.name, facetName: String.localize("Search.Refine.AllCategories"), count: nil)
+        self.delegate?.refineSearchViewController(controller: self, didSelectFacet: selectedFacet)
+        self.navigationController?.popViewController(animated: true)
+    }
+    
+    func headerView(headerView: HeaderView, didSwitchMode mode: RefineMode) {
+        self.mines = []
+        switch mode {
+        case .One:
+            self.mines = self.createMines(showAllMines: false)
+            break
+        default:
+            // should show all mines
+            self.mines = self.createMines(showAllMines: true)
+            break
+        }
+    }
+    
+    // MARK: Table container delegate
+    
+    func tableContainer(tableContainer: TableContainer, didSelectCategory category: FormattedFacet) {
+        if let facetName = category.getTitle(), let selectedMine = self.selectedMine {
+            AppManager.sharedManager.cachedCategory = facetName
+            let selectedFacet = SelectedFacet(withMineName: selectedMine.name, facetName: facetName, count: category.getCount())
+            self.delegate?.refineSearchViewController(controller: self, didSelectFacet: selectedFacet)
+        }
     }
 
 }

@@ -14,10 +14,19 @@ class AppManager {
     
     private var launchVC: UIViewController?
     private var tutorialView: TutorialView?
+    private var debugTutorial = false
+    
+    var mineChanged: Bool = false
+    var listsLoadedWithNewMine: Bool = false
+    var templatesLoadedWithNewMine: Bool = false
     
     var selectedMine: String = General.defaultMine {
+        willSet (newValue) {
+            if newValue != self.selectedMine && self.selectedMine != General.defaultMine {
+                mineChanged = true
+            }
+        }
         didSet {
-            //
             var info: [String: Any] = [:]
             info = ["mineName": self.selectedMine]
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: Notifications.mineSelected), object: self, userInfo: info)
@@ -70,8 +79,15 @@ class AppManager {
         }
     }
     
+    private func shouldShowTutorial() -> Bool {
+        if debugTutorial {
+            return true
+        }
+        return !DefaultsManager.keyExists(key: DefaultsKeys.tutorialShown)
+    }
+    
     func showTutorialView() {
-        if !DefaultsManager.keyExists(key: DefaultsKeys.tutorialShown) {
+        if shouldShowTutorial() {
             let tutorialView = TutorialView.instantiateFromNib()
             if let window = UIApplication.shared.keyWindow {
                 tutorialView.resizeView(toY: 0, toWidth: window.frame.size.width, toHeight: window.frame.size.height)

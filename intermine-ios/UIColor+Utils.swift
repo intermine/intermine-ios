@@ -35,4 +35,12 @@ extension UIColor {
             alpha: CGFloat(1.0)
         )
     }
+    
+    class func gold() -> UIColor? {
+        if let img = UIImage(named: "gold") {
+            return UIColor(patternImage: img)
+        } else {
+            return nil
+        }
+    }
 }

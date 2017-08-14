@@ -18,19 +18,19 @@ class BaseViewController: UIViewController {
     }
     
     func configureNavBar() {
-        self.navigationController?.navigationBar.barTintColor = Colors.palma
+        self.navigationController?.navigationBar.barTintColor = UIColor.white//Colors.palma
         self.navigationController?.navigationBar.isTranslucent = false
-        self.navigationController?.navigationBar.tintColor = Colors.white
+        self.navigationController?.navigationBar.tintColor = UIColor.black//Colors.white
         
-        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: Colors.white]
+        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.black]//Colors.white]
     }
     
     func showMenuButton() {
         let button = UIButton()
         button.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
-        button.setImage(Icons.menu, for: .normal)
+        button.setImage(Icons.blackMenu, for: .normal)
         button.addTarget(self, action: #selector(BaseViewController.menuButtonPressed), for: .touchUpInside)
-        button.tintColor = Colors.white
+        button.tintColor = UIColor.black//Colors.white
         let barButton = UIBarButtonItem()
         barButton.customView = button
         
@@ -66,18 +66,18 @@ class BaseViewController: UIViewController {
     }
     
     func defaultNavbarConfiguration(withTitle: String) {
-        self.navigationController?.navigationBar.barTintColor = Colors.palma
+        self.navigationController?.navigationBar.barTintColor = UIColor.white//Colors.palma
         self.navigationController?.navigationBar.isTranslucent = false
-        self.navigationController?.navigationBar.tintColor = Colors.white
+        self.navigationController?.navigationBar.tintColor = UIColor.black//Colors.white
         self.navigationController?.navigationBar.topItem?.title = withTitle
         //self.navigationController?.navigationBar.topItem?.titleView = UIImageView(image: Icons.titleBarPlaceholder)
-        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: Colors.white]
+        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.black]//Colors.white]
         
         let button = UIButton()
         button.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
         button.setImage(Icons.titleBarPlaceholder, for: .normal)
         button.addTarget(self, action: #selector(LoadingTableViewController.menuButtonPressed), for: .touchUpInside)
-        button.tintColor = Colors.white
+        button.tintColor = UIColor.black//Colors.white
         let barButton = UIBarButtonItem()
         barButton.customView = button
         self.navigationItem.leftBarButtonItem = barButton

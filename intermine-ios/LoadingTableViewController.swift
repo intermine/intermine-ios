@@ -67,15 +67,6 @@ class LoadingTableViewController: UITableViewController {
         self.tableView.estimatedRowHeight = 200
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.mineSelected(_:)), name: NSNotification.Name(rawValue: Notifications.mineSelected), object: nil)
-    }
-    
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-    }
-    
     func didTapInfoButton() {
         print("tapped")
     }
@@ -144,7 +135,7 @@ class LoadingTableViewController: UITableViewController {
         if shouldShowMenuButton {
             let button = UIButton()
             button.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
-            button.setImage(Icons.menu, for: .normal)
+            button.setImage(Icons.whiteMenu, for: .normal)
             button.addTarget(self, action: #selector(LoadingTableViewController.menuButtonPressed), for: .touchUpInside)
             button.tintColor = Colors.white
             let barButton = UIBarButtonItem()
@@ -161,17 +152,17 @@ class LoadingTableViewController: UITableViewController {
     }
     
     func defaultNavbarConfiguration(withTitle: String) {
-        self.navigationController?.navigationBar.barTintColor = Colors.palma
+        self.navigationController?.navigationBar.barTintColor = UIColor.white//Colors.palma
         self.navigationController?.navigationBar.isTranslucent = false
-        self.navigationController?.navigationBar.tintColor = Colors.white
+        self.navigationController?.navigationBar.tintColor = UIColor.black//Colors.white
         self.navigationController?.navigationBar.topItem?.title = withTitle//UIImageView(image: Icons.titleBarPlaceholder)
-        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: Colors.white]
+        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.black]//Colors.white]
         
         let button = UIButton()
         button.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
         button.setImage(Icons.titleBarPlaceholder, for: .normal)
         button.addTarget(self, action: #selector(LoadingTableViewController.menuButtonPressed), for: .touchUpInside)
-        button.tintColor = Colors.white
+        button.tintColor = UIColor.black//Colors.white
         let barButton = UIBarButtonItem()
         barButton.customView = button
         self.navigationItem.leftBarButtonItem = barButton

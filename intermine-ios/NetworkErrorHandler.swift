@@ -13,6 +13,7 @@ enum NetworkErrorType: Int {
     case ConnectionLost
     case Server
     case Auth
+    case Cancelled
 }
 
 class NetworkErrorHandler: NSObject {
@@ -21,22 +22,24 @@ class NetworkErrorHandler: NSObject {
         var errorType = NetworkErrorType.Unknown
         switch error._code {
         case NSURLErrorTimedOut, NSURLErrorNetworkConnectionLost, NSURLErrorNotConnectedToInternet:
-            errorType = NetworkErrorType.ConnectionLost
+            errorType = .ConnectionLost
             break
         case NSURLErrorBadServerResponse, NSURLErrorResourceUnavailable:
-            errorType = NetworkErrorType.Server
+            errorType = .Server
             break
         case NSURLErrorUserCancelledAuthentication, NSURLErrorUserAuthenticationRequired:
-            errorType = NetworkErrorType.Auth
+            errorType = .Auth
             break
+        case NSURLErrorCancelled:
+            errorType = .Cancelled
         default:
             break
         }
         return errorType
     }
 
-    class func getErrorMessage(errorType: NetworkErrorType) -> String {
-        var message = String.localize("Network.Error.Unknown")
+    class func getErrorMessage(errorType: NetworkErrorType) -> String? {
+        var message: String? = String.localize("Network.Error.Unknown")
         switch errorType {
         case .ConnectionLost:
             message = String.localize("Network.Error.ConnectionLost")
@@ -46,6 +49,9 @@ class NetworkErrorHandler: NSObject {
             break
         case .Auth:
             message = String.localize("Network.Error.Auth")
+            break
+        case .Cancelled:
+            message = nil
             break
         default:
             break
