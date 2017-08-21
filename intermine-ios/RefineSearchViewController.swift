@@ -210,7 +210,7 @@ class RefineSearchViewController: BaseViewController, UIPickerViewDelegate, UIPi
     }
     
     private func getInitialSelectedRow() -> Int? {
-        if AppManager.sharedManager.cachedMineIndex != nil {
+        if let cachedIndex = AppManager.sharedManager.cachedMineIndex, cachedIndex <= mines.count-1 {
             return AppManager.sharedManager.cachedMineIndex
         } else {
             if mines.count > 1 {

@@ -30,7 +30,6 @@ public class Mine: NSManagedObject {
                 mine?.name = json["name"] as? String
                 mine?.url = json["url"] as? String
                 if let colors = json["colors"] as? [String: AnyObject], let header = colors["header"] as? [String: AnyObject], let main = header["main"] as? String {
-                    print("theme found")
                     mine?.theme = main
                 }
                 mine?.lastTimeUpdated = NSDate()
