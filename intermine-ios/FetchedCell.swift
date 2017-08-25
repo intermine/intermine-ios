@@ -15,6 +15,7 @@ class FetchedCell: TypeColorCell {
     @IBOutlet weak var typeView: UIView?
     private var typeViewBackgroundColor: UIColor?
     @IBOutlet weak var favoriteButton: FavoriteButton?
+    @IBOutlet weak var colorView: UIView?
     
     override func prepareForReuse() {
         super.prepareForReuse()
@@ -29,7 +30,8 @@ class FetchedCell: TypeColorCell {
     var typeColor: UIColor? {
         didSet {
             if let typeColor = self.typeColor {
-                contentView.backgroundColor = typeColor
+                colorView?.backgroundColor = typeColor
+                //contentView.backgroundColor = typeColor
             }
         }
     }
@@ -49,20 +51,20 @@ class FetchedCell: TypeColorCell {
     var representedData: [String:String] = [:] {
         didSet {
             descriptionLabel?.attributedText = self.labelContents(representedData: representedData)
-            typeView?.layer.borderWidth = 1
-            typeView?.layer.borderColor = Colors.gray56.withAlphaComponent(0.3).cgColor
         }
     }
     
     var data: SearchResult? {
         didSet {
             if let data = self.data {
+                favoriteButton?.isEnabled = true
+                favoriteButton?.isHidden = false
                 favoriteButton?.changeSelectedState(isFavorite: data.isFavorited())
                 let viewableRepresentation: [String:String] = data.viewableRepresentation()
                 descriptionLabel?.attributedText = self.labelContents(representedData: viewableRepresentation)
                 if let type = data.getType() {
                     let typeViewBackgroundColor = getBackgroundColor(categoryType: type)
-                    typeView?.backgroundColor = typeViewBackgroundColor
+                    colorView?.backgroundColor = typeViewBackgroundColor
                     self.typeViewBackgroundColor = typeViewBackgroundColor
                 }
             }

@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -17,7 +18,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HhL-6W-YeF">
-                    <rect key="frame" x="8" y="323" width="359" height="21"/>
+                    <rect key="frame" x="0.0" y="323" width="375" height="21"/>
                     <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                     <color key="textColor" red="0.56078431370000004" green="0.56078431370000004" blue="0.56078431370000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
@@ -25,9 +26,9 @@
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="HhL-6W-YeF" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leadingMargin" id="fRe-RA-DaG"/>
-                <constraint firstAttribute="trailingMargin" secondItem="HhL-6W-YeF" secondAttribute="trailing" id="lQM-9O-J0L"/>
-                <constraint firstItem="HhL-6W-YeF" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="yrU-wV-aZq"/>
+                <constraint firstItem="HhL-6W-YeF" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="VU7-ce-Ydc"/>
+                <constraint firstItem="HhL-6W-YeF" firstAttribute="width" secondItem="iN0-l3-epB" secondAttribute="width" id="Yz6-jg-x7Y"/>
+                <constraint firstItem="HhL-6W-YeF" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerYWithinMargins" id="yrU-wV-aZq"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <connections>

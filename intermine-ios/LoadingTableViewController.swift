@@ -65,6 +65,8 @@ class LoadingTableViewController: UITableViewController {
         super.viewDidLoad()
         self.tableView.rowHeight = UITableViewAutomaticDimension
         self.tableView.estimatedRowHeight = 200
+        let fetchedCellNib = UINib(nibName: "FetchedCell", bundle: nil)
+        self.tableView?.register(fetchedCellNib, forCellReuseIdentifier: FetchedCell.identifier)
     }
     
     func didTapInfoButton() {

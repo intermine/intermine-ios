@@ -25,6 +25,7 @@ class FavoritesViewController: BaseViewController, UITableViewDataSource, UITabl
             } else {
                 let failedView = FailedRegistryView.instantiateFromNib()
                 failedView.messageText = String.localize("Favorites.NothingFound")
+                failedView.frame = self.view.bounds
                 self.tableView?.addSubview(failedView)
                 self.failedView = failedView
             }
@@ -40,6 +41,8 @@ class FavoritesViewController: BaseViewController, UITableViewDataSource, UITabl
         tableView?.rowHeight = UITableViewAutomaticDimension
         tableView?.estimatedRowHeight = 140
         tableView?.allowsMultipleSelectionDuringEditing = true
+        let fetchedCellNib = UINib(nibName: "FetchedCell", bundle: nil)
+        self.tableView?.register(fetchedCellNib, forCellReuseIdentifier: FetchedCell.identifier)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -76,6 +79,7 @@ class FavoritesViewController: BaseViewController, UITableViewDataSource, UITabl
         if let searches = self.savedSearches {
             let search = searches[indexPath.row]
             cell.representedData = search.viewableRepresentation()
+            cell.typeColor = TypeColorDefine.getBackgroundColor(categoryType: search.type)
         }
         return cell
     }

@@ -80,6 +80,7 @@ struct Colors {
     static let silver = UIColor.hexStringToUIColor(hex: "#CCCCCC")
     static let silverChalice = UIColor.hexStringToUIColor(hex: "#A6A6A6")
     static let scorpion = UIColor.hexStringToUIColor(hex: "#585656")
+    
 }
 
 struct DefaultsKeys {

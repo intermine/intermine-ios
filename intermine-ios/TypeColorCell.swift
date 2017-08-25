@@ -54,18 +54,29 @@ class TypeColorDefine: NSObject {
     }
     
     class func getBackgroundColor(categoryType: String?) -> UIColor {
-        let color = getSideColor(categoryType: categoryType)
-        var alpha = 0.1
-        if color == Colors.silver {
-            alpha = 0.3
-        }
-        return color.withAlphaComponent(CGFloat(alpha))
+        return getSideColor(categoryType: categoryType)
+//        var alpha = 0.1
+//        if color == Colors.silver {
+//            alpha = 0.3
+//        }
+//        return color.withAlphaComponent(CGFloat(alpha))
     }
 
     
 }
 
 class TypeColorCell: UITableViewCell {
+    
+    @IBOutlet weak var separatorView: UIView?
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        separatorView?.isHidden = false
+    }
+    
+    func hideSeparator() {
+        separatorView?.isHidden = true
+    }
 
     func getSideColor(categoryType: String?) -> UIColor {
         return TypeColorDefine.getSideColor(categoryType: categoryType)

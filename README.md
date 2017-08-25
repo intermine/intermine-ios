@@ -18,8 +18,8 @@ The application is build following [MVVM](https://en.wikipedia.org/wiki/Model%E2
 
 ## How to contribute?
 To contribute to Intermine iOS app, one can do the following:
-1. Write tests. All modules of the app need tests, including all application modules and layers. Writing tests is the best place to start for a new contributor, as it allows to get familiar with the codebase.
-2. Refactoring. Chancing a perfect code leads to better understanding of the codebase and makes the code more maintainable and clean.
+1. Write tests. All modules of the app need tests, including all application models and layers. Writing tests is the best place to start for a new contributor, as it allows to get familiar with the codebase.
+2. Refactoring. Chasing perfection leads to better understanding of the codebase and makes the code more maintainable and clean.
 3. [Github issues](https://github.com/intermine/intermine-ios/issues). Issues are written by developers of the application for the developers working on the application. Most likely, a new contributor will have trouble understanding the problem described in any particular issue. Try to get familiar with the codebase and contact one of the developers for more details.
 
 ## Dependencies

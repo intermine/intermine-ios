@@ -16,14 +16,16 @@ class Template {
     private let queryList: [TemplateQuery]?
     private let mineUrl: String?
     private let authorized: Bool?
+    private let tags: [String]
     
-    init(withTitle: String?, description: String?, queryList: [TemplateQuery]?, name: String?, mineUrl: String, authorized: Bool?) {
+    init(withTitle: String?, description: String?, queryList: [TemplateQuery]?, name: String?, mineUrl: String, authorized: Bool?, tags: [String]) {
         self.title = withTitle
         self.description = description
         self.queryList = queryList
         self.name = name
         self.mineUrl = mineUrl
         self.authorized = authorized
+        self.tags = tags
     }
     
     // MARK: Public methods
@@ -53,6 +55,10 @@ class Template {
             return ""
         }
         return name
+    }
+    
+    func getTags() -> [String]? {
+        return self.tags
     }
     
     func lookupQueryCount() -> Int {

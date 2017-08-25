@@ -14,6 +14,8 @@ class ListTableViewCell: TypeColorCell {
     @IBOutlet weak var colorTypeView: UIView?
     @IBOutlet weak var userImageView: UIImageView?
     
+    @IBOutlet weak var colorView: UIView?
+    
     var list: List? {
         didSet {
             // configure UI
@@ -26,7 +28,7 @@ class ListTableViewCell: TypeColorCell {
                 }
                 if let type = list.getType() {
                     let color = getBackgroundColor(categoryType: type)
-                    colorTypeView?.backgroundColor = color
+                    colorView?.backgroundColor = color
                 }
                 userImageView?.isHidden = !list.getAuthd()
             }

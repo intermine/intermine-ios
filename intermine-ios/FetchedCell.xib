@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="FetchedCell" id="KGk-i7-Jjw" customClass="FetchedCell" customModule="intermine_ios" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wpb-gQ-GXS" userLabel="separator">
+                        <rect key="frame" x="8" y="42.5" width="304" height="1"/>
+                        <color key="backgroundColor" red="0.82745098039999998" green="0.82745098039999998" blue="0.82745098039999998" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="1" id="mFf-SY-Lm2"/>
+                        </constraints>
+                    </view>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FTk-MF-YfD" userLabel="main view">
+                        <rect key="frame" x="8" y="5" width="304" height="32.5"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AwQ-9P-JeB">
+                                <rect key="frame" x="10" y="0.0" width="284" height="32.5"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
+                                <color key="textColor" red="0.40000000000000002" green="0.4039215686" blue="0.36078431370000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="r6J-dn-SmG" customClass="FavoriteButton" customModule="intermine_ios" customModuleProvider="target">
+                                <rect key="frame" x="258" y="0.0" width="46" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="46" id="VUq-qb-gle"/>
+                                </constraints>
+                                <color key="tintColor" red="0.54901960780000003" green="0.64705882349999999" blue="0.043137254899999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <connections>
+                                    <action selector="favoriteButtonTapped:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="SWg-6c-sLj"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="AwQ-9P-JeB" secondAttribute="trailing" constant="10" id="4rN-vZ-lh5"/>
+                            <constraint firstItem="AwQ-9P-JeB" firstAttribute="leading" secondItem="FTk-MF-YfD" secondAttribute="leading" constant="10" id="OsO-Bf-bNS"/>
+                            <constraint firstItem="r6J-dn-SmG" firstAttribute="top" secondItem="FTk-MF-YfD" secondAttribute="top" id="Q2b-aj-7Cb"/>
+                            <constraint firstAttribute="bottom" secondItem="AwQ-9P-JeB" secondAttribute="bottom" id="X1H-BB-V48"/>
+                            <constraint firstItem="AwQ-9P-JeB" firstAttribute="top" secondItem="FTk-MF-YfD" secondAttribute="top" id="wSy-dw-e3U"/>
+                        </constraints>
+                    </view>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rCj-Vi-Yn6">
+                        <rect key="frame" x="8" y="0.0" width="4" height="43.5"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="4" id="wx5-ju-4Ae"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="bottom" secondItem="Wpb-gQ-GXS" secondAttribute="bottom" id="BNf-xO-q06"/>
+                    <constraint firstItem="rCj-Vi-Yn6" firstAttribute="bottom" secondItem="Wpb-gQ-GXS" secondAttribute="bottom" id="E7o-kp-7ea"/>
+                    <constraint firstItem="Wpb-gQ-GXS" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="Ge6-Fw-wHz"/>
+                    <constraint firstItem="Wpb-gQ-GXS" firstAttribute="top" secondItem="FTk-MF-YfD" secondAttribute="bottom" constant="5" id="JEP-FG-G1D"/>
+                    <constraint firstItem="FTk-MF-YfD" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="RfJ-U9-5ML"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="Wpb-gQ-GXS" secondAttribute="trailing" id="U34-mE-eGu"/>
+                    <constraint firstItem="FTk-MF-YfD" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="5" id="aLQ-Jz-FAp"/>
+                    <constraint firstItem="rCj-Vi-Yn6" firstAttribute="top" secondItem="FTk-MF-YfD" secondAttribute="top" constant="-5" id="kAU-Bu-6db"/>
+                    <constraint firstItem="r6J-dn-SmG" firstAttribute="trailing" secondItem="Wpb-gQ-GXS" secondAttribute="trailing" id="kau-U8-6Nb"/>
+                    <constraint firstItem="rCj-Vi-Yn6" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="qMh-le-78G"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="FTk-MF-YfD" secondAttribute="trailing" id="tWy-cv-VfR"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="colorView" destination="rCj-Vi-Yn6" id="C0y-XU-IpZ"/>
+                <outlet property="descriptionLabel" destination="AwQ-9P-JeB" id="woC-1m-Xm7"/>
+                <outlet property="favoriteButton" destination="r6J-dn-SmG" id="nvf-Ab-aOC"/>
+            </connections>
+        </tableViewCell>
+    </objects>
+</document>

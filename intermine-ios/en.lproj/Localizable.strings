@@ -24,6 +24,7 @@
 "Templates.Value" = "Value";
 "Templates.ExtraValue" = "Organism";
 "Templates.OperationSelect.Done" = "Done";
+"Templates.Tags" = "Tags:";
 
 "General.NothingFound" = "No results found";
 
