@@ -13,8 +13,7 @@ class CacheDataStore {
     
     private let modelName = General.modelName
     private let debug = true
-    private let minesUpdateInterval: Double = 432000 //5 days, TODO: -change this value to less often
-    
+    private let minesUpdateInterval: Double = 86400 //1 day    
     // MARK: Shared Instance
     
     static let sharedCacheDataStore : CacheDataStore = {
